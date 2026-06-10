@@ -11,10 +11,12 @@ import java.util.List;
 @Repository
 public class EmployeeDAOImpl implements EmployeeDAO {
 
-    // define field for entity manager
     private EntityManager entityManager;
 
-    //set up constructor injection
+    public EmployeeDAOImpl(EntityManager entityManager) {
+        this.entityManager = entityManager;
+    }
+
     @Autowired
     public void setEntityManager(EntityManager injection) {
         entityManager = injection;
@@ -22,9 +24,7 @@ public class EmployeeDAOImpl implements EmployeeDAO {
 
     @Override
     public List<Employee> findAll() {
-        //create a Query
         TypedQuery<Employee> theQuery = entityManager.createQuery("from Employee", Employee.class);
-        //execute query and get the result list
         return theQuery.getResultList();
     }
 }
