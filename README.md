@@ -1,8 +1,11 @@
 # Rest Controller Methode 
 
 - Partial Updates `patch`
+- Single update 
+- Multiple update
 
 > Want To update partial update ✅
+
 
 ```json
 {
