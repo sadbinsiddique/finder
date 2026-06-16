@@ -58,4 +58,20 @@ public class EmployeeController {
         return employeeService.save(patchedEmployee);
     }
 
+
+    //add mapping for DELETE /employee/{employeeId} - delete the Employee
+    @DeleteMapping("/employee/{employeeId}")
+    public String deleteEmployee(@PathVariable int employeeId) {
+
+        Employee tempEmployee = employeeService.findById(employeeId);
+
+        // for null
+        if (tempEmployee == null) {
+            throw new RuntimeException("Employee Id Not Found");
+        }
+
+        employeeService.deleteById(employeeId);
+
+        return "Delete employee  id - " + employeeId;
+    }
 }
