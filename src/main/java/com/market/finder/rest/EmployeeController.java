@@ -13,7 +13,7 @@ import java.util.Map;
 public class EmployeeController {
 
     private  final EmployeeService employeeService;
-    private JsonMapper jsonMapper;
+    private final JsonMapper jsonMapper;
 
     public EmployeeController(EmployeeService  injection, JsonMapper theJsonMapper) {
        this. employeeService = injection;
