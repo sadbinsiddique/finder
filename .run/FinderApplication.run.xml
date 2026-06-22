@@ -1,0 +1,12 @@
+<component name="ProjectRunConfigurationManager">
+    <configuration default="false" name="FinderApplication" type="SpringBootApplicationConfigurationType"
+                   factoryName="Spring Boot" nameIsGenerated="true">
+        <option name="ALTERNATIVE_JRE_PATH" value="26"/>
+        <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="true"/>
+        <module name="finder"/>
+        <option name="SPRING_BOOT_MAIN_CLASS" value="com.market.finder.FinderApplication"/>
+        <method v="2">
+            <option name="Make" enabled="true"/>
+        </method>
+    </configuration>
+</component>
