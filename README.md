@@ -13,3 +13,9 @@
   "email": "sadbinsiddique@gmail.com"
 }
 ```
+
+Swagger Ui at
+
+```https
+http://localhost:8080/swagger-ui/index.htm
+```
