@@ -25,7 +25,28 @@ public class SecurityConfig {
         return new JdbcUserDetailsManager(dataSource);
     }
 
-    // Define in-memory users with roles
+    @Bean
+    public UserDetailsManager userDetailsManager(DataSource dataSource) {
+        return new JdbcUserDetailsManager(dataSource);
+    }
+
+    @Bean
+    public SecurityFilterChain filterChain(HttpSecurity http) {
+        http.authorizeHttpRequests(configurer ->
+                configurer
+                        .requestMatchers(HttpMethod.GET, "/api/employees").hasRole("EMPLOYEE")
+                        .requestMatchers(HttpMethod.GET, "/api/employees/**").hasRole("EMPLOYEE")
+                        .requestMatchers(HttpMethod.POST, "/api/employees").hasRole("MANAGER")
+                        .requestMatchers(HttpMethod.PUT, "/api/employees").hasRole("MANAGER")
+                        .requestMatchers(HttpMethod.PUT, "/api/employees/**").hasRole("MANAGER")
+                        .requestMatchers(HttpMethod.PATCH, "/api/employees/**").hasRole("MANAGER")
+        );
+        http.httpBasic(Customizer.withDefaults());
+        http.csrf(AbstractHttpConfigurer::disable);
+        return http.build();
+    }
+
+    /*
     @Bean
     public InMemoryUserDetailsManager userDetailManager() {
         UserDetails john = User.builder()
