@@ -1,0 +1,542 @@
+2026-06-30 13:25:28.702 [main] INFO  com.market.finder.FinderApplication - Starting FinderApplication using Java 26.0.1 with PID 27760 (E:\finder\target\classes started by Sad Bin Siddique in E:\finder)
+2026-06-30 13:25:28.704 [main] INFO  com.market.finder.FinderApplication - No active profile set, falling back to 1 default profile: "default"
+2026-06-30 13:25:29.562 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Multiple Spring Data modules found, entering strict repository configuration mode
+2026-06-30 13:25:29.563 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JDBC repositories in DEFAULT mode.
+2026-06-30 13:25:29.588 [main] INFO  o.s.d.r.c.RepositoryConfigurationExtensionSupport - Spring Data JDBC - Could not safely identify store assignment for repository candidate interface com.market.finder.dao.EmployeeRepository; If you want this repository to be a JDBC repository, consider annotating your entities with one of these annotations: org.springframework.data.relational.core.mapping.Table.
+2026-06-30 13:25:29.590 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 20 ms. Found 0 JDBC repository interfaces.
+2026-06-30 13:25:29.599 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Multiple Spring Data modules found, entering strict repository configuration mode
+2026-06-30 13:25:29.600 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-06-30 13:25:29.623 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 20 ms. Found 1 JPA repository interface.
+2026-06-30 13:25:30.065 [main] INFO  o.s.boot.tomcat.TomcatWebServer - Tomcat initialized with port 8080 (http)
+2026-06-30 13:25:30.073 [main] INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
+2026-06-30 13:25:30.074 [main] INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/11.0.21]
+2026-06-30 13:25:30.122 [main] INFO  o.s.b.w.c.s.WebApplicationContextInitializer - Root WebApplicationContext: initialization completed in 1384 ms
+2026-06-30 13:25:30.374 [main] INFO  org.hibernate.orm.jpa - HHH008540: Processing PersistenceUnitInfo [name: default]
+2026-06-30 13:25:30.413 [main] INFO  org.hibernate.orm.core - HHH000001: Hibernate ORM core version 7.2.12.Final
+2026-06-30 13:25:30.809 [main] INFO  o.s.o.j.p.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-06-30 13:25:30.837 [main] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
+2026-06-30 13:25:31.135 [main] INFO  com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@41289e88
+2026-06-30 13:25:31.137 [main] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
+2026-06-30 13:25:31.223 [main] INFO  o.hibernate.orm.connections.pooling - HHH10001005: Database info:
+	Database JDBC URL [jdbc:mysql://localhost:3306/finder]
+	Database driver: MySQL Connector/J
+	Database dialect: MySQLDialect
+	Database version: 8.0.46
+	Default catalog/schema: finder/undefined
+	Autocommit mode: undefined/unknown
+	Isolation level: REPEATABLE_READ [default REPEATABLE_READ]
+	JDBC fetch size: none
+	Pool: DataSourceConnectionProvider
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2026-06-30 13:25:31.844 [main] INFO  org.hibernate.orm.core - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-06-30 13:25:31.897 [main] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-06-30 13:25:31.951 [main] INFO  o.s.d.j.r.q.QueryEnhancerFactories - Hibernate is in classpath; If applicable, HQL parser will be used.
+2026-06-30 13:25:32.031 [main] INFO  o.s.s.p.JdbcUserDetailsManager - No authentication manager set. Reauthentication of users when changing passwords will not be performed.
+2026-06-30 13:25:32.165 [main] WARN  o.s.b.j.a.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2026-06-30 13:25:32.350 [main] INFO  o.s.s.c.a.a.c.InitializeUserDetailsBeanManagerConfigurer$InitializeUserDetailsManagerConfigurer - Global AuthenticationManager configured with UserDetailsService bean with name userDetailsManager
+2026-06-30 13:25:33.069 [main] INFO  o.s.b.a.e.web.EndpointLinksResolver - Exposing 1 endpoint beneath base path '/actuator'
+2026-06-30 13:25:33.133 [main] INFO  o.s.boot.tomcat.TomcatWebServer - Tomcat started on port 8080 (http) with context path '/'
+2026-06-30 13:25:33.141 [main] INFO  com.market.finder.FinderApplication - Started FinderApplication in 5.003 seconds (process running for 5.76)
+2026-06-30 13:25:33.148 [main] WARN  o.s.c.events.SpringDocAppInitializer - SpringDoc /v3/api-docs endpoint is enabled by default. To disable it in production, set the property 'springdoc.api-docs.enabled=false'
+2026-06-30 13:25:33.149 [main] WARN  o.s.c.events.SpringDocAppInitializer - SpringDoc /swagger-ui.html endpoint is enabled by default. To disable it in production, set the property 'springdoc.swagger-ui.enabled=false'
+2026-06-30 13:25:33.559 [RMI TCP Connection(4)-192.168.68.61] INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring DispatcherServlet 'dispatcherServlet'
+2026-06-30 13:25:33.559 [RMI TCP Connection(4)-192.168.68.61] INFO  o.s.web.servlet.DispatcherServlet - Initializing Servlet 'dispatcherServlet'
+2026-06-30 13:25:33.562 [RMI TCP Connection(4)-192.168.68.61] INFO  o.s.web.servlet.DispatcherServlet - Completed initialization in 3 ms
+2026-06-30 13:25:41.924 [http-nio-8080-exec-1] INFO  c.m.f.security.CustomLoggingFilter - API Request [GET /api/employees] IP: 0:0:0:0:0:0:0:1 | Request Body: [Empty]
+2026-06-30 13:25:41.924 [http-nio-8080-exec-1] INFO  c.m.f.security.CustomLoggingFilter - API Response [Status: 200 Time: 373ms] | Response Body: {
+  "_embedded" : {
+    "employees" : [ {
+      "_links" : {
+        "self" : {
+          "href" : "http://localhost:8080/api/employees/3"
+        },
+        "employee" : {
+          "href" : "http://localhost:8080/api/employees/3"
+        }
+      },
+      "email" : "email@gmail.com",
+      "lastName" : "far",
+      "fastName" : "naki"
+    }, {
+      "_links" : {
+        "self" : {
+          "href" : "http://localhost:8080/api/employees/7"
+        },
+        "employee" : {
+          "href" : "http://localhost:8080/api/employees/7"
+        }
+      },
+      "email" : "alice.johnson@gmail.com",
+      "lastName" : "Johnson",
+      "fastName" : "Alice"
+    }, {
+      "_links" : {
+        "self" : {
+          "href" : "http://localhost:8080/api/employees/8"
+        },
+        "employee" : {
+          "href" : "http://localhost:8080/api/employees/8"
+        }
+      },
+      "email" : "bob.smith@yahoo.com",
+      "lastName" : "Smith",
+      "fastName" : "Bob"
+    }, {
+      "_links" : {
+        "self" : {
+          "href" : "http://localhost:8080/api/employees/9"
+        },
+        "employee" : {
+          "href" : "http://localhost:8080/api/employees/9"
+        }
+      },
+      "email" : "carol.white@outlook.com",
+      "lastName" : "White",
+      "fastName" : "Carol"
+    }, {
+      "_links" : {
+        "self" : {
+          "href" : "http://localhost:8080/api/employees/10"
+        },
+        "employee" : {
+          "href" : "http://localhost:8080/api/employees/10"
+        }
+      },
+      "email" : "david.brown@gmail.com",
+      "lastName" : "Brown",
+      "fastName" : "David"
+    }, {
+      "_links" : {
+        "self" : {
+          "href" : "http://localhost:8080/api/employees/11"
+        },
+        "employee" : {
+          "href" : "http://localhost:8080/api/employees/11"
+        }
+      },
+      "email" : "eva.davis@hotmail.com",
+      "lastName" : "Davis",
+      "fastName" : "Eva"
+    }, {
+      "_links" : {
+        "self" : {
+          "href" : "http://localhost:8080/api/employees/12"
+        },
+        "employee" : {
+          "href" : "http://localhost:8080/api/employees/12"
+        }
+      },
+      "email" : "frank.miller@gmail.com",
+      "lastName" : "Miller",
+      "fastName" : "Frank"
+    }, {
+      "_links" : {
+        "self" : {
+          "href" : "http://localhost:8080/api/employees/13"
+        },
+        "employee" : {
+          "href" : "http://localhost:8080/api/employees/13"
+        }
+      },
+      "email" : "grace.wilson@yahoo.com",
+      "lastName" : "Wilson",
+      "fastName" : "Grace"
+    }, {
+      "_links" : {
+        "self" : {
+          "href" : "http://localhost:8080/api/employees/14"
+        },
+        "employee" : {
+          "href" : "http://localhost:8080/api/employees/14"
+        }
+      },
+      "email" : "henry.moore@outlook.com",
+      "lastName" : "Moore",
+      "fastName" : "Henry"
+    }, {
+      "_links" : {
+        "self" : {
+          "href" : "http://localhost:8080/api/employees/15"
+        },
+        "employee" : {
+          "href" : "http://localhost:8080/api/employees/15"
+        }
+      },
+      "email" : "isla.taylor@gmail.com",
+      "lastName" : "Taylor",
+      "fastName" : "Isla"
+    } ]
+  },
+  "_links" : {
+    "first" : {
+      "href" : "http://localhost:8080/api/employees?page=0&size=10"
+    },
+    "self" : {
+      "href" : "http://localhost:8080/api/employees?page=0&size=10"
+    },
+    "next" : {
+      "href" : "http://localhost:8080/api/employees?page=1&size=10"
+    },
+    "last" : {
+      "href" : "http://localhost:8080/api/employees?page=4159&size=10"
+    },
+    "profile" : {
+      "href" : "http://localhost:8080/api/profile/employees"
+    }
+  },
+  "page" : {
+    "number" : 0,
+    "size" : 10,
+    "totalElements" : 41600,
+    "totalPages" : 4160
+  }
+}
+2026-06-30 13:33:52.237 [SpringApplicationShutdownHook] INFO  o.s.boot.tomcat.GracefulShutdown - Commencing graceful shutdown. Waiting for active requests to complete
+2026-06-30 13:33:52.244 [tomcat-shutdown] INFO  o.s.boot.tomcat.GracefulShutdown - Graceful shutdown complete
+2026-06-30 13:33:52.251 [SpringApplicationShutdownHook] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
+2026-06-30 13:33:52.254 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown initiated...
+2026-06-30 13:33:52.260 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown completed.
+2026-06-30 13:33:55.141 [main] INFO  com.market.finder.FinderApplication - Starting FinderApplication using Java 26.0.1 with PID 22672 (E:\finder\target\classes started by Sad Bin Siddique in E:\finder)
+2026-06-30 13:33:55.143 [main] INFO  com.market.finder.FinderApplication - No active profile set, falling back to 1 default profile: "default"
+2026-06-30 13:33:55.937 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Multiple Spring Data modules found, entering strict repository configuration mode
+2026-06-30 13:33:55.940 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JDBC repositories in DEFAULT mode.
+2026-06-30 13:33:55.972 [main] INFO  o.s.d.r.c.RepositoryConfigurationExtensionSupport - Spring Data JDBC - Could not safely identify store assignment for repository candidate interface com.market.finder.dao.EmployeeRepository; If you want this repository to be a JDBC repository, consider annotating your entities with one of these annotations: org.springframework.data.relational.core.mapping.Table.
+2026-06-30 13:33:55.973 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 27 ms. Found 0 JDBC repository interfaces.
+2026-06-30 13:33:55.984 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Multiple Spring Data modules found, entering strict repository configuration mode
+2026-06-30 13:33:55.985 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-06-30 13:33:56.010 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 20 ms. Found 1 JPA repository interface.
+2026-06-30 13:33:56.491 [main] INFO  o.s.boot.tomcat.TomcatWebServer - Tomcat initialized with port 8080 (http)
+2026-06-30 13:33:56.505 [main] INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
+2026-06-30 13:33:56.506 [main] INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/11.0.21]
+2026-06-30 13:33:56.566 [main] INFO  o.s.b.w.c.s.WebApplicationContextInitializer - Root WebApplicationContext: initialization completed in 1393 ms
+2026-06-30 13:33:56.796 [main] INFO  org.hibernate.orm.jpa - HHH008540: Processing PersistenceUnitInfo [name: default]
+2026-06-30 13:33:56.867 [main] INFO  org.hibernate.orm.core - HHH000001: Hibernate ORM core version 7.2.12.Final
+2026-06-30 13:33:57.265 [main] INFO  o.s.o.j.p.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-06-30 13:33:57.303 [main] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
+2026-06-30 13:33:57.669 [main] INFO  com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@5cba474f
+2026-06-30 13:33:57.670 [main] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
+2026-06-30 13:33:57.759 [main] INFO  o.hibernate.orm.connections.pooling - HHH10001005: Database info:
+	Database JDBC URL [jdbc:mysql://localhost:3306/finder]
+	Database driver: MySQL Connector/J
+	Database dialect: MySQLDialect
+	Database version: 8.0.46
+	Default catalog/schema: finder/undefined
+	Autocommit mode: undefined/unknown
+	Isolation level: REPEATABLE_READ [default REPEATABLE_READ]
+	JDBC fetch size: none
+	Pool: DataSourceConnectionProvider
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2026-06-30 13:33:58.546 [main] INFO  org.hibernate.orm.core - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-06-30 13:33:58.603 [main] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-06-30 13:33:58.650 [main] INFO  o.s.d.j.r.q.QueryEnhancerFactories - Hibernate is in classpath; If applicable, HQL parser will be used.
+2026-06-30 13:33:58.725 [main] INFO  o.s.s.p.JdbcUserDetailsManager - No authentication manager set. Reauthentication of users when changing passwords will not be performed.
+2026-06-30 13:33:58.847 [main] WARN  o.s.b.j.a.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2026-06-30 13:33:59.006 [main] INFO  o.s.s.c.a.a.c.InitializeUserDetailsBeanManagerConfigurer$InitializeUserDetailsManagerConfigurer - Global AuthenticationManager configured with UserDetailsService bean with name userDetailsManager
+2026-06-30 13:33:59.629 [main] INFO  o.s.b.a.e.web.EndpointLinksResolver - Exposing 1 endpoint beneath base path '/actuator'
+2026-06-30 13:33:59.695 [main] INFO  o.s.boot.tomcat.TomcatWebServer - Tomcat started on port 8080 (http) with context path '/'
+2026-06-30 13:33:59.702 [main] INFO  com.market.finder.FinderApplication - Started FinderApplication in 5.07 seconds (process running for 5.757)
+2026-06-30 13:33:59.708 [main] WARN  o.s.c.events.SpringDocAppInitializer - SpringDoc /v3/api-docs endpoint is enabled by default. To disable it in production, set the property 'springdoc.api-docs.enabled=false'
+2026-06-30 13:33:59.709 [main] WARN  o.s.c.events.SpringDocAppInitializer - SpringDoc /swagger-ui.html endpoint is enabled by default. To disable it in production, set the property 'springdoc.swagger-ui.enabled=false'
+2026-06-30 13:33:59.927 [RMI TCP Connection(3)-192.168.68.61] INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring DispatcherServlet 'dispatcherServlet'
+2026-06-30 13:33:59.928 [RMI TCP Connection(3)-192.168.68.61] INFO  o.s.web.servlet.DispatcherServlet - Initializing Servlet 'dispatcherServlet'
+2026-06-30 13:33:59.929 [RMI TCP Connection(3)-192.168.68.61] INFO  o.s.web.servlet.DispatcherServlet - Completed initialization in 1 ms
+2026-06-30 13:34:17.832 [http-nio-8080-exec-2] INFO  c.m.f.security.CustomLoggingFilter - API Request [GET /api/employees] IP: 0:0:0:0:0:0:0:1 | Request Body: [Empty]
+2026-06-30 13:34:17.832 [http-nio-8080-exec-2] INFO  c.m.f.security.CustomLoggingFilter - API Response [Status: 200 Time: 350ms] | Response Body: {
+  "_embedded" : {
+    "employees" : [ {
+      "_links" : {
+        "self" : {
+          "href" : "http://localhost:8080/api/employees/3"
+        },
+        "employee" : {
+          "href" : "http://localhost:8080/api/employees/3"
+        }
+      },
+      "email" : "email@gmail.com",
+      "lastName" : "far",
+      "fastName" : "naki"
+    }, {
+      "_links" : {
+        "self" : {
+          "href" : "http://localhost:8080/api/employees/7"
+        },
+        "employee" : {
+          "href" : "http://localhost:8080/api/employees/7"
+        }
+      },
+      "email" : "alice.johnson@gmail.com",
+      "lastName" : "Johnson",
+      "fastName" : "Alice"
+    }, {
+      "_links" : {
+        "self" : {
+          "href" : "http://localhost:8080/api/employees/8"
+        },
+        "employee" : {
+          "href" : "http://localhost:8080/api/employees/8"
+        }
+      },
+      "email" : "bob.smith@yahoo.com",
+      "lastName" : "Smith",
+      "fastName" : "Bob"
+    }, {
+      "_links" : {
+        "self" : {
+          "href" : "http://localhost:8080/api/employees/9"
+        },
+        "employee" : {
+          "href" : "http://localhost:8080/api/employees/9"
+        }
+      },
+      "email" : "carol.white@outlook.com",
+      "lastName" : "White",
+      "fastName" : "Carol"
+    }, {
+      "_links" : {
+        "self" : {
+          "href" : "http://localhost:8080/api/employees/10"
+        },
+        "employee" : {
+          "href" : "http://localhost:8080/api/employees/10"
+        }
+      },
+      "email" : "david.brown@gmail.com",
+      "lastName" : "Brown",
+      "fastName" : "David"
+    }, {
+      "_links" : {
+        "self" : {
+          "href" : "http://localhost:8080/api/employees/11"
+        },
+        "employee" : {
+          "href" : "http://localhost:8080/api/employees/11"
+        }
+      },
+      "email" : "eva.davis@hotmail.com",
+      "lastName" : "Davis",
+      "fastName" : "Eva"
+    }, {
+      "_links" : {
+        "self" : {
+          "href" : "http://localhost:8080/api/employees/12"
+        },
+        "employee" : {
+          "href" : "http://localhost:8080/api/employees/12"
+        }
+      },
+      "email" : "frank.miller@gmail.com",
+      "lastName" : "Miller",
+      "fastName" : "Frank"
+    }, {
+      "_links" : {
+        "self" : {
+          "href" : "http://localhost:8080/api/employees/13"
+        },
+        "employee" : {
+          "href" : "http://localhost:8080/api/employees/13"
+        }
+      },
+      "email" : "grace.wilson@yahoo.com",
+      "lastName" : "Wilson",
+      "fastName" : "Grace"
+    }, {
+      "_links" : {
+        "self" : {
+          "href" : "http://localhost:8080/api/employees/14"
+        },
+        "employee" : {
+          "href" : "http://localhost:8080/api/employees/14"
+        }
+      },
+      "email" : "henry.moore@outlook.com",
+      "lastName" : "Moore",
+      "fastName" : "Henry"
+    }, {
+      "_links" : {
+        "self" : {
+          "href" : "http://localhost:8080/api/employees/15"
+        },
+        "employee" : {
+          "href" : "http://localhost:8080/api/employees/15"
+        }
+      },
+      "email" : "isla.taylor@gmail.com",
+      "lastName" : "Taylor",
+      "fastName" : "Isla"
+    } ]
+  },
+  "_links" : {
+    "first" : {
+      "href" : "http://localhost:8080/api/employees?page=0&size=10"
+    },
+    "self" : {
+      "href" : "http://localhost:8080/api/employees?page=0&size=10"
+    },
+    "next" : {
+      "href" : "http://localhost:8080/api/employees?page=1&size=10"
+    },
+    "last" : {
+      "href" : "http://localhost:8080/api/employees?page=4159&size=10"
+    },
+    "profile" : {
+      "href" : "http://localhost:8080/api/profile/employees"
+    }
+  },
+  "page" : {
+    "number" : 0,
+    "size" : 10,
+    "totalElements" : 41600,
+    "totalPages" : 4160
+  }
+}
+2026-06-30 13:34:47.920 [http-nio-8080-exec-5] INFO  c.m.f.security.CustomLoggingFilter - API Request [GET /api/employees] IP: 0:0:0:0:0:0:0:1 | Request Body: [Empty]
+2026-06-30 13:34:47.920 [http-nio-8080-exec-5] INFO  c.m.f.security.CustomLoggingFilter - API Response [Status: 200 Time: 26ms] | Response Body: {
+  "_embedded" : {
+    "employees" : [ {
+      "_links" : {
+        "self" : {
+          "href" : "http://localhost:8080/api/employees/3"
+        },
+        "employee" : {
+          "href" : "http://localhost:8080/api/employees/3"
+        }
+      },
+      "email" : "email@gmail.com",
+      "lastName" : "far",
+      "fastName" : "naki"
+    }, {
+      "_links" : {
+        "self" : {
+          "href" : "http://localhost:8080/api/employees/7"
+        },
+        "employee" : {
+          "href" : "http://localhost:8080/api/employees/7"
+        }
+      },
+      "email" : "alice.johnson@gmail.com",
+      "lastName" : "Johnson",
+      "fastName" : "Alice"
+    }, {
+      "_links" : {
+        "self" : {
+          "href" : "http://localhost:8080/api/employees/8"
+        },
+        "employee" : {
+          "href" : "http://localhost:8080/api/employees/8"
+        }
+      },
+      "email" : "bob.smith@yahoo.com",
+      "lastName" : "Smith",
+      "fastName" : "Bob"
+    }, {
+      "_links" : {
+        "self" : {
+          "href" : "http://localhost:8080/api/employees/9"
+        },
+        "employee" : {
+          "href" : "http://localhost:8080/api/employees/9"
+        }
+      },
+      "email" : "carol.white@outlook.com",
+      "lastName" : "White",
+      "fastName" : "Carol"
+    }, {
+      "_links" : {
+        "self" : {
+          "href" : "http://localhost:8080/api/employees/10"
+        },
+        "employee" : {
+          "href" : "http://localhost:8080/api/employees/10"
+        }
+      },
+      "email" : "david.brown@gmail.com",
+      "lastName" : "Brown",
+      "fastName" : "David"
+    }, {
+      "_links" : {
+        "self" : {
+          "href" : "http://localhost:8080/api/employees/11"
+        },
+        "employee" : {
+          "href" : "http://localhost:8080/api/employees/11"
+        }
+      },
+      "email" : "eva.davis@hotmail.com",
+      "lastName" : "Davis",
+      "fastName" : "Eva"
+    }, {
+      "_links" : {
+        "self" : {
+          "href" : "http://localhost:8080/api/employees/12"
+        },
+        "employee" : {
+          "href" : "http://localhost:8080/api/employees/12"
+        }
+      },
+      "email" : "frank.miller@gmail.com",
+      "lastName" : "Miller",
+      "fastName" : "Frank"
+    }, {
+      "_links" : {
+        "self" : {
+          "href" : "http://localhost:8080/api/employees/13"
+        },
+        "employee" : {
+          "href" : "http://localhost:8080/api/employees/13"
+        }
+      },
+      "email" : "grace.wilson@yahoo.com",
+      "lastName" : "Wilson",
+      "fastName" : "Grace"
+    }, {
+      "_links" : {
+        "self" : {
+          "href" : "http://localhost:8080/api/employees/14"
+        },
+        "employee" : {
+          "href" : "http://localhost:8080/api/employees/14"
+        }
+      },
+      "email" : "henry.moore@outlook.com",
+      "lastName" : "Moore",
+      "fastName" : "Henry"
+    }, {
+      "_links" : {
+        "self" : {
+          "href" : "http://localhost:8080/api/employees/15"
+        },
+        "employee" : {
+          "href" : "http://localhost:8080/api/employees/15"
+        }
+      },
+      "email" : "isla.taylor@gmail.com",
+      "lastName" : "Taylor",
+      "fastName" : "Isla"
+    } ]
+  },
+  "_links" : {
+    "first" : {
+      "href" : "http://localhost:8080/api/employees?page=0&size=10"
+    },
+    "self" : {
+      "href" : "http://localhost:8080/api/employees?page=0&size=10"
+    },
+    "next" : {
+      "href" : "http://localhost:8080/api/employees?page=1&size=10"
+    },
+    "last" : {
+      "href" : "http://localhost:8080/api/employees?page=4159&size=10"
+    },
+    "profile" : {
+      "href" : "http://localhost:8080/api/profile/employees"
+    }
+  },
+  "page" : {
+    "number" : 0,
+    "size" : 10,
+    "totalElements" : 41600,
+    "totalPages" : 4160
+  }
+}
