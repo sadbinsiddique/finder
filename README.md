@@ -17,7 +17,7 @@
 Swagger Ui at
 
 ```https
-http://localhost:8080/swagger-ui/index.htm
+http://localhost:8080/swagger-ui/index.html
 ```
 
 Work Done
