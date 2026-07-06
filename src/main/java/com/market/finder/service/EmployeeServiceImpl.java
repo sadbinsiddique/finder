@@ -20,14 +20,19 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     @Override
     public List<Employee> findAll() {
-        return employeeRepository.findAll();
+        return employeeRepository.findAllByOrderByLastNameAsc();
+    }
+
+    @Override
+    public List<Employee> findAllByOrderByLastNameAsc() {
+        return List.of();
     }
 
     @Override
     public Employee findById(int theId) {
         Optional<Employee> result = employeeRepository.findById(theId);
 
-        Employee theEmployee = null;
+        Employee theEmployee;
 
         if (result.isPresent()) {
             theEmployee = result.get();
