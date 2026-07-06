@@ -1,0 +1,25 @@
+{
+  "name": "finder",
+  "version": "1.0.0",
+  "description": "- Partial Updates `patch`\r - Single update \r - Multiple update",
+  "main": "index.js",
+  "scripts": {
+    "tailwind": "npx @tailwindcss/cli -i ./src/main/resources/static/css/style.css -o ./src/main/resources/static/css/output.css --watch"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sadbinsiddique/finder.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/sadbinsiddique/finder/issues"
+  },
+  "homepage": "https://github.com/sadbinsiddique/finder#readme",
+  "devDependencies": {
+    "@tailwindcss/cli": "^4.3.2",
+    "tailwindcss": "^4.3.2"
+  }
+}
