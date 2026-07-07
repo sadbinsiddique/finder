@@ -11,15 +11,23 @@ public class InstructorDetail {
     private int id;
     @Column(name = "age")
     private int age;
-    @Column(name = "hobby")
-    private String hobby;
+    @Column(name = "youtube_channel")
+    private String youtubeChannel;
 
     public InstructorDetail() {
     }
 
-    public InstructorDetail(int age, String hobby) {
+    public InstructorDetail(int age, String youtubeChannel) {
         this.age = age;
-        this.hobby = hobby;
+        this.youtubeChannel = youtubeChannel;
+    }
+
+    public String getYoutubeChannel() {
+        return youtubeChannel;
+    }
+
+    public void setYoutubeChannel(String youtubeChannel) {
+        this.youtubeChannel = youtubeChannel;
     }
 
     public int getId() {
@@ -36,22 +44,5 @@ public class InstructorDetail {
 
     public void setAge(int age) {
         this.age = age;
-    }
-
-    public String getHobby() {
-        return hobby;
-    }
-
-    public void setHobby(String hobby) {
-        this.hobby = hobby;
-    }
-
-    @Override
-    public String toString() {
-        return "InstructorDetail{" +
-                "id=" + id +
-                ", age=" + age +
-                ", hobby='" + hobby + '\'' +
-                '}';
     }
 }
