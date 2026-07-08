@@ -45,4 +45,10 @@ public class InstructorDetail {
     public void setAge(int age) {
         this.age = age;
     }
+
+    public void setInstructorDetail(InstructorDetail tempInstructorDetail) {
+        tempInstructorDetail.age = age;
+        tempInstructorDetail.youtubeChannel = youtubeChannel;
+
+    }
 }

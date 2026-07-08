@@ -1,3 +1,8 @@
+select *
+from fix_finder;
+
+
+
 create table users
 (
     username    varchar(64) unique primary key,

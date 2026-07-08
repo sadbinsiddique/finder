@@ -5,8 +5,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
 
-public interface StaffReposotory extends JpaRepository<Staff, Integer> {
+public interface StaffRepository extends JpaRepository<Staff, Integer> {
     List<Staff> findAllByOrderByAgeAsc();
-
     List<Staff> findAllByOrderByIncomeAsc();
 }
