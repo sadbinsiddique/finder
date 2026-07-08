@@ -11,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class AppDAOImpl implements AppDAO {
 
     // define field for entity manager
+    //add sad
     private final EntityManager entityManager;
 
     // inject entity manager using constructor injection
