@@ -1,6 +1,6 @@
 package com.market.finder.service;
 
-import com.market.finder.dao.StaffReposotory;
+import com.market.finder.dao.StaffRepository;
 
 import com.market.finder.entity.Staff;
 
@@ -8,9 +8,9 @@ import java.util.List;
 import java.util.Optional;
 
 public class StaffServiceImpl implements StaffService {
-    private final StaffReposotory staffReposotory;
+    private final StaffRepository staffReposotory;
 
-    public StaffServiceImpl(StaffReposotory staffReposotory) {
+    public StaffServiceImpl(StaffRepository staffReposotory) {
         this.staffReposotory = staffReposotory;
     }
 
