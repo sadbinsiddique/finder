@@ -51,4 +51,13 @@ public class InstructorDetail {
         tempInstructorDetail.youtubeChannel = youtubeChannel;
 
     }
+
+    @Override
+    public String toString() {
+        return "InstructorDetail{" +
+                "id=" + id +
+                ", age=" + age +
+                ", youtubeChannel='" + youtubeChannel + '\'' +
+                '}';
+    }
 }
