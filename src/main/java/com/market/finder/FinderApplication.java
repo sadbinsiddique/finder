@@ -27,7 +27,7 @@ public class FinderApplication {
 	}
 
 	private void deleteInstructorDetail(AppDAO appDAO) {
-		int theId = 5;
+		int theId = 1;
 		System.out.println("Deleting instructor detail id: " + theId);
 		appDAO.deleteInstructorDetailById(theId);
 		System.out.println("Done");
@@ -61,7 +61,6 @@ public class FinderApplication {
 			System.out.println("Instructor not found with id: " + theId);
 		}
 	}
-
 
 	private void createInstructor(AppDAO appDAO) {
 
