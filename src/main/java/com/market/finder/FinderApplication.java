@@ -21,8 +21,16 @@ public class FinderApplication {
 			// createInstructor(appDAO);
 			//findInstructor(appDAO);
 			//deleteInstructor(appDAO);
-			findInstructorDetail(appDAO);
+			//findInstructorDetail(appDAO);
+			deleteInstructorDetail(appDAO);
 		};
+	}
+
+	private void deleteInstructorDetail(AppDAO appDAO) {
+		int theId = 5;
+		System.out.println("Deleting instructor detail id: " + theId);
+		appDAO.deleteInstructorDetailById(theId);
+		System.out.println("Done");
 	}
 
 	private void findInstructorDetail(AppDAO appDAO) {
