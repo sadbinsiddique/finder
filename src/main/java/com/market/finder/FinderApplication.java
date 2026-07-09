@@ -18,8 +18,23 @@ public class FinderApplication {
 	public CommandLineRunner commandLineRunner(AppDAO appDAO) {
 
 		return runner -> {
-			createInstructor(appDAO);
+			// createInstructor(appDAO);
+			findInstructor(appDAO);
 		};
+	}
+
+	private void findInstructor(AppDAO appDAO) {
+		int theId = 10;
+		System.out.println("Finding instructor with id: " + theId);
+
+		Instructor tempInstructor = appDAO.findInstructorById(theId);
+
+		System.out.println("Temp instructor: " + tempInstructor);
+		if (tempInstructor != null) {
+			System.out.println("The Associated instructorDetail: " + tempInstructor.getInstructorDetail());
+		} else {
+			System.out.println("Instructor not found with id: " + theId);
+		}
 	}
 
 
@@ -45,7 +60,6 @@ private void createInstructor(AppDAO appDAO) {
 
 		System.out.println("Done!");
 	}
-
 }
 
 
