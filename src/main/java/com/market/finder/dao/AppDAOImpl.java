@@ -1,6 +1,7 @@
 package com.market.finder.dao;
 
 import com.market.finder.entity.Instructor;
+import com.market.finder.entity.InstructorDetail;
 import jakarta.persistence.EntityManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -31,6 +32,11 @@ public class AppDAOImpl implements AppDAO {
     public void deleteInstructorById(int theId) {
         Instructor tempInstructor = entityManager.find(Instructor.class, theId);
         entityManager.remove(tempInstructor);
+    }
+
+    @Override
+    public InstructorDetail findInstructorDetailById(int theId) {
+        return entityManager.find(InstructorDetail.class, theId);
     }
 
 }

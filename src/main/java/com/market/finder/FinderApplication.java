@@ -20,8 +20,17 @@ public class FinderApplication {
 		return runner -> {
 			// createInstructor(appDAO);
 			//findInstructor(appDAO);
-			deleteInstructor(appDAO);
+			//deleteInstructor(appDAO);
+			findInstructorDetail(appDAO);
 		};
+	}
+
+	private void findInstructorDetail(AppDAO appDAO) {
+		int theId = 4;
+		InstructorDetail tempInstructorDetail = appDAO.findInstructorDetailById(theId);
+		System.out.println("tempInstructorDetail: " + tempInstructorDetail);
+		System.out.println("the associated instructor: " + tempInstructorDetail.getInstructor());
+		System.out.println("Done!");
 	}
 
 	private void deleteInstructor(AppDAO appDAO) {
@@ -46,14 +55,14 @@ public class FinderApplication {
 	}
 
 
-private void createInstructor(AppDAO appDAO) {
+	private void createInstructor(AppDAO appDAO) {
 
 
 		// create the instructor
 		Instructor tempInstructor = new Instructor("sadbinsiddique@gmail.com", "sad", "bin siddique");
 
 		// create the instructor detail
-		InstructorDetail tempInstructorDetail =  new InstructorDetail(36, "dad@gmail.com");
+		InstructorDetail tempInstructorDetail = new InstructorDetail(36, "dad@gmail.com");
 
 		// associate the objects
 		tempInstructor.setInstructorDetail(tempInstructorDetail);
