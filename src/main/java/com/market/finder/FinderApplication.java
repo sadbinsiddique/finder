@@ -19,8 +19,16 @@ public class FinderApplication {
 
 		return runner -> {
 			// createInstructor(appDAO);
-			findInstructor(appDAO);
+			//findInstructor(appDAO);
+			deleteInstructor(appDAO);
 		};
+	}
+
+	private void deleteInstructor(AppDAO appDAO) {
+		int theId = 9;
+		System.out.println("Delete Instructor id: " + theId);
+		appDAO.deleteInstructorById(theId);
+		System.out.println("Done!");
 	}
 
 	private void findInstructor(AppDAO appDAO) {
