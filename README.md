@@ -1,33 +1,94 @@
-# Rest Controller Methode 
+# SOLID
 
-- Partial Updates `patch`
-- Single update 
-- Multiple update
+## Single Responsibility Principle
 
-> Want To update partial update ✅
+Every software component should have one and only one responsibility.
 
+Normal:
 
-```json
-{
-  "id": 1,
-  "email": "sadbinsiddique@gmail.com"
+```java
+// High level of cohesion between "calculateArea() & calculatePerimeter()"
+// High level of cohesion between "draw() & rotate(int degree)"
+
+public class Square {
+    int side = 5;
+
+    // component 1 
+    public int calculateArea() {
+        return side * side;
+    }
+
+    //component 2
+    public int calculatePerimeter() {
+        return side * 4;
+    }
+
+    //component 3
+    public void draw() {
+        if (highResolutionMonitor) {
+            // render normal image of a square
+        } else {
+            // render high regulation image of a square
+        }
+    }
+
+    //component 4
+    public void rotate(int degree) {
+        //rotate the image in clockwise to 
+        //the required degree and re-render
+    }
 }
+
+// But Low level cohesion in "Square" class
 ```
 
-Swagger Ui at
+Single Responsibility :
 
-```https
-http://localhost:8080/swagger-ui/index.html
+```java
+public class Square {
+    int side = 5;
+
+    // component 1 
+    public int calculateArea() {
+        return side * side;
+    }
+
+    //component 2
+    public int calculatePerimeter() {
+        return side * 4;
+    }
+}
+
+// Level cohesion in "Square" class is ++
+// responsibility: Measurements of squares
 ```
 
-Work Done
+```java
+public class SquareUI {
+    //component 3
+    public void draw() {
+        if (highResolutionMonitor) {
+            // render normal image of a square
+        } else {
+            // render high regulation image of a square
+        }
+    }
 
-section 5 of `150 no video`
+    //component 4
+    public void rotate(int degree) {
+        //rotate the image in clockwise to 
+        //the required degree and re-render
+    }
+}
+// Level cohesion in "SquareUI" class is ++
+// responsibility: Rendering images of squares
+```
 
-### Mini Project Requirements
+> High Cohesion helps attain batter adherence to the single responsibility principle
 
-- if you delete an instructor, Do Not delete the courses
-- if you delete a course, Do Not delete the instructor
+
+
+
 
 
 
