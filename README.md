@@ -86,95 +86,9 @@ public class SquareUI {
 
 > High Cohesion helps attain batter adherence to the single responsibility principle
 
-# Liskov
 
-We should be to substitite base class objects with child class object & this should not alter
-behavior/characteristics of problem
 
-Example:
 
-```java
-// A Rectangle == Square but
-// A Square != Rectangle 
-public class Rectangle {
-    private int width;
-    private int height;
-
-    //constructor 
-    public Rectangle(int width, int height) {
-        this.width = width;
-        this.height = height;
-    }
-
-    //Getter Method 
-    public int getWidth() {
-        return width;
-    }
-
-    public int getHeight() {
-        return height;
-    }
-
-    //setter method
-    public void setWidth(int width) {
-        this.width = width;
-    }
-
-    public void setHeight(int height) {
-        this.height = height;
-    }
-}
-```
-
-```java
-public class Square extends Rectangle {
-
-    // behavior/characteristics has been chang ( 1X )
-    public Square(int side) {
-        super(side, side);
-    }
-
-    // Overlap method as Rectangle
-    @Override
-    public void setWidth(int width) {
-        setSide(width);
-    }
-
-    // Overlap method as Rectangle
-    @Override
-    public void setHeight(int height) {
-        setSide(height);
-    }
-
-    // behavior/characteristics has been chang ( 2X )
-    public void setSide(int side) {
-        super.setWidth(side);
-        super.setHeight(side);
-    }
-}
-```
-
-> It violated The Rules of Liskov
-
-Fix :
-
-Interface for commonness for two class for avoid config
-
-```java
-public interface Shape {
-    int computeArea();
-}
-```
-
-```java 
-public class Rectangle implements Shape {
-    private int width;
-    private int height;
-
-    public Rectangle(int width, int height) {
-        this.width = width;
-        this.height = height;
-    }
 
     public int getWidth() {
         return width;
