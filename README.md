@@ -86,9 +86,204 @@ public class SquareUI {
 
 > High Cohesion helps attain batter adherence to the single responsibility principle
 
+# Liskov
+
+We should be to substitite base class objects with child class object & this should not alter
+behavior/characteristics of problem
+
+Example:
+
+```java
+// A Rectangle == Square but
+// A Square != Rectangle 
+public class Rectangle {
+    private int width;
+    private int height;
+
+    //constructor 
+    public Rectangle(int width, int height) {
+        this.width = width;
+        this.height = height;
+    }
+
+    //Getter Method 
+    public int getWidth() {
+        return width;
+    }
+
+    public int getHeight() {
+        return height;
+    }
+
+    //setter method
+    public void setWidth(int width) {
+        this.width = width;
+    }
+
+    public void setHeight(int height) {
+        this.height = height;
+    }
+}
+```
+
+```java
+public class Square extends Rectangle {
+
+    // behavior/characteristics has been chang ( 1X )
+    public Square(int side) {
+        super(side, side);
+    }
+
+    // Overlap method as Rectangle
+    @Override
+    public void setWidth(int width) {
+        setSide(width);
+    }
+
+    // Overlap method as Rectangle
+    @Override
+    public void setHeight(int height) {
+        setSide(height);
+    }
+
+    // behavior/characteristics has been chang ( 2X )
+    public void setSide(int side) {
+        super.setWidth(side);
+        super.setHeight(side);
+    }
+}
+```
+
+> It violated The Rules of Liskov
+
+Fix :
+
+Interface for commonness for two class for avoid config
+
+```java
+public interface Shape {
+    int computeArea();
+}
+```
+
+```java 
+public class Rectangle implements Shape {
+    private int width;
+    private int height;
+
+    public Rectangle(int width, int height) {
+        this.width = width;
+        this.height = height;
+    }
+
+    public int getWidth() {
+        return width;
+    }
+
+    public int getHeight() {
+        return height;
+    }
+
+    public void setWidth(int width) {
+        this.width = width;
+    }
+
+    public void setHeight(int height) {
+        this.height = height;
+    }
+
+    @Override
+    public int computeArea() {
+        return height * width;
+    }
+}
+```
+
+```java
+public class Square extends Shape {
+
+    private int side;
+
+    public Square(int side) {
+        this.side = side;
+    }
+
+    public void setSide(int side) {
+        this.side = side;
+    }
+
+    public int getSide() {
+        return side;
+    }
+
+    @Override
+    public int computeArea() {
+        return side * side;
+    }
+}
+```
+
+# Dependency Inversion principal
+
+1) High level modules should not depend upon low level moduls. Both should depend upon abstractions
+
+2) Abstractions should not depend upon details. Details should depend upon abstractions
+
+```java
+import org.apache.juli.JsonFormatter;
+import org.apache.logging.log4j.message.Message;
+
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.Formatter;
+
+public class MassagePrinter {
+    public void writeMessage(Message msg, String filename) throws IOException {
+        Formatter formatter = new JsonFormatter(); // Create formater
+        try (PrintWriter writer = new PrintWriter(new FileWriter(filename))) {//create print writer 
+            writer.println(formatter.format(msg)); //formats and writes message
+            writer.flush();
+        }
+    }
+}
+
+//
+// Main Class
+//
+public class Main {
+    static void main(String[] args) throws IOException {
+        Message msg = new Message("This is the message");
+        MessagePrinter printer = new MessagePrinter();
+        printer.writeMessage(msg, "test.txt");
+    }
+}
+```
+
+Fix:
+
+```java
+// Formatter form another class
+// PrintWriter from another class
+
+public class MassagePrinter {
+    public void writeMessage(Message msg, String filename, Formatter formatterm PrintWriter writer) throws IOException {
+        writer.println(formatter.format(msg)); //formats and writes message
+        writer.flush();
+    }
+}
 
 
+//
+// Main
+//
+
+public class Main {
+    static void main(String[] args) throws IOException {
+        Message msg = new Message("This is the message 2");
+        MessagePrinter printer = new MessagePrinter();
 
 
-
-
+    }
+}
+```
