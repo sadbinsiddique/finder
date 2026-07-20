@@ -15,7 +15,7 @@ import java.util.Objects;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-class GradebookId implements Serializable {
+public class GradebookId implements Serializable {
     @Column(name = "student_id")
     private Integer studentId;
 
