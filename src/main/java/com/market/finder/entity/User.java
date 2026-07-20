@@ -1,51 +1,32 @@
 package com.market.finder.entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
+import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
+import java.util.Set;
+
+@Getter
+@Setter
+@NoArgsConstructor
 @Entity
 @Table(name = "users")
 public class User {
     @Id
-    @Size(max = 50)
-    @Column(name = "username", nullable = false, length = 50)
+    @Column(length = 50)
     private String username;
 
-    @Size(max = 68)
-    @NotNull
-    @Column(name = "password", nullable = false, length = 68)
-    private String password;
-
-    @NotNull
-    @Column(name = "enabled", nullable = false)
     private Boolean enabled;
 
-    public String getUsername() {
-        return username;
-    }
+    @Column(length = 68)
+    private String password;
 
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public Boolean getEnabled() {
-        return enabled;
-    }
-
-    public void setEnabled(Boolean enabled) {
-        this.enabled = enabled;
-    }
-
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(
+            name = "user_roles",
+            joinColumns = @JoinColumn(name = "username"),
+            inverseJoinColumns = @JoinColumn(name = "role_id")
+    )
+    private Set<Role> roles;
 }
