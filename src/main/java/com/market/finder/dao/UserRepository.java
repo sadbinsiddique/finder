@@ -8,6 +8,6 @@ import java.util.Optional;
 
 @Repository
 public interface UserRepository extends JpaRepository<User, String> {
-    // Basic CRUD is auto-provided (save, findById, delete, etc.)
+
     Optional<User> findByUsernameAndEnabledTrue(String username);
 }
