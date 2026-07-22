@@ -33,32 +33,45 @@
             -webkit-font-smoothing: antialiased;
         }
 
+        /* Solid background for legacy browsers */
         .glass-navbar {
-            background: rgba(7, 9, 14, 0.75);
-            backdrop-filter: blur(25px) saturate(180%);
-            -webkit-backdrop-filter: blur(25px) saturate(180%);
+            background: #0b0e14;
             border-bottom: 1px solid var(--glass-border);
             position: sticky;
             top: 0;
             z-index: 1000;
         }
 
-        .logo-glow {
-            color: var(--apple-green);
-            filter: drop-shadow(0 0 10px rgba(48, 209, 88, 0.7));
-        }
-
         .liquid-glass-form {
-            background: var(--glass-bg);
-            backdrop-filter: blur(30px) saturate(190%);
-            -webkit-backdrop-filter: blur(30px) saturate(190%);
+            background: #11151c;
             border: 1px solid var(--glass-border);
             border-radius: 24px;
             padding: 2.5rem;
             max-width: 600px;
             width: 100%;
             margin: 2rem auto;
-            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.5), var(--glass-inner-shadow);
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.5);
+        }
+
+        /* Progressive Glassmorphism for modern browsers */
+        @supports (backdrop-filter: blur(25px)) or (-webkit-backdrop-filter: blur(25px)) {
+            .glass-navbar {
+                background: rgba(7, 9, 14, 0.75);
+                -webkit-backdrop-filter: blur(25px) saturate(180%);
+                backdrop-filter: blur(25px) saturate(180%);
+            }
+
+            .liquid-glass-form {
+                background: var(--glass-bg);
+                -webkit-backdrop-filter: blur(30px) saturate(190%);
+                backdrop-filter: blur(30px) saturate(190%);
+                box-shadow: 0 30px 60px rgba(0, 0, 0, 0.5), var(--glass-inner-shadow);
+            }
+        }
+
+        .logo-glow {
+            color: var(--apple-green);
+            filter: drop-shadow(0 0 10px rgba(48, 209, 88, 0.7));
         }
 
         .form-label {
@@ -92,7 +105,7 @@
         .btn-apple-primary {
             background: var(--apple-blue);
             border: 1px solid rgba(255, 255, 255, 0.2);
-            box-shadow: 0 4px 14px rgba(10, 132, 255, 0.35), var(--glass-inner-shadow);
+            box-shadow: 0 4px 14px rgba(10, 132, 255, 0.35);
             color: #fff;
             border-radius: 12px;
             padding: 10px 24px;
@@ -110,7 +123,6 @@
         .btn-apple-glass {
             background: rgba(255, 255, 255, 0.06);
             border: 1px solid rgba(255, 255, 255, 0.12);
-            box-shadow: var(--glass-inner-shadow);
             color: var(--text-primary);
             border-radius: 12px;
             padding: 10px 24px;

@@ -35,14 +35,38 @@
             -webkit-font-smoothing: antialiased;
         }
 
+        /* Solid background for legacy browsers */
         .glass-navbar {
-            background: rgba(7, 9, 14, 0.75);
-            backdrop-filter: blur(25px) saturate(180%);
-            -webkit-backdrop-filter: blur(25px) saturate(180%);
+            background: #0b0e14;
             border-bottom: 1px solid var(--glass-border);
             position: sticky;
             top: 0;
             z-index: 1000;
+        }
+
+        .liquid-glass-card {
+            background: #11151c;
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            padding: 1.5rem;
+            box-shadow: 0 16px 40px rgba(0, 0, 0, 0.35);
+            overflow: hidden;
+        }
+
+        /* Progressive Glassmorphism for modern browsers */
+        @supports (backdrop-filter: blur(25px)) or (-webkit-backdrop-filter: blur(25px)) {
+            .glass-navbar {
+                background: rgba(7, 9, 14, 0.75);
+                -webkit-backdrop-filter: blur(25px) saturate(180%);
+                backdrop-filter: blur(25px) saturate(180%);
+            }
+
+            .liquid-glass-card {
+                background: var(--glass-bg);
+                -webkit-backdrop-filter: blur(25px) saturate(180%);
+                backdrop-filter: blur(25px) saturate(180%);
+                box-shadow: 0 16px 40px rgba(0, 0, 0, 0.35), var(--glass-inner-shadow);
+            }
         }
 
         .logo-glow {
@@ -53,7 +77,6 @@
         .btn-apple-glass {
             background: rgba(255, 255, 255, 0.06);
             border: 1px solid rgba(255, 255, 255, 0.12);
-            box-shadow: var(--glass-inner-shadow);
             color: var(--text-primary);
             border-radius: 10px;
             padding: 6px 14px;
@@ -67,17 +90,6 @@
             background: rgba(255, 255, 255, 0.12);
             border-color: rgba(255, 255, 255, 0.25);
             color: #fff;
-        }
-
-        .liquid-glass-card {
-            background: var(--glass-bg);
-            backdrop-filter: blur(25px) saturate(180%);
-            -webkit-backdrop-filter: blur(25px) saturate(180%);
-            border: 1px solid var(--glass-border);
-            box-shadow: 0 16px 40px rgba(0, 0, 0, 0.35), var(--glass-inner-shadow);
-            border-radius: 20px;
-            padding: 1.5rem;
-            overflow: hidden;
         }
 
         /* Strict Bootstrap Table Overrides */
