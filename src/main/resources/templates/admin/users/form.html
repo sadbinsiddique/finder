@@ -170,7 +170,12 @@
 
             <div class="mb-3">
                 <label class="form-label">Password</label>
-                <input type="password" class="form-control" th:field="*{password}" required placeholder="Password"/>
+                <input type="password" class="form-control" th:field="*{password}"
+                       th:required="${user.username == null or user.username == ''}"
+                       placeholder="Enter new password or leave blank to keep current"/>
+                <small class="text-secondary mt-1 d-block" th:if="${user.username != null and user.username != ''}">
+                    Leave blank to preserve existing password.
+                </small>
             </div>
 
             <div class="mb-3 form-check">

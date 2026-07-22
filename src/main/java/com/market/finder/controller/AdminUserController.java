@@ -53,6 +53,16 @@ public class AdminUserController {
     @PostMapping("/save")
     public String saveUser(@ModelAttribute("user") User user,
                            @RequestParam(value = "roleIds", required = false) List<Integer> roleIds) {
+        
+        // Preserve existing password if editing user and password field was left empty
+        if (user.getUsername() != null && !user.getUsername().trim().isEmpty()) {
+            userService.findByUsername(user.getUsername()).ifPresent(existingUser -> {
+                if (user.getPassword() == null || user.getPassword().trim().isEmpty()) {
+                    user.setPassword(existingUser.getPassword());
+                }
+            });
+        }
+
         if (roleIds != null && !roleIds.isEmpty()) {
             Set<Role> selectedRoles = new HashSet<>(roleService.findAllById(roleIds));
             user.setRoles(selectedRoles);
