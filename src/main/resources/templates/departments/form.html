@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
 <head>
     <meta charset="UTF-8">
     <title>Department Form</title>
@@ -18,7 +18,9 @@
 
         <div class="mb-3">
             <label class="form-label fw-bold">Department Name</label>
-            <input class="form-control" placeholder="e.g., Computer Science" required th:field="*{name}" type="text"/>
+            <label>
+                <input class="form-control" placeholder="e.g., Computer Science" required th:field="*{name}" type="text"/>
+            </label>
         </div>
 
         <div class="mt-4">

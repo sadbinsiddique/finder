@@ -21,15 +21,21 @@
 
         <div class="mb-3">
             <!-- Note: Make sure your Java class uses 'firstName' and not 'fastName' -->
-            <input class="form-control" placeholder="First Name" th:field="*{fastName}" type="text">
+            <label>
+                <input class="form-control" placeholder="First Name" th:field="*{fastName}" type="text">
+            </label>
         </div>
 
         <div class="mb-3">
-            <input class="form-control" placeholder="Last Name" th:field="*{lastName}" type="text">
+            <label>
+                <input class="form-control" placeholder="Last Name" th:field="*{lastName}" type="text">
+            </label>
         </div>
 
         <div class="mb-4">
-            <input class="form-control" placeholder="Email" th:field="*{email}" type="text">
+            <label>
+                <input class="form-control" placeholder="Email" th:field="*{email}" type="text">
+            </label>
         </div>
 
         <button class="btn btn-info w-100 text-white fw-bold" type="submit">Save</button>

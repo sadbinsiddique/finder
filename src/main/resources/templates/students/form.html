@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
 <head>
     <meta charset="UTF-8">
     <title>Student Form</title>
@@ -17,30 +17,38 @@
 
         <div class="mb-3">
             <label class="form-label fw-bold">First Name</label>
-            <input class="form-control" placeholder="Enter first name" required th:field="*{firstName}" type="text"/>
+            <label>
+                <input class="form-control" placeholder="Enter first name" required th:field="*{firstName}" type="text"/>
+            </label>
         </div>
 
         <div class="mb-3">
             <label class="form-label fw-bold">Last Name</label>
-            <input class="form-control" placeholder="Enter last name" required th:field="*{lastName}" type="text"/>
+            <label>
+                <input class="form-control" placeholder="Enter last name" required th:field="*{lastName}" type="text"/>
+            </label>
         </div>
 
         <div class="mb-3">
             <label class="form-label fw-bold">Email</label>
-            <input class="form-control" placeholder="student@example.com" required th:field="*{email}" type="email"/>
+            <label>
+                <input class="form-control" placeholder="student@example.com" required th:field="*{email}" type="email"/>
+            </label>
         </div>
 
         <!-- Dropdown bound to the Department entity -->
         <div class="mb-3">
             <label class="form-label fw-bold">Department</label>
-            <select class="form-select" th:field="*{department}">
-                <option value="">-- Select a Department --</option>
-                <!-- Loop through the departments passed from the controller -->
-                <option th:each="dept : ${departments}"
-                        th:text="${dept.name}"
-                        th:value="${dept.id}">
-                </option>
-            </select>
+            <label>
+                <select class="form-select" th:field="*{department}">
+                    <option value="">-- Select a Department --</option>
+                    <!-- Loop through the departments passed from the controller -->
+                    <option th:each="dept : ${departments}"
+                            th:text="${dept.name}"
+                            th:value="${dept.id}">
+                    </option>
+                </select>
+            </label>
         </div>
 
         <div class="mt-4">

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
 <head>
     <meta charset="UTF-8">
     <title>User Form</title>
@@ -15,13 +15,17 @@
         <div class="mb-3">
             <label class="form-label fw-bold">Username</label>
             <!-- Make username readonly if we are editing an existing user so the Primary Key doesn't change -->
-            <input class="form-control" required th:field="*{username}"
-                   th:readonly="${user.username != null and user.username != ''}" type="text"/>
+            <label>
+                <input class="form-control" required th:field="*{username}"
+                       th:readonly="${user.username != null and user.username != ''}" type="text"/>
+            </label>
         </div>
 
         <div class="mb-3">
             <label class="form-label fw-bold">Password</label>
-            <input class="form-control" required th:field="*{password}" type="password"/>
+            <label>
+                <input class="form-control" required th:field="*{password}" type="password"/>
+            </label>
         </div>
 
         <div class="mb-3 form-check">

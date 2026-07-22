@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
 <head>
     <meta charset="UTF-8">
     <title>Enrollment Form</title>
@@ -17,31 +17,37 @@
         <div class="mb-3">
             <label class="form-label fw-bold">Student</label>
             <!-- Lock the dropdown if we are updating an existing enrollment so the Composite Key doesn't change -->
-            <select class="form-select" required th:field="*{student}"
-                    th:style="${enrollment.id != null && enrollment.id.studentId != null ? 'pointer-events: none; background-color: #e9ecef;' : ''}">
-                <option value="">-- Select Student --</option>
-                <option th:each="stu : ${students}"
-                        th:text="${stu.firstName + ' ' + stu.lastName}"
-                        th:value="${stu.id}"></option>
-            </select>
+            <label>
+                <select class="form-select" required th:field="*{student}"
+                        th:style="${enrollment.id != null && enrollment.id.studentId != null ? 'pointer-events: none; background-color: #e9ecef;' : ''}">
+                    <option value="">-- Select Student --</option>
+                    <option th:each="stu : ${students}"
+                            th:text="${stu.firstName + ' ' + stu.lastName}"
+                            th:value="${stu.id}"></option>
+                </select>
+            </label>
         </div>
 
         <!-- Course Dropdown -->
         <div class="mb-3">
             <label class="form-label fw-bold">Course</label>
-            <select class="form-select" required th:field="*{course}"
-                    th:style="${enrollment.id != null && enrollment.id.courseId != null ? 'pointer-events: none; background-color: #e9ecef;' : ''}">
-                <option value="">-- Select Course --</option>
-                <option th:each="crs : ${courses}"
-                        th:text="${crs.title}"
-                        th:value="${crs.id}"></option>
-            </select>
+            <label>
+                <select class="form-select" required th:field="*{course}"
+                        th:style="${enrollment.id != null && enrollment.id.courseId != null ? 'pointer-events: none; background-color: #e9ecef;' : ''}">
+                    <option value="">-- Select Course --</option>
+                    <option th:each="crs : ${courses}"
+                            th:text="${crs.title}"
+                            th:value="${crs.id}"></option>
+                </select>
+            </label>
         </div>
 
         <!-- Enrollment Date -->
         <div class="mb-3">
             <label class="form-label fw-bold">Enrollment Date</label>
-            <input class="form-control" required th:field="*{enrollmentDate}" type="date"/>
+            <label>
+                <input class="form-control" required th:field="*{enrollmentDate}" type="date"/>
+            </label>
         </div>
 
         <div class="mt-4">

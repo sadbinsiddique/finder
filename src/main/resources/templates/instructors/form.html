@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
 <head>
     <meta charset="UTF-8">
     <title>Instructor Form</title>
@@ -18,18 +18,24 @@
 
         <div class="mb-3">
             <label class="form-label fw-bold">First Name</label>
-            <input class="form-control" placeholder="Enter first name" required th:field="*{firstName}" type="text"/>
+            <label>
+                <input class="form-control" placeholder="Enter first name" required th:field="*{firstName}" type="text"/>
+            </label>
         </div>
 
         <div class="mb-3">
             <label class="form-label fw-bold">Last Name</label>
-            <input class="form-control" placeholder="Enter last name" required th:field="*{lastName}" type="text"/>
+            <label>
+                <input class="form-control" placeholder="Enter last name" required th:field="*{lastName}" type="text"/>
+            </label>
         </div>
 
         <div class="mb-3">
             <label class="form-label fw-bold">Email</label>
-            <input class="form-control" placeholder="instructor@university.edu" required th:field="*{email}"
-                   type="email"/>
+            <label>
+                <input class="form-control" placeholder="instructor@university.edu" required th:field="*{email}"
+                       type="email"/>
+            </label>
         </div>
 
         <div class="mt-4">

@@ -88,7 +88,6 @@
             <version>3.0.2</version>
         </dependency>
 
-        <!-- FIX 1: Bumped Lombok to 1.18.38 -->
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>

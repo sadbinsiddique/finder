@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
 <head>
     <meta charset="UTF-8">
     <title>Attendance Form</title>
@@ -17,44 +17,52 @@
         <div class="mb-3">
             <label class="form-label fw-bold">Student</label>
             <!-- Lock the dropdown if we are updating an existing record so the Composite Key doesn't change -->
-            <select class="form-select" required th:field="*{student}"
-                    th:style="${attendance.id != null && attendance.id.studentId != null ? 'pointer-events: none; background-color: #e9ecef;' : ''}">
-                <option value="">-- Select Student --</option>
-                <option th:each="stu : ${students}"
-                        th:text="${stu.firstName + ' ' + stu.lastName}"
-                        th:value="${stu.id}"></option>
-            </select>
+            <label>
+                <select class="form-select" required th:field="*{student}"
+                        th:style="${attendance.id != null && attendance.id.studentId != null ? 'pointer-events: none; background-color: #e9ecef;' : ''}">
+                    <option value="">-- Select Student --</option>
+                    <option th:each="stu : ${students}"
+                            th:text="${stu.firstName + ' ' + stu.lastName}"
+                            th:value="${stu.id}"></option>
+                </select>
+            </label>
         </div>
 
         <!-- Course Dropdown -->
         <div class="mb-3">
             <label class="form-label fw-bold">Course</label>
-            <select class="form-select" required th:field="*{course}"
-                    th:style="${attendance.id != null && attendance.id.courseId != null ? 'pointer-events: none; background-color: #e9ecef;' : ''}">
-                <option value="">-- Select Course --</option>
-                <option th:each="crs : ${courses}"
-                        th:text="${crs.title}"
-                        th:value="${crs.id}"></option>
-            </select>
+            <label>
+                <select class="form-select" required th:field="*{course}"
+                        th:style="${attendance.id != null && attendance.id.courseId != null ? 'pointer-events: none; background-color: #e9ecef;' : ''}">
+                    <option value="">-- Select Course --</option>
+                    <option th:each="crs : ${courses}"
+                            th:text="${crs.title}"
+                            th:value="${crs.id}"></option>
+                </select>
+            </label>
         </div>
 
         <!-- Attendance Date (Part of Composite Key) -->
         <div class="mb-3">
             <label class="form-label fw-bold">Date</label>
-            <input class="form-control" required th:field="*{id.attendanceDate}"
-                   th:readonly="${attendance.id != null && attendance.id.attendanceDate != null}"
-                   type="date"/>
+            <label>
+                <input class="form-control" required th:field="*{id.attendanceDate}"
+                       th:readonly="${attendance.id != null && attendance.id.attendanceDate != null}"
+                       type="date"/>
+            </label>
         </div>
 
         <!-- Status Dropdown (Enum) -->
         <div class="mb-3">
             <label class="form-label fw-bold">Status</label>
-            <select class="form-select" required th:field="*{status}">
-                <option value="">-- Select Status --</option>
-                <option th:each="stat : ${statuses}"
-                        th:text="${stat}"
-                        th:value="${stat}"></option>
-            </select>
+            <label>
+                <select class="form-select" required th:field="*{status}">
+                    <option value="">-- Select Status --</option>
+                    <option th:each="stat : ${statuses}"
+                            th:text="${stat}"
+                            th:value="${stat}"></option>
+                </select>
+            </label>
         </div>
 
         <div class="mt-4">
