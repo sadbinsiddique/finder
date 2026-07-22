@@ -12,6 +12,10 @@ public interface StaffService {
 
     List<Staff> findAll();
 
+    List<Staff> findAllByOrderByAgeAsc();
+
+    List<Staff> findAllByOrderByIncomeAsc();
+
     Optional<Staff> findById(int theId);
 
     Staff save(Staff theStaff);

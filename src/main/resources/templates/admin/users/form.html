@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>User Form - Admin</title>
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'><path fill='%2330D158' d='M512 256C512 397.4 397.4 512 256 512C114.6 512 0 397.4 0 256C0 114.6 114.6 0 256 0C397.4 0 512 114.6 512 256zM256 48C141.1 48 48 141.1 48 256C48 285.2 54.02 313.1 64.9 338.3C77.46 322.9 96.79 313.3 118.2 313.3H144C161.7 313.3 176 298.1 176 281.3V256C176 238.3 190.3 224 208 224H256C273.7 224 288 209.7 288 192V160C288 142.3 302.3 128 320 128H336C344.8 128 352 120.8 352 112V92.29C322.7 64.08 283.4 48 256 48z'/></svg>">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -17,6 +18,7 @@
             --glass-inner-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.15);
             --apple-blue: #0A84FF;
             --apple-purple: #5E5CE6;
+            --apple-green: #30D158;
             --text-primary: #F5F5F7;
             --text-secondary: rgba(245, 245, 247, 0.55);
         }
@@ -41,6 +43,11 @@
             position: sticky;
             top: 0;
             z-index: 1000;
+        }
+
+        .logo-glow {
+            color: var(--apple-green);
+            filter: drop-shadow(0 0 10px rgba(48, 209, 88, 0.7));
         }
 
         .liquid-glass-form {
@@ -143,7 +150,7 @@
 <nav class="navbar navbar-expand-lg glass-navbar py-3 mb-4">
     <div class="container">
         <a class="navbar-brand text-white fw-bold d-flex align-items-center gap-2" href="/">
-            <i class="fas fa-graduation-cap" style="color: var(--apple-blue);"></i>
+            <i class="fas fa-globe logo-glow fs-4 me-1"></i>
             <span>University ERP</span>
         </a>
         <div class="ms-auto">
@@ -162,15 +169,15 @@
         <form method="post" th:action="@{/admin/users/save}" th:object="${user}">
 
             <div class="mb-3">
-                <label class="form-label">Username</label>
-                <input type="text" class="form-control" th:field="*{username}" required
+                <label for="usernameInput" class="form-label">Username</label>
+                <input id="usernameInput" type="text" class="form-control" th:field="*{username}" required
                        th:readonly="${user.username != null and user.username != ''}"
                        placeholder="Username"/>
             </div>
 
             <div class="mb-3">
-                <label class="form-label">Password</label>
-                <input type="password" class="form-control" th:field="*{password}"
+                <label for="passwordInput" class="form-label">Password</label>
+                <input id="passwordInput" type="password" class="form-control" th:field="*{password}"
                        th:required="${user.username == null or user.username == ''}"
                        placeholder="Enter new password or leave blank to keep current"/>
                 <small class="text-secondary mt-1 d-block" th:if="${user.username != null and user.username != ''}">

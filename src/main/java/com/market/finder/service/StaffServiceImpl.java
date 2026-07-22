@@ -8,11 +8,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.Optional;
 
-/**
- * DIP: Controller depends on StaffService interface, not this concrete class.
- * Fixes: Added @Service, fixed typo staffReposotory→staffRepository,
- *        fixed copy-paste bug in findAllByOrderByIncomeAsc().
- */
 @Service
 public class StaffServiceImpl implements StaffService {
 
