@@ -24,7 +24,7 @@ public class RoleAccessInterceptor implements HandlerInterceptor {
     private static final Logger logger = LoggerFactory.getLogger(RoleAccessInterceptor.class);
 
     @Override
-    public boolean preHandle(HttpServletRequest request,
+    public boolean preHandle(@NonNull HttpServletRequest request,
                              @NonNull HttpServletResponse response,
                              @NonNull Object handler) throws Exception {
 
@@ -79,9 +79,7 @@ public class RoleAccessInterceptor implements HandlerInterceptor {
         // 5. /departments module (Admin: Full, Instructor: View & Update, Student: View Only)
         if (uri.startsWith("/departments")) {
             if (uri.contains("/delete") || uri.contains("/new")) {
-                if (!isAdmin) {
-                    return denyAccess(response, username, method, uri, "Department create/delete restricted to ADMIN role");
-                }
+                return denyAccess(response, username, method, uri, "Department create/delete restricted to ADMIN role");
             }
             if (isStudent && (uri.contains("/edit") || uri.contains("/save"))) {
                 return denyAccess(response, username, method, uri, "STUDENT role can only view /departments");
@@ -91,18 +89,14 @@ public class RoleAccessInterceptor implements HandlerInterceptor {
         // 6. /students module (Admin: Full, Instructor & Student: View, Create, Edit - NO Delete)
         if (uri.startsWith("/students")) {
             if (uri.contains("/delete")) {
-                if (!isAdmin) {
-                    return denyAccess(response, username, method, uri, "Student deletion restricted to ADMIN role");
-                }
+                return denyAccess(response, username, method, uri, "Student deletion restricted to ADMIN role");
             }
         }
 
         // 7. /attendance module (Admin: Full, Instructor: View, Create, Update - NO Delete, Student: View Only)
         if (uri.startsWith("/attendance")) {
             if (uri.contains("/delete")) {
-                if (!isAdmin) {
-                    return denyAccess(response, username, method, uri, "Attendance deletion restricted to ADMIN role");
-                }
+                return denyAccess(response, username, method, uri, "Attendance deletion restricted to ADMIN role");
             }
             if (isStudent && (uri.contains("/new") || uri.contains("/edit") || uri.contains("/save"))) {
                 return denyAccess(response, username, method, uri, "STUDENT role can only view /attendance");
@@ -112,9 +106,7 @@ public class RoleAccessInterceptor implements HandlerInterceptor {
         // 8. /gradebooks module (Admin: Full, Instructor: View, Create, Edit, Update - NO Delete, Student: View Only)
         if (uri.startsWith("/gradebooks")) {
             if (uri.contains("/delete")) {
-                if (!isAdmin) {
-                    return denyAccess(response, username, method, uri, "Gradebook deletion restricted to ADMIN role");
-                }
+                return denyAccess(response, username, method, uri, "Gradebook deletion restricted to ADMIN role");
             }
             if (isStudent && (uri.contains("/new") || uri.contains("/edit") || uri.contains("/save"))) {
                 return denyAccess(response, username, method, uri, "STUDENT role can only view /gradebooks");

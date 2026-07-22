@@ -33,7 +33,7 @@ public class CustomUserDetailsService implements UserDetailsService {
 
     @Override
     @Transactional(readOnly = true)
-    public UserDetails loadUserByUsername(@NonNull String username) throws UsernameNotFoundException {
+    public @NonNull UserDetails loadUserByUsername(@NonNull String username) throws UsernameNotFoundException {
         logger.info("[AUTH-QUERY] Querying MySQL database for user: '{}'", username);
 
         User user = userRepository.findById(username)

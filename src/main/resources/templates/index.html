@@ -4,7 +4,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>University Management System</title>
+    <title>University ERP - Dashboard</title>
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'><path fill='%2330D158' d='M512 256C512 397.4 397.4 512 256 512C114.6 512 0 397.4 0 256C0 114.6 114.6 0 256 0C397.4 0 512 114.6 512 256zM256 48C141.1 48 48 141.1 48 256C48 285.2 54.02 313.1 64.9 338.3C77.46 322.9 96.79 313.3 118.2 313.3H144C161.7 313.3 176 298.1 176 281.3V256C176 238.3 190.3 224 208 224H256C273.7 224 288 209.7 288 192V160C288 142.3 302.3 128 320 128H336C344.8 128 352 120.8 352 112V92.29C322.7 64.08 283.4 48 256 48z'/></svg>">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -14,16 +15,14 @@
         :root {
             --bg-color: #07090e;
             --glass-bg: rgba(255, 255, 255, 0.03);
-            --glass-bg-hover: rgba(255, 255, 255, 0.06);
+            --glass-bg-hover: rgba(255, 255, 255, 0.07);
             --glass-border: rgba(255, 255, 255, 0.08);
-            --glass-border-hover: rgba(255, 255, 255, 0.18);
-            --glass-inner-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.1);
+            --glass-border-hover: rgba(255, 255, 255, 0.2);
+            --glass-inner-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.12);
             --apple-blue: #0A84FF;
             --apple-purple: #5E5CE6;
-            --apple-cyan: #64D2FF;
             --apple-green: #30D158;
             --apple-amber: #FF9F0A;
-            --apple-red: #FF453A;
             --text-primary: #F5F5F7;
             --text-secondary: rgba(245, 245, 247, 0.55);
         }
@@ -31,8 +30,9 @@
         body {
             background-color: var(--bg-color);
             background-image: 
-                radial-gradient(circle at 15% 20%, rgba(94, 92, 230, 0.08) 0%, transparent 45%),
-                radial-gradient(circle at 85% 75%, rgba(10, 132, 255, 0.06) 0%, transparent 45%);
+                radial-gradient(circle at 80% 10%, rgba(48, 209, 88, 0.07) 0%, transparent 40%),
+                radial-gradient(circle at 15% 70%, rgba(94, 92, 230, 0.08) 0%, transparent 45%),
+                radial-gradient(circle at 85% 85%, rgba(10, 132, 255, 0.06) 0%, transparent 45%);
             background-attachment: fixed;
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
             color: var(--text-primary);
@@ -40,7 +40,6 @@
             -webkit-font-smoothing: antialiased;
         }
 
-        /* Apple Glass Navbar */
         .glass-navbar {
             background: rgba(7, 9, 14, 0.75);
             backdrop-filter: blur(25px) saturate(180%);
@@ -51,25 +50,14 @@
             z-index: 1000;
         }
 
-        .navbar-brand {
-            font-weight: 600;
-            font-size: 1.15rem;
-            letter-spacing: -0.02em;
-            color: var(--text-primary) !important;
+        .logo-glow {
+            color: var(--apple-green);
+            filter: drop-shadow(0 0 10px rgba(48, 209, 88, 0.7));
+            transition: all 0.3s ease;
         }
 
-        .user-pill {
-            background: rgba(255, 255, 255, 0.06);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            box-shadow: var(--glass-inner-shadow);
-            border-radius: 30px;
-            padding: 5px 14px;
-            font-size: 0.825rem;
-            font-weight: 500;
-            color: var(--text-primary);
-            display: flex;
-            align-items: center;
-            gap: 6px;
+        .navbar-brand:hover .logo-glow {
+            transform: rotate(15deg) scale(1.1);
         }
 
         .btn-apple-glass {
@@ -81,56 +69,16 @@
             padding: 6px 14px;
             font-size: 0.85rem;
             font-weight: 500;
-            transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+            transition: all 0.25s ease;
+            text-decoration: none;
         }
 
         .btn-apple-glass:hover {
             background: rgba(255, 255, 255, 0.12);
             border-color: rgba(255, 255, 255, 0.25);
             color: #fff;
-            transform: translateY(-1px);
         }
 
-        .btn-apple-danger {
-            background: rgba(255, 69, 58, 0.1);
-            border: 1px solid rgba(255, 69, 58, 0.2);
-            color: #FF453A;
-            border-radius: 10px;
-            padding: 6px 14px;
-            font-size: 0.85rem;
-            font-weight: 500;
-            transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
-        }
-
-        .btn-apple-danger:hover {
-            background: rgba(255, 69, 58, 0.2);
-            border-color: rgba(255, 69, 58, 0.4);
-            color: #FF453A;
-        }
-
-        /* Hero Section */
-        .hero-section {
-            text-align: center;
-            padding: 3.5rem 0 2.5rem;
-        }
-
-        .hero-title {
-            font-size: 2.5rem;
-            font-weight: 700;
-            letter-spacing: -0.03em;
-            color: #F5F5F7;
-            margin-bottom: 0.5rem;
-        }
-
-        .hero-subtitle {
-            color: var(--text-secondary);
-            font-size: 1.05rem;
-            font-weight: 400;
-            max-width: 600px;
-            margin: 0 auto;
-        }
-
-        /* Apple Liquid Glass Card */
         .liquid-glass-card {
             background: var(--glass-bg);
             backdrop-filter: blur(25px) saturate(180%);
@@ -138,236 +86,165 @@
             border: 1px solid var(--glass-border);
             box-shadow: 0 16px 40px rgba(0, 0, 0, 0.35), var(--glass-inner-shadow);
             border-radius: 20px;
-            padding: 1.75rem;
+            padding: 1.5rem;
             height: 100%;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: block;
+            color: var(--text-primary);
         }
 
         .liquid-glass-card:hover {
             background: var(--glass-bg-hover);
             border-color: var(--glass-border-hover);
             transform: translateY(-4px);
-            box-shadow: 0 24px 48px rgba(0, 0, 0, 0.45), inset 0 1px 0 0 rgba(255, 255, 255, 0.2);
+            color: #fff;
         }
 
-        .icon-box {
+        .card-icon {
             width: 48px;
             height: 48px;
-            border-radius: 12px;
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            box-shadow: var(--glass-inner-shadow);
+            border-radius: 14px;
             display: flex;
             align-items: center;
             justify-content: center;
             font-size: 1.25rem;
-            margin-bottom: 1.25rem;
-            transition: all 0.3s ease;
+            margin-bottom: 1rem;
         }
 
-        .liquid-glass-card:hover .icon-box {
-            transform: scale(1.05);
-        }
-
-        .icon-box.admin { color: var(--apple-purple); }
-        .icon-box.students { color: var(--apple-blue); }
-        .icon-box.instructors { color: var(--apple-green); }
-        .icon-box.courses { color: var(--apple-cyan); }
-        .icon-box.departments { color: var(--apple-amber); }
-        .icon-box.enrollments { color: #32ADE6; }
-        .icon-box.attendance { color: #FFD60A; }
-        .icon-box.gradebooks { color: #BF5AF2; }
-        .icon-box.users { color: #FF375F; }
-
-        .card-heading {
-            font-size: 1.15rem;
-            font-weight: 600;
-            letter-spacing: -0.015em;
-            color: #F5F5F7;
-            margin-bottom: 0.5rem;
-        }
-
-        .card-description {
-            color: var(--text-secondary);
-            font-size: 0.875rem;
-            line-height: 1.5;
-            font-weight: 400;
-            margin-bottom: 1.5rem;
-        }
-
-        .btn-card-action {
-            background: rgba(255, 255, 255, 0.06);
-            border: 1px solid rgba(255, 255, 255, 0.12);
-            box-shadow: var(--glass-inner-shadow);
-            color: var(--text-primary);
-            border-radius: 12px;
-            padding: 10px 0;
-            width: 100%;
-            font-size: 0.875rem;
+        .badge-apple-role {
+            background: rgba(94, 92, 230, 0.15);
+            border: 1px solid rgba(94, 92, 230, 0.3);
+            color: #A5A3FF;
+            border-radius: 20px;
+            padding: 4px 12px;
+            font-size: 0.8rem;
             font-weight: 500;
-            text-align: center;
-            text-decoration: none;
-            transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
-            display: inline-block;
-        }
-
-        .btn-card-action:hover {
-            background: rgba(255, 255, 255, 0.14);
-            border-color: rgba(255, 255, 255, 0.25);
-            color: #fff;
         }
     </style>
 </head>
 <body>
 
-<!-- Apple Glass Navbar -->
-<nav class="navbar navbar-expand-lg glass-navbar py-3">
+<nav class="navbar navbar-expand-lg glass-navbar py-3 mb-4">
     <div class="container">
-        <a class="navbar-brand d-flex align-items-center gap-2" href="/">
-            <i class="fas fa-graduation-cap" style="color: var(--apple-blue);"></i>
-            <span>Portal</span>
+        <a class="navbar-brand text-white fw-bold d-flex align-items-center gap-2" href="/">
+            <i class="fas fa-globe logo-glow fs-4 me-1"></i>
+            <span>University ERP</span>
         </a>
-
         <div class="ms-auto d-flex align-items-center gap-3">
-            <div class="user-pill" sec:authorize="isAuthenticated()">
-                <i class="fas fa-user-circle" style="color: var(--apple-blue);"></i>
-                <span sec:authentication="name">User</span>
-            </div>
-
+            <span class="text-secondary small me-2" sec:authorize="isAuthenticated()">
+                <i class="fas fa-user-circle me-1" style="color: var(--apple-green);"></i>
+                <span sec:authentication="name" class="text-white fw-medium">User</span>
+            </span>
             <a th:href="@{/admin}" class="btn btn-apple-glass" sec:authorize="hasRole('ADMIN')">
                 <i class="fas fa-sliders-h me-1" style="color: var(--apple-purple);"></i> Admin Panel
             </a>
-
             <form th:action="@{/logout}" method="post" class="d-inline" sec:authorize="isAuthenticated()">
-                <button type="submit" class="btn btn-apple-danger">
+                <button type="submit" class="btn btn-apple-glass text-danger">
                     <i class="fas fa-power-off me-1"></i> Logout
                 </button>
             </form>
+            <a th:href="@{/login}" class="btn btn-apple-glass" sec:authorize="!isAuthenticated()">
+                <i class="fas fa-sign-in-alt me-1"></i> Login
+            </a>
         </div>
     </div>
 </nav>
 
 <div class="container pb-5">
-    <!-- Hero Section -->
-    <div class="hero-section">
-        <h1 class="hero-title">Overview</h1>
-        <p class="hero-subtitle">Access and manage all academic and administrative modules from a single unified portal.</p>
+    <div class="mb-4">
+        <h1 class="h2 fw-bold text-white mb-1">University Resource Portal</h1>
+        <p class="text-secondary mb-0">Select a management directory module below to proceed.</p>
     </div>
 
-    <!-- Grid of Liquid Glass Cards -->
     <div class="row g-4">
-
-        <!-- Admin Panel Card -->
-        <div class="col-md-4" sec:authorize="hasRole('ADMIN')">
-            <div class="liquid-glass-card">
-                <div>
-                    <div class="icon-box admin"><i class="fas fa-shield-alt"></i></div>
-                    <h2 class="card-heading">Admin Panel</h2>
-                    <p class="card-description">Full system administration with user credentials, role definitions, and access permissions.</p>
-                </div>
-                <a class="btn-card-action" th:href="@{/admin}">Open Admin Panel</a>
-            </div>
-        </div>
-
         <!-- Students Module -->
-        <div class="col-md-4">
-            <div class="liquid-glass-card">
-                <div>
-                    <div class="icon-box students"><i class="fas fa-user-graduate"></i></div>
-                    <h2 class="card-heading">Students</h2>
-                    <p class="card-description">Register student profiles, assign academic departments, and maintain records.</p>
+        <div class="col-md-6 col-lg-4">
+            <a th:href="@{/students}" class="liquid-glass-card">
+                <div class="card-icon" style="background: rgba(10, 132, 255, 0.12); color: var(--apple-blue);">
+                    <i class="fas fa-user-graduate"></i>
                 </div>
-                <a class="btn-card-action" th:href="@{/students}">Manage Students</a>
-            </div>
+                <h5 class="fw-bold mb-1">Students Directory</h5>
+                <p class="text-secondary small mb-0">View student profiles, enrollments, and academic departments.</p>
+            </a>
         </div>
 
-        <!-- Instructors Module (Admin & Student only - Hidden for Instructors) -->
-        <div class="col-md-4" sec:authorize="hasAnyRole('ADMIN', 'STUDENT')">
-            <div class="liquid-glass-card">
-                <div>
-                    <div class="icon-box instructors"><i class="fas fa-chalkboard-teacher"></i></div>
-                    <h2 class="card-heading">Instructors</h2>
-                    <p class="card-description">View faculty members, academic titles, contact details, and department allocations.</p>
+        <!-- Instructors Module -->
+        <div class="col-md-6 col-lg-4" sec:authorize="hasAnyRole('ADMIN', 'STUDENT')">
+            <a th:href="@{/instructors}" class="liquid-glass-card">
+                <div class="card-icon" style="background: rgba(48, 209, 88, 0.12); color: var(--apple-green);">
+                    <i class="fas fa-chalkboard-teacher"></i>
                 </div>
-                <a class="btn-card-action" th:href="@{/instructors}">View Instructors</a>
-            </div>
+                <h5 class="fw-bold mb-1">Instructors Roster</h5>
+                <p class="text-secondary small mb-0">Faculty staff directory and instructor assignments.</p>
+            </a>
         </div>
 
-        <!-- Courses Module (Admin & Student only - Hidden for Instructors) -->
-        <div class="col-md-4" sec:authorize="hasAnyRole('ADMIN', 'STUDENT')">
-            <div class="liquid-glass-card">
-                <div>
-                    <div class="icon-box courses"><i class="fas fa-book"></i></div>
-                    <h2 class="card-heading">Courses</h2>
-                    <p class="card-description">Catalog and manage active course offerings, syllabus titles, and curriculum structures.</p>
+        <!-- Courses Module -->
+        <div class="col-md-6 col-lg-4" sec:authorize="hasAnyRole('ADMIN', 'STUDENT')">
+            <a th:href="@{/courses}" class="liquid-glass-card">
+                <div class="card-icon" style="background: rgba(100, 210, 255, 0.12); color: #64D2FF;">
+                    <i class="fas fa-book"></i>
                 </div>
-                <a class="btn-card-action" th:href="@{/courses}">View Courses</a>
-            </div>
+                <h5 class="fw-bold mb-1">Academic Courses</h5>
+                <p class="text-secondary small mb-0">Course catalog, syllabus titles, and active curriculum.</p>
+            </a>
         </div>
 
         <!-- Departments Module -->
-        <div class="col-md-4">
-            <div class="liquid-glass-card">
-                <div>
-                    <div class="icon-box departments"><i class="fas fa-building"></i></div>
-                    <h2 class="card-heading">Departments</h2>
-                    <p class="card-description">Organize academic faculties, department names, and institutional divisions.</p>
+        <div class="col-md-6 col-lg-4">
+            <a th:href="@{/departments}" class="liquid-glass-card">
+                <div class="card-icon" style="background: rgba(255, 159, 10, 0.12); color: var(--apple-amber);">
+                    <i class="fas fa-building"></i>
                 </div>
-                <a class="btn-card-action" th:href="@{/departments}">Manage Departments</a>
-            </div>
+                <h5 class="fw-bold mb-1">Departments</h5>
+                <p class="text-secondary small mb-0">University faculties and academic department units.</p>
+            </a>
         </div>
 
         <!-- Enrollments Module -->
-        <div class="col-md-4">
-            <div class="liquid-glass-card">
-                <div>
-                    <div class="icon-box enrollments"><i class="fas fa-clipboard-list"></i></div>
-                    <h2 class="card-heading">Enrollments</h2>
-                    <p class="card-description">Track course registrations, student course links, and enrollment dates.</p>
+        <div class="col-md-6 col-lg-4">
+            <a th:href="@{/enrollments}" class="liquid-glass-card">
+                <div class="card-icon" style="background: rgba(50, 173, 230, 0.12); color: #32ADE6;">
+                    <i class="fas fa-clipboard-list"></i>
                 </div>
-                <a class="btn-card-action" th:href="@{/enrollments}">Manage Enrollments</a>
-            </div>
+                <h5 class="fw-bold mb-1">Course Enrollments</h5>
+                <p class="text-secondary small mb-0">Manage course registrations and student enrollments.</p>
+            </a>
         </div>
 
         <!-- Attendance Module -->
-        <div class="col-md-4">
-            <div class="liquid-glass-card">
-                <div>
-                    <div class="icon-box attendance"><i class="fas fa-calendar-check"></i></div>
-                    <h2 class="card-heading">Attendance</h2>
-                    <p class="card-description">Record and monitor daily student attendance statuses across all active courses.</p>
+        <div class="col-md-6 col-lg-4">
+            <a th:href="@{/attendance}" class="liquid-glass-card">
+                <div class="card-icon" style="background: rgba(255, 214, 10, 0.12); color: #FFD60A;">
+                    <i class="fas fa-calendar-check"></i>
                 </div>
-                <a class="btn-card-action" th:href="@{/attendance}">Manage Attendance</a>
-            </div>
+                <h5 class="fw-bold mb-1">Attendance Records</h5>
+                <p class="text-secondary small mb-0">Daily class attendance logs and status tracking.</p>
+            </a>
         </div>
 
         <!-- Gradebook Module -->
-        <div class="col-md-4">
-            <div class="liquid-glass-card">
-                <div>
-                    <div class="icon-box gradebooks"><i class="fas fa-chart-bar"></i></div>
-                    <h2 class="card-heading">Gradebook</h2>
-                    <p class="card-description">Record assignment scores, calculate student marks, and manage academic evaluation.</p>
+        <div class="col-md-6 col-lg-4">
+            <a th:href="@{/gradebooks}" class="liquid-glass-card">
+                <div class="card-icon" style="background: rgba(191, 90, 242, 0.12); color: #BF5AF2;">
+                    <i class="fas fa-award"></i>
                 </div>
-                <a class="btn-card-action" th:href="@{/gradebooks}">Manage Gradebook</a>
-            </div>
+                <h5 class="fw-bold mb-1">Student Gradebook</h5>
+                <p class="text-secondary small mb-0">Academic scores, assignments, and exam results.</p>
+            </a>
         </div>
 
-        <!-- System Users (Admin Only) -->
-        <div class="col-md-4" sec:authorize="hasRole('ADMIN')">
-            <div class="liquid-glass-card">
-                <div>
-                    <div class="icon-box users"><i class="fas fa-users-cog"></i></div>
-                    <h2 class="card-heading">System Users</h2>
-                    <p class="card-description">Configure system accounts, login credentials, and user security parameters.</p>
+        <!-- Admin Control Panel -->
+        <div class="col-md-6 col-lg-4" sec:authorize="hasRole('ADMIN')">
+            <a th:href="@{/admin}" class="liquid-glass-card" style="border-color: rgba(94, 92, 230, 0.3);">
+                <div class="card-icon" style="background: rgba(94, 92, 230, 0.15); color: var(--apple-purple);">
+                    <i class="fas fa-user-shield"></i>
                 </div>
-                <a class="btn-card-action" th:href="@{/admin/users}">Manage Users</a>
-            </div>
+                <h5 class="fw-bold mb-1 text-white">Admin Control Panel</h5>
+                <p class="text-secondary small mb-0">System user accounts, role definitions, and permissions.</p>
+            </a>
         </div>
-
     </div>
 </div>
 

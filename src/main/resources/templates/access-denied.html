@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Access Denied - University ERP</title>
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'><path fill='%2330D158' d='M512 256C512 397.4 397.4 512 256 512C114.6 512 0 397.4 0 256C0 114.6 114.6 0 256 0C397.4 0 512 114.6 512 256zM256 48C141.1 48 48 141.1 48 256C48 285.2 54.02 313.1 64.9 338.3C77.46 322.9 96.79 313.3 118.2 313.3H144C161.7 313.3 176 298.1 176 281.3V256C176 238.3 190.3 224 208 224H256C273.7 224 288 209.7 288 192V160C288 142.3 302.3 128 320 128H336C344.8 128 352 120.8 352 112V92.29C322.7 64.08 283.4 48 256 48z'/></svg>">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -12,11 +13,12 @@
     <style>
         :root {
             --bg-color: #07090e;
-            --glass-bg: rgba(255, 255, 255, 0.03);
-            --glass-border: rgba(255, 255, 255, 0.08);
-            --glass-inner-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.1);
-            --apple-red: #FF453A;
+            --glass-bg: rgba(255, 255, 255, 0.04);
+            --glass-border: rgba(255, 255, 255, 0.1);
+            --glass-inner-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.15);
             --apple-blue: #0A84FF;
+            --apple-green: #30D158;
+            --apple-red: #FF453A;
             --text-primary: #F5F5F7;
             --text-secondary: rgba(245, 245, 247, 0.55);
         }
@@ -24,7 +26,7 @@
         body {
             background-color: var(--bg-color);
             background-image: 
-                radial-gradient(circle at 50% 30%, rgba(255, 69, 58, 0.06) 0%, transparent 55%),
+                radial-gradient(circle at 50% 30%, rgba(255, 69, 58, 0.08) 0%, transparent 50%),
                 radial-gradient(circle at 20% 80%, rgba(10, 132, 255, 0.05) 0%, transparent 45%);
             background-attachment: fixed;
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
@@ -33,73 +35,52 @@
             display: flex;
             align-items: center;
             justify-content: center;
+            margin: 0;
             -webkit-font-smoothing: antialiased;
         }
 
-        .liquid-glass-denied {
+        .denied-card {
             background: var(--glass-bg);
             backdrop-filter: blur(30px) saturate(190%);
             -webkit-backdrop-filter: blur(30px) saturate(190%);
             border: 1px solid var(--glass-border);
-            border-radius: 24px;
-            padding: 3.5rem 2.5rem;
-            text-align: center;
-            max-width: 460px;
-            width: 100%;
             box-shadow: 0 30px 60px rgba(0, 0, 0, 0.5), var(--glass-inner-shadow);
+            border-radius: 24px;
+            padding: 3rem 2.5rem;
+            width: 100%;
+            max-width: 480px;
         }
 
-        .icon-badge-denied {
+        .logo-glow {
+            color: var(--apple-green);
+            filter: drop-shadow(0 0 14px rgba(48, 209, 88, 0.8));
+        }
+
+        .shield-icon {
             width: 72px;
             height: 72px;
-            border-radius: 20px;
-            background: rgba(255, 69, 58, 0.1);
+            border-radius: 22px;
+            background: rgba(255, 69, 58, 0.12);
             border: 1px solid rgba(255, 69, 58, 0.25);
-            box-shadow: var(--glass-inner-shadow);
             display: flex;
             align-items: center;
             justify-content: center;
             margin: 0 auto 1.5rem;
-            font-size: 2rem;
             color: var(--apple-red);
-        }
-
-        .error-code {
-            font-size: 3rem;
-            font-weight: 800;
-            letter-spacing: -0.04em;
-            color: #FF6B60;
-            line-height: 1;
-            margin-bottom: 0.5rem;
-        }
-
-        .denied-title {
-            font-size: 1.5rem;
-            font-weight: 700;
-            letter-spacing: -0.02em;
-            color: #F5F5F7;
-            margin-bottom: 0.75rem;
-        }
-
-        .denied-text {
-            color: var(--text-secondary);
-            font-size: 0.9rem;
-            line-height: 1.6;
-            margin-bottom: 2rem;
+            font-size: 2rem;
         }
 
         .btn-apple-primary {
             background: var(--apple-blue);
             border: 1px solid rgba(255, 255, 255, 0.2);
-            box-shadow: 0 4px 16px rgba(10, 132, 255, 0.35), var(--glass-inner-shadow);
+            box-shadow: 0 4px 14px rgba(10, 132, 255, 0.35), var(--glass-inner-shadow);
             color: #fff;
             border-radius: 12px;
-            padding: 12px 28px;
-            font-size: 0.9rem;
+            padding: 10px 24px;
             font-weight: 500;
             text-decoration: none;
             display: inline-block;
-            transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+            transition: all 0.25s ease;
         }
 
         .btn-apple-primary:hover {
@@ -111,16 +92,23 @@
 </head>
 <body>
 
-<div class="liquid-glass-denied">
-    <div class="icon-badge-denied">
-        <i class="fas fa-shield-alt"></i>
+<div class="denied-card text-center">
+    <div class="mb-3">
+        <i class="fas fa-globe logo-glow fs-3 mb-3 d-block"></i>
     </div>
-    <div class="error-code">403</div>
-    <h1 class="denied-title">Access Restricted</h1>
-    <p class="denied-text">You do not have the required role permissions to perform this action or view this resource.</p>
-    <a th:href="@{/}" class="btn-apple-primary">
-        <i class="fas fa-arrow-left me-2"></i>Return to Dashboard
-    </a>
+    <div class="shield-icon">
+        <i class="fas fa-user-shield"></i>
+    </div>
+    <h1 class="h3 fw-bold text-white mb-2">403 - Access Denied</h1>
+    <p class="text-secondary small mb-4">
+        You do not have sufficient security authority permissions to view or modify this resource.
+    </p>
+
+    <div class="d-flex justify-content-center gap-3">
+        <a th:href="@{/}" class="btn btn-apple-primary">
+            <i class="fas fa-home me-1"></i> Return Home
+        </a>
+    </div>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>

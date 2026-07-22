@@ -13,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -25,9 +26,7 @@ public class DataInitializer implements CommandLineRunner {
     private static final Logger logger = LoggerFactory.getLogger(DataInitializer.class);
 
     private final UserRepository userRepository;
-    private final UserService userService;
     private final RoleService roleService;
-    private final PermissionService permissionService;
     private final DepartmentService departmentService;
     private final CourseService courseService;
     private final InstructorService instructorService;
@@ -40,9 +39,7 @@ public class DataInitializer implements CommandLineRunner {
     private final PasswordEncoder passwordEncoder;
 
     public DataInitializer(UserRepository userRepository,
-                           UserService userService,
                            RoleService roleService,
-                           PermissionService permissionService,
                            DepartmentService departmentService,
                            CourseService courseService,
                            InstructorService instructorService,
@@ -54,9 +51,7 @@ public class DataInitializer implements CommandLineRunner {
                            GradebookService gradebookService,
                            PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
-        this.userService = userService;
         this.roleService = roleService;
-        this.permissionService = permissionService;
         this.departmentService = departmentService;
         this.courseService = courseService;
         this.instructorService = instructorService;
@@ -268,9 +263,12 @@ public class DataInitializer implements CommandLineRunner {
     }
 
     private void seedEnrollmentsAndGrades() {
-        if (studentService.findAll().size() >= 2 && courseService.findAll().size() >= 2) {
-            Student s1 = studentService.findAll().get(0);
-            Course c1 = courseService.findAll().get(0);
+        List<Student> students = studentService.findAll();
+        List<Course> courses = courseService.findAll();
+
+        if (students.size() >= 2 && courses.size() >= 2) {
+            Student s1 = students.get(0);
+            Course c1 = courses.get(0);
 
             if (enrollmentService.findAll().isEmpty()) {
                 Enrollment en = new Enrollment();

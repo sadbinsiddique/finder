@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org"
-      xmlns:sec="http://www.thymeleaf.org/extras/spring-security" lang="en">
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Panel - University ERP</title>
+    <title>Admin Dashboard - University ERP</title>
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'><path fill='%2330D158' d='M512 256C512 397.4 397.4 512 256 512C114.6 512 0 397.4 0 256C0 114.6 114.6 0 256 0C397.4 0 512 114.6 512 256zM256 48C141.1 48 48 141.1 48 256C48 285.2 54.02 313.1 64.9 338.3C77.46 322.9 96.79 313.3 118.2 313.3H144C161.7 313.3 176 298.1 176 281.3V256C176 238.3 190.3 224 208 224H256C273.7 224 288 209.7 288 192V160C288 142.3 302.3 128 320 128H336C344.8 128 352 120.8 352 112V92.29C322.7 64.08 283.4 48 256 48z'/></svg>">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -22,8 +22,6 @@
             --apple-purple: #5E5CE6;
             --apple-cyan: #64D2FF;
             --apple-green: #30D158;
-            --apple-amber: #FF9F0A;
-            --apple-red: #FF453A;
             --text-primary: #F5F5F7;
             --text-secondary: rgba(245, 245, 247, 0.55);
         }
@@ -50,18 +48,10 @@
             z-index: 1000;
         }
 
-        .user-pill {
-            background: rgba(255, 255, 255, 0.06);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            box-shadow: var(--glass-inner-shadow);
-            border-radius: 30px;
-            padding: 5px 14px;
-            font-size: 0.825rem;
-            font-weight: 500;
-            color: var(--text-primary);
-            display: flex;
-            align-items: center;
-            gap: 6px;
+        .logo-glow {
+            color: var(--apple-green);
+            filter: drop-shadow(0 0 10px rgba(48, 209, 88, 0.7));
+            transition: all 0.3s ease;
         }
 
         .btn-apple-glass {
@@ -73,137 +63,60 @@
             padding: 6px 14px;
             font-size: 0.85rem;
             font-weight: 500;
-            transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+            transition: all 0.25s ease;
+            text-decoration: none;
         }
 
         .btn-apple-glass:hover {
             background: rgba(255, 255, 255, 0.12);
             border-color: rgba(255, 255, 255, 0.25);
             color: #fff;
-            transform: translateY(-1px);
         }
 
-        .btn-apple-danger {
-            background: rgba(255, 69, 58, 0.1);
-            border: 1px solid rgba(255, 69, 58, 0.2);
-            color: #FF453A;
-            border-radius: 10px;
-            padding: 6px 14px;
-            font-size: 0.85rem;
-            font-weight: 500;
-            transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
-        }
-
-        .btn-apple-danger:hover {
-            background: rgba(255, 69, 58, 0.2);
-            border-color: rgba(255, 69, 58, 0.4);
-            color: #FF453A;
-        }
-
-        .liquid-glass-stat {
+        .liquid-glass-card {
             background: var(--glass-bg);
             backdrop-filter: blur(25px) saturate(180%);
             -webkit-backdrop-filter: blur(25px) saturate(180%);
             border: 1px solid var(--glass-border);
-            box-shadow: 0 12px 32px rgba(0, 0, 0, 0.3), var(--glass-inner-shadow);
-            border-radius: 18px;
+            box-shadow: 0 16px 40px rgba(0, 0, 0, 0.35), var(--glass-inner-shadow);
+            border-radius: 20px;
             padding: 1.5rem;
-            text-align: center;
-            transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
-        }
-
-        .liquid-glass-stat:hover {
-            background: var(--glass-bg-hover);
-            border-color: var(--glass-border-hover);
-            transform: translateY(-3px);
-        }
-
-        .stat-icon-badge {
-            width: 44px;
-            height: 44px;
-            border-radius: 12px;
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            box-shadow: var(--glass-inner-shadow);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.15rem;
-            margin: 0 auto 0.75rem;
-        }
-
-        .stat-icon-badge.users { color: var(--apple-purple); }
-        .stat-icon-badge.roles { color: #FF375F; }
-        .stat-icon-badge.students { color: var(--apple-blue); }
-        .stat-icon-badge.instructors { color: var(--apple-green); }
-        .stat-icon-badge.courses { color: var(--apple-cyan); }
-        .stat-icon-badge.departments { color: var(--apple-amber); }
-
-        .stat-num {
-            font-size: 1.75rem;
-            font-weight: 700;
-            color: #F5F5F7;
-            letter-spacing: -0.02em;
-        }
-
-        .stat-lbl {
-            color: var(--text-secondary);
-            font-size: 0.75rem;
-            font-weight: 500;
-            text-transform: uppercase;
-            letter-spacing: 0.08em;
-            margin-top: 0.2rem;
-        }
-
-        .liquid-glass-action {
-            background: var(--glass-bg);
-            backdrop-filter: blur(25px) saturate(180%);
-            -webkit-backdrop-filter: blur(25px) saturate(180%);
-            border: 1px solid var(--glass-border);
-            box-shadow: 0 12px 32px rgba(0, 0, 0, 0.3), var(--glass-inner-shadow);
-            border-radius: 18px;
-            padding: 1.5rem;
+            height: 100%;
+            transition: all 0.3s ease;
             text-decoration: none;
-            color: var(--text-primary);
             display: block;
-            transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+            color: var(--text-primary);
         }
 
-        .liquid-glass-action:hover {
+        .liquid-glass-card:hover {
             background: var(--glass-bg-hover);
             border-color: var(--glass-border-hover);
-            transform: translateY(-3px);
+            transform: translateY(-4px);
             color: #fff;
         }
 
-        .section-heading {
-            font-size: 1.35rem;
-            font-weight: 600;
+        .stat-value {
+            font-size: 2.25rem;
+            font-weight: 700;
             letter-spacing: -0.02em;
-            color: #F5F5F7;
-            margin-bottom: 1.25rem;
+            color: #fff;
         }
     </style>
 </head>
 <body>
 
-<!-- Navbar -->
-<nav class="navbar navbar-expand-lg glass-navbar py-3">
+<nav class="navbar navbar-expand-lg glass-navbar py-3 mb-4">
     <div class="container">
         <a class="navbar-brand text-white fw-bold d-flex align-items-center gap-2" href="/">
-            <i class="fas fa-graduation-cap" style="color: var(--apple-blue);"></i>
+            <i class="fas fa-globe logo-glow fs-4 me-1"></i>
             <span>University ERP</span>
         </a>
         <div class="ms-auto d-flex align-items-center gap-3">
-            <div class="user-pill">
-                <i class="fas fa-shield-alt" style="color: var(--apple-purple);"></i>
-                <span sec:authentication="name">Admin</span>
-            </div>
             <a th:href="@{/}" class="btn btn-apple-glass">
-                <i class="fas fa-home me-1"></i> Home
+                <i class="fas fa-home me-1"></i> Public Dashboard
             </a>
             <form th:action="@{/logout}" method="post" class="d-inline">
-                <button type="submit" class="btn btn-apple-danger">
+                <button type="submit" class="btn btn-apple-glass text-danger">
                     <i class="fas fa-power-off me-1"></i> Logout
                 </button>
             </form>
@@ -211,122 +124,75 @@
     </div>
 </nav>
 
-<div class="container py-4">
-    <!-- Header -->
+<div class="container pb-5">
     <div class="mb-4">
-        <h1 class="h2 fw-bold text-white mb-1">Admin Panel</h1>
-        <p class="text-secondary mb-0">System metrics, security roles, and user administration.</p>
+        <h1 class="h2 fw-bold text-white mb-1">Admin Control Center</h1>
+        <p class="text-secondary mb-0">System administration, security role assignments, and directory management.</p>
     </div>
 
-    <!-- Stats Row -->
-    <div class="row g-3 mb-5">
-        <div class="col-6 col-md-2">
-            <div class="liquid-glass-stat">
-                <div class="stat-icon-badge users"><i class="fas fa-users"></i></div>
-                <div class="stat-num" th:text="${totalUsers}">0</div>
-                <div class="stat-lbl">Users</div>
+    <!-- Quick Stats -->
+    <div class="row g-4 mb-4">
+        <div class="col-md-4">
+            <div class="liquid-glass-card">
+                <div class="text-secondary small mb-1">TOTAL USERS</div>
+                <div class="stat-value text-white" th:text="${userCount}">0</div>
+                <div class="small text-secondary mt-2"><i class="fas fa-user-shield me-1" style="color: var(--apple-blue);"></i> Active MySQL accounts</div>
             </div>
         </div>
-        <div class="col-6 col-md-2">
-            <div class="liquid-glass-stat">
-                <div class="stat-icon-badge roles"><i class="fas fa-user-tag"></i></div>
-                <div class="stat-num" th:text="${totalRoles}">0</div>
-                <div class="stat-lbl">Roles</div>
+        <div class="col-md-4">
+            <div class="liquid-glass-card">
+                <div class="text-secondary small mb-1">SECURITY ROLES</div>
+                <div class="stat-value text-white" th:text="${roleCount}">0</div>
+                <div class="small text-secondary mt-2"><i class="fas fa-key me-1" style="color: var(--apple-purple);"></i> System authority sets</div>
             </div>
         </div>
-        <div class="col-6 col-md-2">
-            <div class="liquid-glass-stat">
-                <div class="stat-icon-badge students"><i class="fas fa-user-graduate"></i></div>
-                <div class="stat-num" th:text="${totalStudents}">0</div>
-                <div class="stat-lbl">Students</div>
-            </div>
-        </div>
-        <div class="col-6 col-md-2">
-            <div class="liquid-glass-stat">
-                <div class="stat-icon-badge instructors"><i class="fas fa-chalkboard-teacher"></i></div>
-                <div class="stat-num" th:text="${totalInstructors}">0</div>
-                <div class="stat-lbl">Instructors</div>
-            </div>
-        </div>
-        <div class="col-6 col-md-2">
-            <div class="liquid-glass-stat">
-                <div class="stat-icon-badge courses"><i class="fas fa-book"></i></div>
-                <div class="stat-num" th:text="${totalCourses}">0</div>
-                <div class="stat-lbl">Courses</div>
-            </div>
-        </div>
-        <div class="col-6 col-md-2">
-            <div class="liquid-glass-stat">
-                <div class="stat-icon-badge departments"><i class="fas fa-building"></i></div>
-                <div class="stat-num" th:text="${totalDepartments}">0</div>
-                <div class="stat-lbl">Departments</div>
+        <div class="col-md-4">
+            <div class="liquid-glass-card">
+                <div class="text-secondary small mb-1">TOTAL STUDENTS</div>
+                <div class="stat-value text-white" th:text="${studentCount}">0</div>
+                <div class="small text-secondary mt-2"><i class="fas fa-graduation-cap me-1" style="color: var(--apple-green);"></i> Enrolled student roster</div>
             </div>
         </div>
     </div>
 
-    <!-- Quick Administration -->
-    <h2 class="section-heading">System Administration</h2>
-    <div class="row g-4 mb-5">
+    <!-- Module Management -->
+    <div class="row g-4">
         <div class="col-md-4">
-            <a th:href="@{/admin/users}" class="liquid-glass-action">
-                <div class="d-flex align-items-center">
-                    <div class="stat-icon-badge users me-3 mb-0"><i class="fas fa-users-cog"></i></div>
-                    <div>
-                        <h3 class="h6 fw-semibold mb-1">User Management</h3>
-                        <p class="text-secondary small mb-0">Manage accounts, assign roles, and toggle user statuses.</p>
+            <a th:href="@{/admin/users}" class="liquid-glass-card">
+                <div class="d-flex align-items-center justify-content-between mb-3">
+                    <div class="p-3 rounded-3" style="background: rgba(10, 132, 255, 0.12); color: var(--apple-blue);">
+                        <i class="fas fa-users-cog fs-4"></i>
                     </div>
+                    <i class="fas fa-chevron-right text-secondary"></i>
                 </div>
+                <h5 class="fw-bold mb-1">User Management</h5>
+                <p class="text-secondary small mb-0">Create, edit, enable/disable system user accounts and assign security roles.</p>
             </a>
         </div>
-        <div class="col-md-4">
-            <a th:href="@{/admin/roles}" class="liquid-glass-action">
-                <div class="d-flex align-items-center">
-                    <div class="stat-icon-badge roles me-3 mb-0"><i class="fas fa-shield-alt"></i></div>
-                    <div>
-                        <h3 class="h6 fw-semibold mb-1">Role Definitions</h3>
-                        <p class="text-secondary small mb-0">Define system authority roles and permissions.</p>
-                    </div>
-                </div>
-            </a>
-        </div>
-        <div class="col-md-4">
-            <a th:href="@{/admin/permissions}" class="liquid-glass-action">
-                <div class="d-flex align-items-center">
-                    <div class="stat-icon-badge courses me-3 mb-0"><i class="fas fa-key"></i></div>
-                    <div>
-                        <h3 class="h6 fw-semibold mb-1">System Permissions</h3>
-                        <p class="text-secondary small mb-0">View fine-grained permission assignments.</p>
-                    </div>
-                </div>
-            </a>
-        </div>
-    </div>
 
-    <!-- Academic Modules -->
-    <h2 class="section-heading">Academic Modules</h2>
-    <div class="row g-3 mb-4">
-        <div class="col-md-3">
-            <a th:href="@{/students}" class="liquid-glass-action text-center py-3">
-                <i class="fas fa-user-graduate mb-2 fs-5" style="color: var(--apple-blue);"></i>
-                <h3 class="h6 fw-medium mb-0">Students</h3>
+        <div class="col-md-4">
+            <a th:href="@{/admin/roles}" class="liquid-glass-card">
+                <div class="d-flex align-items-center justify-content-between mb-3">
+                    <div class="p-3 rounded-3" style="background: rgba(94, 92, 230, 0.15); color: var(--apple-purple);">
+                        <i class="fas fa-shield-alt fs-4"></i>
+                    </div>
+                    <i class="fas fa-chevron-right text-secondary"></i>
+                </div>
+                <h5 class="fw-bold mb-1">Role Management</h5>
+                <p class="text-secondary small mb-0">Configure system security roles and permission assignments.</p>
             </a>
         </div>
-        <div class="col-md-3">
-            <a th:href="@{/instructors}" class="liquid-glass-action text-center py-3">
-                <i class="fas fa-chalkboard-teacher mb-2 fs-5" style="color: var(--apple-green);"></i>
-                <h3 class="h6 fw-medium mb-0">Instructors</h3>
-            </a>
-        </div>
-        <div class="col-md-3">
-            <a th:href="@{/courses}" class="liquid-glass-action text-center py-3">
-                <i class="fas fa-book mb-2 fs-5" style="color: var(--apple-cyan);"></i>
-                <h3 class="h6 fw-medium mb-0">Courses</h3>
-            </a>
-        </div>
-        <div class="col-md-3">
-            <a th:href="@{/departments}" class="liquid-glass-action text-center py-3">
-                <i class="fas fa-building mb-2 fs-5" style="color: var(--apple-amber);"></i>
-                <h3 class="h6 fw-medium mb-0">Departments</h3>
+
+        <div class="col-md-4">
+            <a th:href="@{/admin/permissions}" class="liquid-glass-card">
+                <div class="d-flex align-items-center justify-content-between mb-3">
+                    <div class="p-3 rounded-3" style="background: rgba(100, 210, 255, 0.12); color: var(--apple-cyan);">
+                        <i class="fas fa-lock fs-4"></i>
+                    </div>
+                    <i class="fas fa-chevron-right text-secondary"></i>
+                </div>
+                <h5 class="fw-bold mb-1">Permissions Registry</h5>
+                <p class="text-secondary small mb-0">View fine-grained security permissions defined in system.</p>
             </a>
         </div>
     </div>
