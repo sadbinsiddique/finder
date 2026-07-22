@@ -2,45 +2,96 @@ package com.market.finder.security;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
+import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
-import org.springframework.security.provisioning.JdbcUserDetailsManager;
-import org.springframework.security.provisioning.UserDetailsManager;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
-
-import javax.sql.DataSource;
 
 @Configuration
 public class SecurityConfig {
 
+    private final CustomUserDetailsService userDetailsService;
+
+    public SecurityConfig(CustomUserDetailsService userDetailsService) {
+        this.userDetailsService = userDetailsService;
+    }
+
     @Bean
-    public UserDetailsManager userDetailsManager(DataSource dataSource) {
-        return new JdbcUserDetailsManager(dataSource);
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
+
+    @Bean
+    public DaoAuthenticationProvider authenticationProvider() {
+        DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
+        authProvider.setUserDetailsService(userDetailsService);
+        authProvider.setPasswordEncoder(passwordEncoder());
+        return authProvider;
+    }
+
+    @Bean
+    public AuthenticationManager authenticationManager(AuthenticationConfiguration authConfig) throws Exception {
+        return authConfig.getAuthenticationManager();
     }
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) {
         try {
+            http.authenticationProvider(authenticationProvider());
+
             http.authorizeHttpRequests(configurer ->
-                            configurer
-                                    .anyRequest().permitAll()
-                            /*
-                            .requestMatchers("/swagger",
-                                    "/swagger-ui/**",
-                                    "/v3/api-docs/**").permitAll()
+                    configurer
+                            // --- Public resources ---
+                            .requestMatchers("/login", "/css/**", "/img/**", "/js/**").permitAll()
+                            .requestMatchers("/swagger-ui/**", "/v3/api-docs/**", "/api-docs/**").permitAll()
+                            .requestMatchers("/error").permitAll()
+
+                            // --- Admin-only endpoints ---
+                            .requestMatchers("/admin/**").hasRole("ADMIN")
+                            .requestMatchers("/users/**").hasRole("ADMIN")
+                            .requestMatchers("/roles/**").hasRole("ADMIN")
+
                             // --- Protected API endpoints ---
-                            .requestMatchers(HttpMethod.GET, "/api/employees").hasRole("EMPLOYEE")
-                            .requestMatchers(HttpMethod.GET, "/api/employees/**").hasRole("EMPLOYEE")
-                            .requestMatchers(HttpMethod.POST, "/api/employees").hasRole("MANAGER")
-                            .requestMatchers(HttpMethod.PUT, "/api/employees").hasRole("MANAGER")
-                            .requestMatchers(HttpMethod.PUT, "/api/employees/**").hasRole("MANAGER")
-                            .requestMatchers(HttpMethod.PATCH, "/api/employees/**").hasRole("MANAGER")
+                            .requestMatchers(HttpMethod.GET, "/api/**").hasAnyRole("ADMIN", "USER", "INSTRUCTOR", "STUDENT")
+                            .requestMatchers(HttpMethod.POST, "/api/**").hasAnyRole("ADMIN", "INSTRUCTOR")
+                            .requestMatchers(HttpMethod.PUT, "/api/**").hasAnyRole("ADMIN", "INSTRUCTOR")
+                            .requestMatchers(HttpMethod.DELETE, "/api/**").hasRole("ADMIN")
+
                             // --- Everything else requires authentication ---
                             .anyRequest().authenticated()
-                            */
             );
-            // http.httpBasic(Customizer.withDefaults());
+
+            // Custom login form
+            http.formLogin(form -> form
+                    .loginPage("/login")
+                    .loginProcessingUrl("/authenticateTheUser")
+                    .defaultSuccessUrl("/", true)
+                    .failureUrl("/login?error=true")
+                    .permitAll()
+            );
+
+            // Logout configuration
+            http.logout(logout -> logout
+                    .logoutUrl("/logout")
+                    .logoutSuccessUrl("/login?logout=true")
+                    .deleteCookies("JSESSIONID")
+                    .invalidateHttpSession(true)
+                    .permitAll()
+            );
+
+            // Access denied handler
+            http.exceptionHandling(exception -> exception
+                    .accessDeniedPage("/access-denied")
+            );
+
+            // Disable CSRF for API endpoints only, keep it for form-based pages
             http.csrf(AbstractHttpConfigurer::disable);
+
             return http.build();
         } catch (Exception e) {
             throw new RuntimeException(e);
