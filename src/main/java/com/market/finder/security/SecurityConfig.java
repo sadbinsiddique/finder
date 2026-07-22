@@ -114,10 +114,10 @@ public class SecurityConfig {
                             .anyRequest().authenticated()
             );
 
-            // Custom login form
+            // Custom login form matching POST /login
             http.formLogin(form -> form
                     .loginPage("/login")
-                    .loginProcessingUrl("/authenticateTheUser")
+                    .loginProcessingUrl("/login")
                     .defaultSuccessUrl("/", true)
                     .failureUrl("/login?error=true")
                     .permitAll()

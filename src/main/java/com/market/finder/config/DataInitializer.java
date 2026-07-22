@@ -3,6 +3,7 @@ package com.market.finder.config;
 import com.market.finder.dao.UserRepository;
 import com.market.finder.entity.*;
 import com.market.finder.service.*;
+import org.jspecify.annotations.NonNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.CommandLineRunner;
@@ -66,7 +67,7 @@ public class DataInitializer implements CommandLineRunner {
 
     @Override
     @Transactional
-    public void run(String... args) {
+    public void run(String @NonNull ... args) {
         logger.info("[DATABASE-INIT] Synchronizing system roles and credentials in MySQL database...");
         seedRolesAndPermissions();
         seedUsers();
@@ -267,8 +268,8 @@ public class DataInitializer implements CommandLineRunner {
         List<Course> courses = courseService.findAll();
 
         if (students.size() >= 2 && courses.size() >= 2) {
-            Student s1 = students.get(0);
-            Course c1 = courses.get(0);
+            Student s1 = students.getFirst();
+            Course c1 = courses.getFirst();
 
             if (enrollmentService.findAll().isEmpty()) {
                 Enrollment en = new Enrollment();
