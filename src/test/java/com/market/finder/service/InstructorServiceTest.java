@@ -42,7 +42,7 @@ class InstructorServiceTest {
         List<Instructor> instructors = instructorService.findAll();
 
         assertEquals(1, instructors.size());
-        assertEquals("John", instructors.get(0).getFirstName());
+        assertEquals("John", instructors.getFirst().getFirstName());
         verify(instructorRepository, times(1)).findAll();
     }
 

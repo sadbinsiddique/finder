@@ -1,6 +1,5 @@
 package com.market.finder.controller;
 
-import com.market.finder.entity.Role;
 import com.market.finder.entity.User;
 import com.market.finder.service.RoleService;
 import com.market.finder.service.UserService;
@@ -15,8 +14,9 @@ import org.springframework.ui.Model;
 import java.util.List;
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -80,7 +80,7 @@ class AdminUserControllerTest {
     void testSaveUser_PreservesPasswordWhenEmpty() {
         User editUser = new User();
         editUser.setUsername("testadmin");
-        editUser.setPassword(""); // Empty password submission
+        editUser.setPassword("");
 
         when(userService.findByUsername("testadmin")).thenReturn(Optional.of(sampleUser));
         when(userService.save(any(User.class))).thenAnswer(i -> i.getArgument(0));
@@ -88,7 +88,7 @@ class AdminUserControllerTest {
         String view = adminUserController.saveUser(editUser, List.of());
 
         assertEquals("redirect:/admin/users", view);
-        assertEquals("password123", editUser.getPassword()); // Preserved existing password!
+        assertEquals("password123", editUser.getPassword());
         verify(userService, times(1)).save(editUser);
     }
 

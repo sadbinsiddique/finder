@@ -40,7 +40,7 @@ class CourseServiceTest {
         List<Course> courses = courseService.findAll();
 
         assertEquals(1, courses.size());
-        assertEquals("Computer Science 101", courses.get(0).getTitle());
+        assertEquals("Computer Science 101", courses.getFirst().getTitle());
         verify(courseRepository, times(1)).findAll();
     }
 

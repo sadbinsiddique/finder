@@ -53,7 +53,7 @@ class CustomUserDetailsServiceTest {
         assertEquals("$2a$10$encodedHash", userDetails.getPassword());
         assertTrue(userDetails.isEnabled());
         assertTrue(userDetails.getAuthorities().stream()
-                .anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN")));
+                .anyMatch(a -> "ROLE_ADMIN".equals(a.getAuthority())));
 
         verify(userRepository, times(1)).findById("admin");
     }
@@ -62,9 +62,7 @@ class CustomUserDetailsServiceTest {
     void testLoadUserByUsername_UserNotFound() {
         when(userRepository.findById("unknown")).thenReturn(Optional.empty());
 
-        assertThrows(UsernameNotFoundException.class, () -> {
-            userDetailsService.loadUserByUsername("unknown");
-        });
+        assertThrows(UsernameNotFoundException.class, () -> userDetailsService.loadUserByUsername("unknown"));
 
         verify(userRepository, times(1)).findById("unknown");
     }

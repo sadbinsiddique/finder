@@ -40,7 +40,7 @@ class DepartmentServiceTest {
         List<Department> list = departmentService.findAll();
 
         assertEquals(1, list.size());
-        assertEquals("Computer Science", list.get(0).getName());
+        assertEquals("Computer Science", list.getFirst().getName());
         verify(departmentRepository, times(1)).findAll();
     }
 
