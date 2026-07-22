@@ -2,14 +2,12 @@ package com.market.finder.controller;
 
 import com.market.finder.dao.InstructorRepository;
 import com.market.finder.entity.Instructor;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
-@RestController
-@RequestMapping("/api/instructors")
+@Controller
+@RequestMapping("/instructors")
 public class InstructorController {
 
     private final InstructorRepository instructorRepository;
@@ -18,30 +16,42 @@ public class InstructorController {
         this.instructorRepository = instructorRepository;
     }
 
+    // 1. Show all instructors
     @GetMapping
-    public List<Instructor> getAllInstructors() {
-        return instructorRepository.findAll();
+    public String listInstructors(Model model) {
+        model.addAttribute("instructors", instructorRepository.findAll());
+        return "instructors/list";
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<Instructor> getInstructorById(@PathVariable Integer id) {
-        return instructorRepository.findById(id)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+    // 2. Show the form to create a new instructor
+    @GetMapping("/new")
+    public String showCreateForm(Model model) {
+        model.addAttribute("instructor", new Instructor());
+        return "instructors/form";
     }
 
-    @PostMapping
-    @ResponseStatus(HttpStatus.CREATED)
-    public Instructor createInstructor(@RequestBody Instructor instructor) {
-        return instructorRepository.save(instructor);
+    // 3. Show the form to edit an existing instructor
+    @GetMapping("/edit/{id}")
+    public String showEditForm(@PathVariable Integer id, Model model) {
+        Instructor instructor = instructorRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Invalid instructor Id: " + id));
+        model.addAttribute("instructor", instructor);
+        return "instructors/form";
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteInstructor(@PathVariable Integer id) {
-        if (!instructorRepository.existsById(id)) {
-            return ResponseEntity.notFound().build();
+    // 4. Save the instructor (Handles both Create and Update)
+    @PostMapping("/save")
+    public String saveInstructor(@ModelAttribute("instructor") Instructor instructor) {
+        instructorRepository.save(instructor);
+        return "redirect:/instructors";
+    }
+
+    // 5. Delete an instructor
+    @GetMapping("/delete/{id}")
+    public String deleteInstructor(@PathVariable Integer id) {
+        if (instructorRepository.existsById(id)) {
+            instructorRepository.deleteById(id);
         }
-        instructorRepository.deleteById(id);
-        return ResponseEntity.noContent().build();
+        return "redirect:/instructors";
     }
 }

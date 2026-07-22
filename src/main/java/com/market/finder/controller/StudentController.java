@@ -1,65 +1,55 @@
 package com.market.finder.controller;
 
+import com.market.finder.dao.DepartmentRepository;
 import com.market.finder.dao.StudentRepository;
 import com.market.finder.entity.Student;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
-@RestController
-@RequestMapping("/api/students")
+@Controller
+@RequestMapping("/students")
 public class StudentController {
 
     private final StudentRepository studentRepository;
+    private final DepartmentRepository departmentRepository; // Needed for the dropdown menu
 
-    public StudentController(StudentRepository studentRepository) {
+    public StudentController(StudentRepository studentRepository, DepartmentRepository departmentRepository) {
         this.studentRepository = studentRepository;
+        this.departmentRepository = departmentRepository;
     }
 
     @GetMapping
-    public List<Student> getAllStudents() {
-        return studentRepository.findAll();
+    public String listStudents(Model model) {
+        model.addAttribute("students", studentRepository.findAll());
+        return "students/list";
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<Student> getStudentById(@PathVariable Integer id) {
-        return studentRepository.findById(id)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+    @GetMapping("/new")
+    public String showCreateForm(Model model) {
+        model.addAttribute("student", new Student());
+        model.addAttribute("departments", departmentRepository.findAll());
+        return "students/form";
     }
 
-    @GetMapping("/department/{deptId}")
-    public List<Student> getStudentsByDepartment(@PathVariable Integer deptId) {
-        return studentRepository.findByDepartment_Id(deptId);
+    @PostMapping("/save")
+    public String saveStudent(@ModelAttribute("student") Student student) {
+        studentRepository.save(student);
+        return "redirect:/students";
     }
 
-    @PostMapping
-    @ResponseStatus(HttpStatus.CREATED)
-    public Student createStudent(@RequestBody Student student) {
-        return studentRepository.save(student);
+    @GetMapping("/edit/{id}")
+    public String showEditForm(@PathVariable("id") Integer id, Model model) {
+        Student student = studentRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Invalid student Id:" + id));
+        model.addAttribute("student", student);
+        model.addAttribute("departments", departmentRepository.findAll());
+        return "students/form";
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<Student> updateStudent(@PathVariable Integer id, @RequestBody Student studentDetails) {
-        return studentRepository.findById(id)
-                .map(student -> {
-                    student.setFirstName(studentDetails.getFirstName());
-                    student.setLastName(studentDetails.getLastName());
-                    student.setEmail(studentDetails.getEmail());
-                    student.setDepartment(studentDetails.getDepartment());
-                    return ResponseEntity.ok(studentRepository.save(student));
-                })
-                .orElse(ResponseEntity.notFound().build());
-    }
-
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteStudent(@PathVariable Integer id) {
-        if (!studentRepository.existsById(id)) {
-            return ResponseEntity.notFound().build();
-        }
+    @GetMapping("/delete/{id}")
+    public String deleteStudent(@PathVariable Integer id) {
         studentRepository.deleteById(id);
-        return ResponseEntity.noContent().build();
+        return "redirect:/students";
     }
 }

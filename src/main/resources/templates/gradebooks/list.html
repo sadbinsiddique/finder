@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Gradebook</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+<div class="container mt-5">
+    <h2>Student Gradebook</h2>
+    <hr/>
+
+    <a class="btn btn-primary mb-3" th:href="@{/gradebooks/new}">Record New Grade</a>
+    <a class="btn btn-secondary mb-3" th:href="@{/}">Back to Home</a>
+
+    <table class="table table-bordered table-striped mt-3">
+        <thead class="table-dark">
+        <tr>
+            <th>Student</th>
+            <th>Course</th>
+            <th>Assignment Name</th>
+            <th>Score</th>
+            <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="grade : ${gradebooks}">
+            <td th:text="${grade.student.firstName + ' ' + grade.student.lastName}"></td>
+            <td th:text="${grade.course.title}"></td>
+            <td th:text="${grade.id.assignmentName}"></td>
+            <td th:text="${grade.score}"></td>
+            <td>
+                <!-- We pass composite keys dynamically via URL parameters -->
+                <a class="btn btn-warning btn-sm"
+                   th:href="@{/gradebooks/edit(studentId=${grade.student.id}, courseId=${grade.course.id}, assignmentName=${grade.id.assignmentName})}">Edit</a>
+
+                <a class="btn btn-danger btn-sm"
+                   onclick="return confirm('Are you sure you want to delete this grade?')"
+                   th:href="@{/gradebooks/delete(studentId=${grade.student.id}, courseId=${grade.course.id}, assignmentName=${grade.id.assignmentName})}">Delete</a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+</body>
+</html>

@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>System Users</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+<div class="container mt-5">
+    <h2>System Users</h2>
+    <hr/>
+
+    <a class="btn btn-primary mb-3" th:href="@{/users/new}">Add New User</a>
+    <a class="btn btn-secondary mb-3" th:href="@{/}">Back to Home</a>
+
+    <table class="table table-bordered table-striped">
+        <thead class="table-dark">
+        <tr>
+            <th>Username</th>
+            <th>Enabled</th>
+            <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="user : ${users}">
+            <td th:text="${user.username}"></td>
+
+            <!-- Display 'Yes' or 'No' instead of true/false -->
+            <td th:text="${user.enabled != null && user.enabled ? 'Yes' : 'No'}"></td>
+
+            <td>
+                <a class="btn btn-warning btn-sm"
+                   th:href="@{/users/edit/{username}(username=${user.username})}">Edit</a>
+                <a class="btn btn-danger btn-sm"
+                   onclick="return confirm('Are you sure you want to delete this user?')"
+                   th:href="@{/users/delete/{username}(username=${user.username})}">Delete</a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+</body>
+</html>

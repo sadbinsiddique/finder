@@ -1,47 +1,92 @@
 package com.market.finder.controller;
 
+import com.market.finder.dao.CourseRepository;
 import com.market.finder.dao.EnrollmentRepository;
+import com.market.finder.dao.StudentRepository;
 import com.market.finder.entity.Enrollment;
 import com.market.finder.entity.EnrollmentId;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
-@RestController
-@RequestMapping("/api/enrollments")
+@Controller
+@RequestMapping("/enrollments")
 public class EnrollmentController {
 
     private final EnrollmentRepository enrollmentRepository;
+    private final StudentRepository studentRepository;
+    private final CourseRepository courseRepository;
 
-    public EnrollmentController(EnrollmentRepository enrollmentRepository) {
+    public EnrollmentController(EnrollmentRepository enrollmentRepository,
+                                StudentRepository studentRepository,
+                                CourseRepository courseRepository) {
         this.enrollmentRepository = enrollmentRepository;
+        this.studentRepository = studentRepository;
+        this.courseRepository = courseRepository;
     }
 
+    // 1. Show all enrollments
     @GetMapping
-    public List<Enrollment> getAllEnrollments() {
-        return enrollmentRepository.findAll();
+    public String listEnrollments(Model model) {
+        model.addAttribute("enrollments", enrollmentRepository.findAll());
+        return "enrollments/list";
     }
 
-    @GetMapping("/student/{studentId}")
-    public List<Enrollment> getEnrollmentsByStudent(@PathVariable Integer studentId) {
-        return enrollmentRepository.findByStudent_Id(studentId);
+    // 2. Show the form to enroll a student
+    @GetMapping("/new")
+    public String showCreateForm(Model model) {
+        model.addAttribute("enrollment", new Enrollment());
+        // Pass students and courses for the dropdown menus
+        model.addAttribute("students", studentRepository.findAll());
+        model.addAttribute("courses", courseRepository.findAll());
+        return "enrollments/form";
     }
 
-    @PostMapping
-    @ResponseStatus(HttpStatus.CREATED)
-    public Enrollment enrollStudent(@RequestBody Enrollment enrollment) {
-        return enrollmentRepository.save(enrollment);
-    }
+    // 3. Show the form to edit an existing enrollment (e.g., updating the enrollment date)
+    @GetMapping("/edit")
+    public String showEditForm(
+            @RequestParam("studentId") Integer studentId,
+            @RequestParam("courseId") Integer courseId,
+            Model model) {
 
-    @DeleteMapping("/student/{studentId}/course/{courseId}")
-    public ResponseEntity<Void> dropCourse(@PathVariable Integer studentId, @PathVariable Integer courseId) {
         EnrollmentId id = new EnrollmentId(studentId, courseId);
-        if (!enrollmentRepository.existsById(id)) {
-            return ResponseEntity.notFound().build();
+        Enrollment enrollment = enrollmentRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Invalid enrollment details"));
+
+        model.addAttribute("enrollment", enrollment);
+        model.addAttribute("students", studentRepository.findAll());
+        model.addAttribute("courses", courseRepository.findAll());
+        return "enrollments/form";
+    }
+
+    // 4. Save the enrollment
+    @PostMapping("/save")
+    public String saveEnrollment(@ModelAttribute("enrollment") Enrollment enrollment) {
+        // Map the selected objects' IDs to the Composite Key before saving
+        if (enrollment.getId() == null) {
+            enrollment.setId(new EnrollmentId());
         }
-        enrollmentRepository.deleteById(id);
-        return ResponseEntity.noContent().build();
+        if (enrollment.getStudent() != null) {
+            enrollment.getId().setStudentId(enrollment.getStudent().getId());
+        }
+        if (enrollment.getCourse() != null) {
+            enrollment.getId().setCourseId(enrollment.getCourse().getId());
+        }
+
+        enrollmentRepository.save(enrollment);
+        return "redirect:/enrollments";
+    }
+
+    // 5. Delete an enrollment (Drop Course)
+    @GetMapping("/delete")
+    public String dropCourse(
+            @RequestParam("studentId") Integer studentId,
+            @RequestParam("courseId") Integer courseId) {
+
+        EnrollmentId id = new EnrollmentId(studentId, courseId);
+        if (enrollmentRepository.existsById(id)) {
+            enrollmentRepository.deleteById(id);
+        }
+        return "redirect:/enrollments";
     }
 }

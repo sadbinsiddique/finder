@@ -2,14 +2,12 @@ package com.market.finder.controller;
 
 import com.market.finder.dao.UserRepository;
 import com.market.finder.entity.User;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
-@RestController
-@RequestMapping("/api/users")
+@Controller
+@RequestMapping("/users")
 public class UserController {
 
     private final UserRepository userRepository;
@@ -18,43 +16,42 @@ public class UserController {
         this.userRepository = userRepository;
     }
 
+    // 1. Show all users
     @GetMapping
-    public List<User> getAllUsers() {
-        return userRepository.findAll();
+    public String listUsers(Model model) {
+        model.addAttribute("users", userRepository.findAll());
+        return "users/list";
     }
 
-    @GetMapping("/{username}")
-    public ResponseEntity<User> getUserByUsername(@PathVariable String username) {
-        return userRepository.findById(username)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+    // 2. Show the form to create a new user
+    @GetMapping("/new")
+    public String showCreateForm(Model model) {
+        model.addAttribute("user", new User());
+        return "users/form";
     }
 
-    @PostMapping
-    @ResponseStatus(HttpStatus.CREATED)
-    public User createUser(@RequestBody User user) {
-        return userRepository.save(user);
+    // 3. Show the form to edit an existing user
+    @GetMapping("/edit/{username}")
+    public String showEditForm(@PathVariable String username, Model model) {
+        User user = userRepository.findById(username)
+                .orElseThrow(() -> new IllegalArgumentException("Invalid username: " + username));
+        model.addAttribute("user", user);
+        return "users/form";
     }
 
-    @PutMapping("/{username}")
-    public ResponseEntity<User> updateUser(@PathVariable String username, @RequestBody User userDetails) {
-        return userRepository.findById(username)
-                .map(user -> {
-                    user.setEnabled(userDetails.getEnabled());
-                    user.setPassword(userDetails.getPassword());
-                    user.setRoles(userDetails.getRoles());
-                    return ResponseEntity.ok(userRepository.save(user));
-                })
-                .orElse(ResponseEntity.notFound().build());
+    // 4. Save the user (Handles both Create and Update from the HTML form)
+    @PostMapping("/save")
+    public String saveUser(@ModelAttribute("user") User user) {
+        userRepository.save(user);
+        return "redirect:/users";
     }
 
-    @DeleteMapping("/{username}")
-    public ResponseEntity<Void> deleteUser(@PathVariable String username) {
-        if (!userRepository.existsById(username)) {
-            return ResponseEntity.notFound().build();
+    // 5. Delete a user
+    @GetMapping("/delete/{username}")
+    public String deleteUser(@PathVariable("username") String username) {
+        if (userRepository.existsById(username)) {
+            userRepository.deleteById(username);
         }
-        userRepository.deleteById(username);
-        return ResponseEntity.noContent().build();
+        return "redirect:/users";
     }
-
 }

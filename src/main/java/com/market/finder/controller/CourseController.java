@@ -2,14 +2,12 @@ package com.market.finder.controller;
 
 import com.market.finder.dao.CourseRepository;
 import com.market.finder.entity.Course;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
-@RestController
-@RequestMapping("/api/courses")
+@Controller
+@RequestMapping("/courses")
 public class CourseController {
 
     private final CourseRepository courseRepository;
@@ -18,30 +16,42 @@ public class CourseController {
         this.courseRepository = courseRepository;
     }
 
+    // 1. Show all courses
     @GetMapping
-    public List<Course> getAllCourses() {
-        return courseRepository.findAll();
+    public String listCourses(Model model) {
+        model.addAttribute("courses", courseRepository.findAll());
+        return "courses/list";
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<Course> getCourseById(@PathVariable Integer id) {
-        return courseRepository.findById(id)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+    // 2. Show the form to create a new course
+    @GetMapping("/new")
+    public String showCreateForm(Model model) {
+        model.addAttribute("course", new Course());
+        return "courses/form";
     }
 
-    @PostMapping
-    @ResponseStatus(HttpStatus.CREATED)
-    public Course createCourse(@RequestBody Course course) {
-        return courseRepository.save(course);
+    // 3. Show the form to edit an existing course
+    @GetMapping("/edit/{id}")
+    public String showEditForm(@PathVariable Integer id, Model model) {
+        Course course = courseRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Invalid course Id: " + id));
+        model.addAttribute("course", course);
+        return "courses/form";
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteCourse(@PathVariable Integer id) {
-        if (!courseRepository.existsById(id)) {
-            return ResponseEntity.notFound().build();
+    // 4. Save the course (Handles both Create and Update)
+    @PostMapping("/save")
+    public String saveCourse(@ModelAttribute("course") Course course) {
+        courseRepository.save(course);
+        return "redirect:/courses";
+    }
+
+    // 5. Delete a course
+    @GetMapping("/delete/{id}")
+    public String deleteCourse(@PathVariable Integer id) {
+        if (courseRepository.existsById(id)) {
+            courseRepository.deleteById(id);
         }
-        courseRepository.deleteById(id);
-        return ResponseEntity.noContent().build();
+        return "redirect:/courses";
     }
 }

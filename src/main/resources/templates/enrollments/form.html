@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Enrollment Form</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+<div class="container mt-5">
+    <h2>Course Enrollment Details</h2>
+    <hr/>
+
+    <form class="mt-4" method="post" style="max-width: 600px;" th:action="@{/enrollments/save}"
+          th:object="${enrollment}">
+
+        <!-- Student Dropdown -->
+        <div class="mb-3">
+            <label class="form-label fw-bold">Student</label>
+            <!-- Lock the dropdown if we are updating an existing enrollment so the Composite Key doesn't change -->
+            <select class="form-select" required th:field="*{student}"
+                    th:style="${enrollment.id != null && enrollment.id.studentId != null ? 'pointer-events: none; background-color: #e9ecef;' : ''}">
+                <option value="">-- Select Student --</option>
+                <option th:each="stu : ${students}"
+                        th:text="${stu.firstName + ' ' + stu.lastName}"
+                        th:value="${stu.id}"></option>
+            </select>
+        </div>
+
+        <!-- Course Dropdown -->
+        <div class="mb-3">
+            <label class="form-label fw-bold">Course</label>
+            <select class="form-select" required th:field="*{course}"
+                    th:style="${enrollment.id != null && enrollment.id.courseId != null ? 'pointer-events: none; background-color: #e9ecef;' : ''}">
+                <option value="">-- Select Course --</option>
+                <option th:each="crs : ${courses}"
+                        th:text="${crs.title}"
+                        th:value="${crs.id}"></option>
+            </select>
+        </div>
+
+        <!-- Enrollment Date -->
+        <div class="mb-3">
+            <label class="form-label fw-bold">Enrollment Date</label>
+            <input class="form-control" required th:field="*{enrollmentDate}" type="date"/>
+        </div>
+
+        <div class="mt-4">
+            <button class="btn btn-success" type="submit">Save Enrollment</button>
+            <a class="btn btn-secondary" th:href="@{/enrollments}">Cancel</a>
+        </div>
+    </form>
+</div>
+</body>
+</html>

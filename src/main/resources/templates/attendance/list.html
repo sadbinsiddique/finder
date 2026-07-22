@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Attendance Records</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+<div class="container mt-5">
+    <h2>Student Attendance Records</h2>
+    <hr/>
+
+    <a class="btn btn-primary mb-3" th:href="@{/attendance/new}">Record Attendance</a>
+    <a class="btn btn-secondary mb-3" th:href="@{/}">Back to Home</a>
+
+    <table class="table table-bordered table-striped mt-3">
+        <thead class="table-dark">
+        <tr>
+            <th>Date</th>
+            <th>Student</th>
+            <th>Course</th>
+            <th>Status</th>
+            <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="record : ${attendanceRecords}">
+            <td th:text="${record.id.attendanceDate}"></td>
+            <td th:text="${record.student.firstName + ' ' + record.student.lastName}"></td>
+            <td th:text="${record.course.title}"></td>
+
+            <!-- Color code the status dynamically -->
+            <td>
+                    <span class="badge" th:classappend="${record.status.name() == 'Present'} ? 'bg-success' :
+                                          (${record.status.name() == 'Absent'} ? 'bg-danger' :
+                                          (${record.status.name() == 'Late'} ? 'bg-warning text-dark' : 'bg-info'))"
+                          th:text="${record.status}">
+                    </span>
+            </td>
+
+            <td>
+                <!-- Pass the composite key as Request Parameters -->
+                <a class="btn btn-warning btn-sm"
+                   th:href="@{/attendance/edit(studentId=${record.student.id}, courseId=${record.course.id}, date=${record.id.attendanceDate})}">Edit</a>
+
+                <a class="btn btn-danger btn-sm"
+                   onclick="return confirm('Are you sure you want to delete this attendance record?')"
+                   th:href="@{/attendance/delete(studentId=${record.student.id}, courseId=${record.course.id}, date=${record.id.attendanceDate})}">Delete</a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+</body>
+</html>

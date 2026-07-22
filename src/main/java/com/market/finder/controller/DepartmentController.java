@@ -2,14 +2,12 @@ package com.market.finder.controller;
 
 import com.market.finder.dao.DepartmentRepository;
 import com.market.finder.entity.Department;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
-@RestController
-@RequestMapping("/api/departments")
+@Controller
+@RequestMapping("/departments")
 public class DepartmentController {
 
     private final DepartmentRepository departmentRepository;
@@ -18,23 +16,42 @@ public class DepartmentController {
         this.departmentRepository = departmentRepository;
     }
 
+    // 1. Show all departments
     @GetMapping
-    public List<Department> getAllDepartments() {
-        return departmentRepository.findAll();
+    public String listDepartments(Model model) {
+        model.addAttribute("departments", departmentRepository.findAll());
+        return "departments/list";
     }
 
-    @PostMapping
-    @ResponseStatus(HttpStatus.CREATED)
-    public Department createDepartment(@RequestBody Department department) {
-        return departmentRepository.save(department);
+    // 2. Show the form to create a new department
+    @GetMapping("/new")
+    public String showCreateForm(Model model) {
+        model.addAttribute("department", new Department());
+        return "departments/form";
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteDepartment(@PathVariable Integer id) {
-        if (!departmentRepository.existsById(id)) {
-            return ResponseEntity.notFound().build();
+    // 3. Show the form to edit an existing department
+    @GetMapping("/edit/{id}")
+    public String showEditForm(@PathVariable Integer id, Model model) {
+        Department department = departmentRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Invalid department Id: " + id));
+        model.addAttribute("department", department);
+        return "departments/form";
+    }
+
+    // 4. Save the department (Handles both Create and Update)
+    @PostMapping("/save")
+    public String saveDepartment(@ModelAttribute("department") Department department) {
+        departmentRepository.save(department);
+        return "redirect:/departments";
+    }
+
+    // 5. Delete a department
+    @GetMapping("/delete/{id}")
+    public String deleteDepartment(@PathVariable Integer id) {
+        if (departmentRepository.existsById(id)) {
+            departmentRepository.deleteById(id);
         }
-        departmentRepository.deleteById(id);
-        return ResponseEntity.noContent().build();
+        return "redirect:/departments";
     }
 }

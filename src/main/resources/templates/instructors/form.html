@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Instructor Form</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+<div class="container mt-5">
+    <h2 th:text="${instructor.id == null ? 'Register New Instructor' : 'Update Instructor'}"></h2>
+    <hr/>
+
+    <form class="mt-4" method="post" style="max-width: 600px;" th:action="@{/instructors/save}"
+          th:object="${instructor}">
+
+        <!-- Hidden field to retain the ID for updates -->
+        <input th:field="*{id}" type="hidden"/>
+
+        <div class="mb-3">
+            <label class="form-label fw-bold">First Name</label>
+            <input class="form-control" placeholder="Enter first name" required th:field="*{firstName}" type="text"/>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label fw-bold">Last Name</label>
+            <input class="form-control" placeholder="Enter last name" required th:field="*{lastName}" type="text"/>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label fw-bold">Email</label>
+            <input class="form-control" placeholder="instructor@university.edu" required th:field="*{email}"
+                   type="email"/>
+        </div>
+
+        <div class="mt-4">
+            <button class="btn btn-success" type="submit">Save Instructor</button>
+            <a class="btn btn-secondary" th:href="@{/instructors}">Cancel</a>
+        </div>
+    </form>
+</div>
+</body>
+</html>
