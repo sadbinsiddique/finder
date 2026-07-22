@@ -8,16 +8,21 @@ import org.springframework.security.authentication.dao.DaoAuthenticationProvider
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
+/**
+ * SRP: Sole responsibility is Spring Security configuration.
+ * DIP: Depends on UserDetailsService interface, NOT concrete CustomUserDetailsService.
+ */
 @Configuration
 public class SecurityConfig {
 
-    private final CustomUserDetailsService userDetailsService;
+    private final UserDetailsService userDetailsService;
 
-    public SecurityConfig(CustomUserDetailsService userDetailsService) {
+    public SecurityConfig(UserDetailsService userDetailsService) {
         this.userDetailsService = userDetailsService;
     }
 
@@ -89,7 +94,6 @@ public class SecurityConfig {
                     .accessDeniedPage("/access-denied")
             );
 
-            // Disable CSRF for API endpoints only, keep it for form-based pages
             http.csrf(AbstractHttpConfigurer::disable);
 
             return http.build();

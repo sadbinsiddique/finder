@@ -7,54 +7,50 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 /**
- * DIP: Depends on RoleService abstraction rather than RoleRepository directly.
+ * SRP: Sole responsibility is Admin Role Management.
+ * DIP: Depends on RoleService interface.
  */
 @Controller
-@RequestMapping("/roles")
-public class RoleController {
+@RequestMapping("/admin/roles")
+public class AdminRoleController {
 
     private final RoleService roleService;
 
-    public RoleController(RoleService roleService) {
+    public AdminRoleController(RoleService roleService) {
         this.roleService = roleService;
     }
 
-    // 1. Show all roles
     @GetMapping
     public String listRoles(Model model) {
         model.addAttribute("roles", roleService.findAll());
-        return "roles/list";
+        return "admin/roles/list";
     }
 
-    // 2. Show the form to create a new role
     @GetMapping("/new")
-    public String showCreateForm(Model model) {
+    public String showCreateRoleForm(Model model) {
         model.addAttribute("role", new Role());
-        return "roles/form";
+        return "admin/roles/form";
     }
 
-    // 3. Show the form to edit an existing role
     @GetMapping("/edit/{id}")
-    public String showEditForm(@PathVariable Integer id, Model model) {
+    public String showEditRoleForm(@PathVariable Integer id, Model model) {
         Role role = roleService.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Invalid role Id: " + id));
         model.addAttribute("role", role);
-        return "roles/form";
+        return "admin/roles/form";
     }
 
-    // 4. Save the role (Handles both Create and Update)
     @PostMapping("/save")
     public String saveRole(@ModelAttribute("role") Role role) {
         roleService.save(role);
-        return "redirect:/roles";
+        return "redirect:/admin/roles";
     }
 
-    // 5. Delete a role
     @GetMapping("/delete/{id}")
     public String deleteRole(@PathVariable Integer id) {
         if (roleService.existsById(id)) {
             roleService.deleteById(id);
         }
-        return "redirect:/roles";
+        return "redirect:/admin/roles";
     }
 }

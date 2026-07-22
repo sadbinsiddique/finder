@@ -201,3 +201,44 @@ CREATE TABLE `attendance`
     FOREIGN KEY (`student_id`) REFERENCES `student` (`id`),
     FOREIGN KEY (`course_id`) REFERENCES `course` (`id`)
 ) ENGINE = InnoDB;
+
+
+# =====================================================
+# SEED DATA - Default Roles, Permissions, and Admin User
+# =====================================================
+
+# Insert default roles
+INSERT INTO `roles` (`role_name`) VALUES ('ROLE_ADMIN');
+INSERT INTO `roles` (`role_name`) VALUES ('ROLE_USER');
+INSERT INTO `roles` (`role_name`) VALUES ('ROLE_INSTRUCTOR');
+INSERT INTO `roles` (`role_name`) VALUES ('ROLE_STUDENT');
+
+# Insert default permissions
+INSERT INTO `permissions` (`permission_name`) VALUES ('READ');
+INSERT INTO `permissions` (`permission_name`) VALUES ('WRITE');
+INSERT INTO `permissions` (`permission_name`) VALUES ('DELETE');
+INSERT INTO `permissions` (`permission_name`) VALUES ('MANAGE_USERS');
+
+# Assign permissions to ROLE_ADMIN (all permissions)
+INSERT INTO `role_permissions` (`role_id`, `permission_id`) VALUES (1, 1); # ADMIN -> READ
+INSERT INTO `role_permissions` (`role_id`, `permission_id`) VALUES (1, 2); # ADMIN -> WRITE
+INSERT INTO `role_permissions` (`role_id`, `permission_id`) VALUES (1, 3); # ADMIN -> DELETE
+INSERT INTO `role_permissions` (`role_id`, `permission_id`) VALUES (1, 4); # ADMIN -> MANAGE_USERS
+
+# Assign permissions to ROLE_USER (READ only)
+INSERT INTO `role_permissions` (`role_id`, `permission_id`) VALUES (2, 1); # USER -> READ
+
+# Assign permissions to ROLE_INSTRUCTOR (READ, WRITE)
+INSERT INTO `role_permissions` (`role_id`, `permission_id`) VALUES (3, 1); # INSTRUCTOR -> READ
+INSERT INTO `role_permissions` (`role_id`, `permission_id`) VALUES (3, 2); # INSTRUCTOR -> WRITE
+
+# Assign permissions to ROLE_STUDENT (READ only)
+INSERT INTO `role_permissions` (`role_id`, `permission_id`) VALUES (4, 1); # STUDENT -> READ
+
+# Insert default admin user
+# Password: admin123 (BCrypt encoded)
+INSERT INTO `users` (`username`, `enabled`, `password`)
+VALUES ('admin', 1, '$2a$10$6Ql8KoKJPXmCQ6jQQ7Yme.TIqFJLJbonbGxSVqlCXHKjhC0t.DlXe');
+
+# Assign ROLE_ADMIN to admin user
+INSERT INTO `user_roles` (`username`, `role_id`) VALUES ('admin', 1);

@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Permissions - Admin</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        body {
+            background: #0f172a;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: #e2e8f0;
+            min-height: 100vh;
+        }
+
+        .admin-navbar {
+            background: rgba(15, 23, 42, 0.95) !important;
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .content-card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 16px;
+            padding: 1.5rem;
+        }
+
+        .table-dark-custom {
+            --bs-table-bg: transparent;
+            --bs-table-border-color: rgba(255, 255, 255, 0.08);
+            color: #e2e8f0;
+        }
+
+        .table-dark-custom thead th {
+            background: rgba(255, 255, 255, 0.05);
+            border-bottom: 2px solid rgba(102, 126, 234, 0.3);
+            font-weight: 600;
+            text-transform: uppercase;
+            font-size: 0.8rem;
+            letter-spacing: 1px;
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .table-dark-custom tbody tr:hover {
+            background: rgba(102, 126, 234, 0.08);
+        }
+
+        .section-title { color: #fff; font-weight: 700; }
+    </style>
+</head>
+<body>
+
+<nav class="navbar navbar-expand-lg admin-navbar mb-4">
+    <div class="container">
+        <a class="navbar-brand text-white fw-bold" href="/">
+            <i class="fas fa-graduation-cap me-2"></i>University ERP
+        </a>
+        <div class="navbar-nav ms-auto d-flex flex-row align-items-center gap-3">
+            <a th:href="@{/admin}" class="btn btn-outline-light btn-sm">
+                <i class="fas fa-tachometer-alt me-1"></i>Dashboard
+            </a>
+            <form th:action="@{/logout}" method="post" class="d-inline">
+                <button type="submit" class="btn btn-outline-danger btn-sm">
+                    <i class="fas fa-sign-out-alt me-1"></i>Logout
+                </button>
+            </form>
+        </div>
+    </div>
+</nav>
+
+<div class="container">
+    <h2 class="section-title mb-4">
+        <i class="fas fa-key me-2"></i>System Permissions
+    </h2>
+
+    <div class="content-card">
+        <table class="table table-dark-custom mb-0">
+            <thead>
+            <tr>
+                <th>ID</th>
+                <th>Permission Name</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="perm : ${permissions}">
+                <td th:text="${perm.id}"></td>
+                <td>
+                    <i class="fas fa-key me-2 text-white-50"></i>
+                    <strong th:text="${perm.permissionName}"></strong>
+                </td>
+            </tr>
+            <tr th:if="${#lists.isEmpty(permissions)}">
+                <td colspan="2" class="text-center text-white-50 py-4">
+                    <i class="fas fa-inbox fa-2x mb-2 d-block"></i>
+                    No permissions defined
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

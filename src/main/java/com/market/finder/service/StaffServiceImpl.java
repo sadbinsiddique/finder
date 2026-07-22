@@ -1,54 +1,57 @@
 package com.market.finder.service;
 
 import com.market.finder.dao.StaffRepository;
-
 import com.market.finder.entity.Staff;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * DIP: Controller depends on StaffService interface, not this concrete class.
+ * Fixes: Added @Service, fixed typo staffReposotory→staffRepository,
+ *        fixed copy-paste bug in findAllByOrderByIncomeAsc().
+ */
+@Service
 public class StaffServiceImpl implements StaffService {
-    private final StaffRepository staffReposotory;
 
-    public StaffServiceImpl(StaffRepository staffReposotory) {
-        this.staffReposotory = staffReposotory;
+    private final StaffRepository staffRepository;
+
+    public StaffServiceImpl(StaffRepository staffRepository) {
+        this.staffRepository = staffRepository;
     }
 
     @Override
     public List<Staff> findAll() {
-        return staffReposotory.findAll();
+        return staffRepository.findAll();
     }
 
     @Override
     public List<Staff> findAllByOrderByAgeAsc() {
-        return staffReposotory.findAllByOrderByAgeAsc();
+        return staffRepository.findAllByOrderByAgeAsc();
     }
 
     @Override
     public List<Staff> findAllByOrderByIncomeAsc() {
-        return staffReposotory.findAllByOrderByAgeAsc();
+        // FIX: Was calling findAllByOrderByAgeAsc() — copy-paste bug
+        return staffRepository.findAllByOrderByIncomeAsc();
     }
 
     @Override
-    public Staff findById(int theId) {
-        Optional<Staff> result = staffReposotory.findById(theId);
-        Staff theStaff;
-
-        if (result.isPresent()) {
-            theStaff = result.get();
-        } else {
-            throw new RuntimeException("Did not find staff  id - " + theId);
-        }
-        return theStaff;
+    public Optional<Staff> findById(int theId) {
+        return staffRepository.findById(theId);
     }
 
     @Override
+    @Transactional
     public Staff save(Staff theStaff) {
-        return staffReposotory.save(theStaff);
+        return staffRepository.save(theStaff);
     }
 
     @Override
+    @Transactional
     public void deleteById(int theId) {
-        staffReposotory.deleteById(theId);
+        staffRepository.deleteById(theId);
     }
 }

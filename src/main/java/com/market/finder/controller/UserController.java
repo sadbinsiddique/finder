@@ -1,25 +1,28 @@
 package com.market.finder.controller;
 
-import com.market.finder.dao.UserRepository;
 import com.market.finder.entity.User;
+import com.market.finder.service.UserService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+/**
+ * DIP: Depends on UserService abstraction rather than UserRepository directly.
+ */
 @Controller
 @RequestMapping("/users")
 public class UserController {
 
-    private final UserRepository userRepository;
+    private final UserService userService;
 
-    public UserController(UserRepository userRepository) {
-        this.userRepository = userRepository;
+    public UserController(UserService userService) {
+        this.userService = userService;
     }
 
     // 1. Show all users
     @GetMapping
     public String listUsers(Model model) {
-        model.addAttribute("users", userRepository.findAll());
+        model.addAttribute("users", userService.findAll());
         return "users/list";
     }
 
@@ -33,7 +36,7 @@ public class UserController {
     // 3. Show the form to edit an existing user
     @GetMapping("/edit/{username}")
     public String showEditForm(@PathVariable String username, Model model) {
-        User user = userRepository.findById(username)
+        User user = userService.findByUsername(username)
                 .orElseThrow(() -> new IllegalArgumentException("Invalid username: " + username));
         model.addAttribute("user", user);
         return "users/form";
@@ -42,16 +45,14 @@ public class UserController {
     // 4. Save the user (Handles both Create and Update from the HTML form)
     @PostMapping("/save")
     public String saveUser(@ModelAttribute("user") User user) {
-        userRepository.save(user);
+        userService.save(user);
         return "redirect:/users";
     }
 
     // 5. Delete a user
     @GetMapping("/delete/{username}")
-    public String deleteUser(@PathVariable("username") String username) {
-        if (userRepository.existsById(username)) {
-            userRepository.deleteById(username);
-        }
+    public String deleteUser(@PathVariable String username) {
+        userService.deleteByUsername(username);
         return "redirect:/users";
     }
 }

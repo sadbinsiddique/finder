@@ -6,8 +6,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @SpringBootApplication
 public class FinderApplication {
 
-    // Added 'public' to the main method
-    static void main(String[] args) {
+    public static void main(String[] args) {
         SpringApplication.run(FinderApplication.class, args);
     }
 }
