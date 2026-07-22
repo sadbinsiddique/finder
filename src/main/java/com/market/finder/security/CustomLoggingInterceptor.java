@@ -4,6 +4,8 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
@@ -15,8 +17,17 @@ public class CustomLoggingInterceptor implements HandlerInterceptor {
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-        logger.info("[preHandle] Incoming request: {}", request.getRequestURI());
         request.setAttribute("startTime", System.currentTimeMillis());
+
+        // Log with authentication context
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        String username = (auth != null && auth.isAuthenticated()
+                && !"anonymousUser".equals(auth.getPrincipal()))
+                ? auth.getName() : "anonymous";
+
+        logger.info("[preHandle] User='{}' IP={} {} {}",
+                username, request.getRemoteAddr(), request.getMethod(), request.getRequestURI());
+
         return true;
     }
 
@@ -29,6 +40,13 @@ public class CustomLoggingInterceptor implements HandlerInterceptor {
     public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) throws Exception {
         long startTime = (Long) request.getAttribute("startTime");
         long duration = System.currentTimeMillis() - startTime;
-        logger.info("[afterCompletion] Request completed in {}ms", duration);
+
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        String username = (auth != null && auth.isAuthenticated()
+                && !"anonymousUser".equals(auth.getPrincipal()))
+                ? auth.getName() : "anonymous";
+
+        logger.info("[afterCompletion] User='{}' {} {} completed in {}ms (status={})",
+                username, request.getMethod(), request.getRequestURI(), duration, response.getStatus());
     }
 }
