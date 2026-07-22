@@ -24,13 +24,12 @@ public class Student {
     @Column(length = 64)
     private String email;
 
+    @Column(name = "username", length = 50)
+    private String username;
+
     @ManyToOne
     @JoinColumn(name = "department_id")
     private Department department;
-
-    @OneToOne
-    @JoinColumn(name = "username", referencedColumnName = "username", unique = true)
-    private User user;
 
     @OneToOne(mappedBy = "student", cascade = CascadeType.ALL)
     @PrimaryKeyJoinColumn

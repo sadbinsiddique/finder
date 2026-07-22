@@ -2,22 +2,23 @@ package com.market.finder.controller;
 
 import com.market.finder.entity.Employee;
 import com.market.finder.service.EmployeeService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+/**
+ * DIP: Depends on EmployeeService abstraction.
+ */
 @Controller
 @RequestMapping("/employees")
 public class EmployeeController {
 
     private final EmployeeService employeeService;
 
-    @Autowired
-    public EmployeeController(EmployeeService theEmployeeService) {
-        this.employeeService = theEmployeeService;
+    public EmployeeController(EmployeeService employeeService) {
+        this.employeeService = employeeService;
     }
 
     @GetMapping("/list")
@@ -36,7 +37,8 @@ public class EmployeeController {
 
     @GetMapping("/showFormForUpdate")
     public String showFormForUpdate(@RequestParam("employeeId") int theId, Model theModel) {
-        Employee theEmployee = employeeService.findById(theId);
+        Employee theEmployee = employeeService.findById(theId)
+                .orElseThrow(() -> new IllegalArgumentException("Invalid employee Id: " + theId));
         theModel.addAttribute("employee", theEmployee);
         return "employees/employee-form";
     }

@@ -26,13 +26,12 @@ public class Instructor {
     @Column(length = 64)
     private String email;
 
+    @Column(name = "username", length = 50)
+    private String username;
+
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "instructor_detail_id")
     private InstructorDetail instructorDetail;
-
-    @OneToOne
-    @JoinColumn(name = "username", referencedColumnName = "username", unique = true)
-    private User user;
 
     @ManyToMany
     @JoinTable(
