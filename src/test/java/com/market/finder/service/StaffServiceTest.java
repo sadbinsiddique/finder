@@ -33,7 +33,7 @@ class StaffServiceTest {
         sampleStaff.setFirstName("Sarah");
         sampleStaff.setLastName("Conner");
         sampleStaff.setAge(30);
-        sampleStaff.setIncome(50000.0);
+        sampleStaff.setIncome(50000);
     }
 
     @Test
@@ -65,7 +65,7 @@ class StaffServiceTest {
         List<Staff> list = staffService.findAllByOrderByIncomeAsc();
 
         assertEquals(1, list.size());
-        assertEquals(50000.0, list.getFirst().getIncome());
+        assertEquals(50000, list.getFirst().getIncome());
         verify(staffRepository, times(1)).findAllByOrderByIncomeAsc();
     }
 
