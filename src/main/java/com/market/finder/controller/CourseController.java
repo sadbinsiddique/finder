@@ -1,25 +1,28 @@
 package com.market.finder.controller;
 
-import com.market.finder.dao.CourseRepository;
 import com.market.finder.entity.Course;
+import com.market.finder.service.CourseService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+/**
+ * DIP: Depends on CourseService abstraction rather than CourseRepository directly.
+ */
 @Controller
 @RequestMapping("/courses")
 public class CourseController {
 
-    private final CourseRepository courseRepository;
+    private final CourseService courseService;
 
-    public CourseController(CourseRepository courseRepository) {
-        this.courseRepository = courseRepository;
+    public CourseController(CourseService courseService) {
+        this.courseService = courseService;
     }
 
     // 1. Show all courses
     @GetMapping
     public String listCourses(Model model) {
-        model.addAttribute("courses", courseRepository.findAll());
+        model.addAttribute("courses", courseService.findAll());
         return "courses/list";
     }
 
@@ -33,7 +36,7 @@ public class CourseController {
     // 3. Show the form to edit an existing course
     @GetMapping("/edit/{id}")
     public String showEditForm(@PathVariable Integer id, Model model) {
-        Course course = courseRepository.findById(id)
+        Course course = courseService.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Invalid course Id: " + id));
         model.addAttribute("course", course);
         return "courses/form";
@@ -42,15 +45,15 @@ public class CourseController {
     // 4. Save the course (Handles both Create and Update)
     @PostMapping("/save")
     public String saveCourse(@ModelAttribute("course") Course course) {
-        courseRepository.save(course);
+        courseService.save(course);
         return "redirect:/courses";
     }
 
     // 5. Delete a course
     @GetMapping("/delete/{id}")
     public String deleteCourse(@PathVariable Integer id) {
-        if (courseRepository.existsById(id)) {
-            courseRepository.deleteById(id);
+        if (courseService.existsById(id)) {
+            courseService.deleteById(id);
         }
         return "redirect:/courses";
     }

@@ -1,34 +1,37 @@
 package com.market.finder.controller;
 
-import com.market.finder.dao.CourseRepository;
-import com.market.finder.dao.EnrollmentRepository;
-import com.market.finder.dao.StudentRepository;
 import com.market.finder.entity.Enrollment;
 import com.market.finder.entity.EnrollmentId;
+import com.market.finder.service.CourseService;
+import com.market.finder.service.EnrollmentService;
+import com.market.finder.service.StudentService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+/**
+ * DIP: Depends on EnrollmentService, StudentService, and CourseService abstractions.
+ */
 @Controller
 @RequestMapping("/enrollments")
 public class EnrollmentController {
 
-    private final EnrollmentRepository enrollmentRepository;
-    private final StudentRepository studentRepository;
-    private final CourseRepository courseRepository;
+    private final EnrollmentService enrollmentService;
+    private final StudentService studentService;
+    private final CourseService courseService;
 
-    public EnrollmentController(EnrollmentRepository enrollmentRepository,
-                                StudentRepository studentRepository,
-                                CourseRepository courseRepository) {
-        this.enrollmentRepository = enrollmentRepository;
-        this.studentRepository = studentRepository;
-        this.courseRepository = courseRepository;
+    public EnrollmentController(EnrollmentService enrollmentService,
+                                StudentService studentService,
+                                CourseService courseService) {
+        this.enrollmentService = enrollmentService;
+        this.studentService = studentService;
+        this.courseService = courseService;
     }
 
     // 1. Show all enrollments
     @GetMapping
     public String listEnrollments(Model model) {
-        model.addAttribute("enrollments", enrollmentRepository.findAll());
+        model.addAttribute("enrollments", enrollmentService.findAll());
         return "enrollments/list";
     }
 
@@ -36,13 +39,12 @@ public class EnrollmentController {
     @GetMapping("/new")
     public String showCreateForm(Model model) {
         model.addAttribute("enrollment", new Enrollment());
-        // Pass students and courses for the dropdown menus
-        model.addAttribute("students", studentRepository.findAll());
-        model.addAttribute("courses", courseRepository.findAll());
+        model.addAttribute("students", studentService.findAll());
+        model.addAttribute("courses", courseService.findAll());
         return "enrollments/form";
     }
 
-    // 3. Show the form to edit an existing enrollment (e.g., updating the enrollment date)
+    // 3. Show the form to edit an existing enrollment
     @GetMapping("/edit")
     public String showEditForm(
             @RequestParam("studentId") Integer studentId,
@@ -50,19 +52,18 @@ public class EnrollmentController {
             Model model) {
 
         EnrollmentId id = new EnrollmentId(studentId, courseId);
-        Enrollment enrollment = enrollmentRepository.findById(id)
+        Enrollment enrollment = enrollmentService.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Invalid enrollment details"));
 
         model.addAttribute("enrollment", enrollment);
-        model.addAttribute("students", studentRepository.findAll());
-        model.addAttribute("courses", courseRepository.findAll());
+        model.addAttribute("students", studentService.findAll());
+        model.addAttribute("courses", courseService.findAll());
         return "enrollments/form";
     }
 
     // 4. Save the enrollment
     @PostMapping("/save")
     public String saveEnrollment(@ModelAttribute("enrollment") Enrollment enrollment) {
-        // Map the selected objects' IDs to the Composite Key before saving
         if (enrollment.getId() == null) {
             enrollment.setId(new EnrollmentId());
         }
@@ -73,7 +74,7 @@ public class EnrollmentController {
             enrollment.getId().setCourseId(enrollment.getCourse().getId());
         }
 
-        enrollmentRepository.save(enrollment);
+        enrollmentService.save(enrollment);
         return "redirect:/enrollments";
     }
 
@@ -84,8 +85,8 @@ public class EnrollmentController {
             @RequestParam("courseId") Integer courseId) {
 
         EnrollmentId id = new EnrollmentId(studentId, courseId);
-        if (enrollmentRepository.existsById(id)) {
-            enrollmentRepository.deleteById(id);
+        if (enrollmentService.existsById(id)) {
+            enrollmentService.deleteById(id);
         }
         return "redirect:/enrollments";
     }

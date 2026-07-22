@@ -1,25 +1,28 @@
 package com.market.finder.controller;
 
-import com.market.finder.dao.InstructorRepository;
 import com.market.finder.entity.Instructor;
+import com.market.finder.service.InstructorService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+/**
+ * DIP: Depends on InstructorService abstraction rather than InstructorRepository directly.
+ */
 @Controller
 @RequestMapping("/instructors")
 public class InstructorController {
 
-    private final InstructorRepository instructorRepository;
+    private final InstructorService instructorService;
 
-    public InstructorController(InstructorRepository instructorRepository) {
-        this.instructorRepository = instructorRepository;
+    public InstructorController(InstructorService instructorService) {
+        this.instructorService = instructorService;
     }
 
     // 1. Show all instructors
     @GetMapping
     public String listInstructors(Model model) {
-        model.addAttribute("instructors", instructorRepository.findAll());
+        model.addAttribute("instructors", instructorService.findAll());
         return "instructors/list";
     }
 
@@ -33,7 +36,7 @@ public class InstructorController {
     // 3. Show the form to edit an existing instructor
     @GetMapping("/edit/{id}")
     public String showEditForm(@PathVariable Integer id, Model model) {
-        Instructor instructor = instructorRepository.findById(id)
+        Instructor instructor = instructorService.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Invalid instructor Id: " + id));
         model.addAttribute("instructor", instructor);
         return "instructors/form";
@@ -42,15 +45,15 @@ public class InstructorController {
     // 4. Save the instructor (Handles both Create and Update)
     @PostMapping("/save")
     public String saveInstructor(@ModelAttribute("instructor") Instructor instructor) {
-        instructorRepository.save(instructor);
+        instructorService.save(instructor);
         return "redirect:/instructors";
     }
 
     // 5. Delete an instructor
     @GetMapping("/delete/{id}")
     public String deleteInstructor(@PathVariable Integer id) {
-        if (instructorRepository.existsById(id)) {
-            instructorRepository.deleteById(id);
+        if (instructorService.existsById(id)) {
+            instructorService.deleteById(id);
         }
         return "redirect:/instructors";
     }

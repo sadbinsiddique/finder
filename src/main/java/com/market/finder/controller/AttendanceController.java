@@ -1,11 +1,11 @@
 package com.market.finder.controller;
 
-import com.market.finder.dao.AttendanceRepository;
-import com.market.finder.dao.CourseRepository;
-import com.market.finder.dao.StudentRepository;
 import com.market.finder.entity.Attendance;
 import com.market.finder.entity.AttendanceId;
 import com.market.finder.entity.AttendanceStatus;
+import com.market.finder.service.AttendanceService;
+import com.market.finder.service.CourseService;
+import com.market.finder.service.StudentService;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -13,26 +13,29 @@ import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
 
+/**
+ * DIP: Depends on AttendanceService, StudentService, and CourseService abstractions.
+ */
 @Controller
 @RequestMapping("/attendance")
 public class AttendanceController {
 
-    private final AttendanceRepository attendanceRepository;
-    private final StudentRepository studentRepository;
-    private final CourseRepository courseRepository;
+    private final AttendanceService attendanceService;
+    private final StudentService studentService;
+    private final CourseService courseService;
 
-    public AttendanceController(AttendanceRepository attendanceRepository,
-                                StudentRepository studentRepository,
-                                CourseRepository courseRepository) {
-        this.attendanceRepository = attendanceRepository;
-        this.studentRepository = studentRepository;
-        this.courseRepository = courseRepository;
+    public AttendanceController(AttendanceService attendanceService,
+                                StudentService studentService,
+                                CourseService courseService) {
+        this.attendanceService = attendanceService;
+        this.studentService = studentService;
+        this.courseService = courseService;
     }
 
     // 1. Show all attendance records
     @GetMapping
     public String listAttendance(Model model) {
-        model.addAttribute("attendanceRecords", attendanceRepository.findAll());
+        model.addAttribute("attendanceRecords", attendanceService.findAll());
         return "attendance/list";
     }
 
@@ -40,8 +43,8 @@ public class AttendanceController {
     @GetMapping("/new")
     public String showCreateForm(Model model) {
         model.addAttribute("attendance", new Attendance());
-        model.addAttribute("students", studentRepository.findAll());
-        model.addAttribute("courses", courseRepository.findAll());
+        model.addAttribute("students", studentService.findAll());
+        model.addAttribute("courses", courseService.findAll());
         model.addAttribute("statuses", AttendanceStatus.values());
         return "attendance/form";
     }
@@ -55,12 +58,12 @@ public class AttendanceController {
             Model model) {
 
         AttendanceId id = new AttendanceId(studentId, courseId, date);
-        Attendance attendance = attendanceRepository.findById(id)
+        Attendance attendance = attendanceService.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Invalid attendance record"));
 
         model.addAttribute("attendance", attendance);
-        model.addAttribute("students", studentRepository.findAll());
-        model.addAttribute("courses", courseRepository.findAll());
+        model.addAttribute("students", studentService.findAll());
+        model.addAttribute("courses", courseService.findAll());
         model.addAttribute("statuses", AttendanceStatus.values());
         return "attendance/form";
     }
@@ -68,7 +71,6 @@ public class AttendanceController {
     // 4. Save the attendance record
     @PostMapping("/save")
     public String saveAttendance(@ModelAttribute("attendance") Attendance attendance) {
-        // Map the selected objects' IDs to the Composite Key before saving
         if (attendance.getId() == null) {
             attendance.setId(new AttendanceId());
         }
@@ -79,7 +81,7 @@ public class AttendanceController {
             attendance.getId().setCourseId(attendance.getCourse().getId());
         }
 
-        attendanceRepository.save(attendance);
+        attendanceService.save(attendance);
         return "redirect:/attendance";
     }
 
@@ -91,8 +93,8 @@ public class AttendanceController {
             @RequestParam("date") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date) {
 
         AttendanceId id = new AttendanceId(studentId, courseId, date);
-        if (attendanceRepository.existsById(id)) {
-            attendanceRepository.deleteById(id);
+        if (attendanceService.existsById(id)) {
+            attendanceService.deleteById(id);
         }
         return "redirect:/attendance";
     }
