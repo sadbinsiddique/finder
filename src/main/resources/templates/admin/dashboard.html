@@ -4,269 +4,329 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Dashboard - University ERP</title>
+    <title>Admin Panel - University ERP</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <style>
+        :root {
+            --bg-color: #07090e;
+            --glass-bg: rgba(255, 255, 255, 0.03);
+            --glass-bg-hover: rgba(255, 255, 255, 0.06);
+            --glass-border: rgba(255, 255, 255, 0.08);
+            --glass-border-hover: rgba(255, 255, 255, 0.18);
+            --glass-inner-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.1);
+            --apple-blue: #0A84FF;
+            --apple-purple: #5E5CE6;
+            --apple-cyan: #64D2FF;
+            --apple-green: #30D158;
+            --apple-amber: #FF9F0A;
+            --apple-red: #FF453A;
+            --text-primary: #F5F5F7;
+            --text-secondary: rgba(245, 245, 247, 0.55);
+        }
+
         body {
-            background: #0f172a;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            color: #e2e8f0;
+            background-color: var(--bg-color);
+            background-image: 
+                radial-gradient(circle at 80% 20%, rgba(94, 92, 230, 0.08) 0%, transparent 45%),
+                radial-gradient(circle at 20% 80%, rgba(10, 132, 255, 0.06) 0%, transparent 45%);
+            background-attachment: fixed;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            color: var(--text-primary);
             min-height: 100vh;
+            -webkit-font-smoothing: antialiased;
         }
 
-        .admin-navbar {
-            background: rgba(15, 23, 42, 0.95) !important;
-            backdrop-filter: blur(10px);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+        .glass-navbar {
+            background: rgba(7, 9, 14, 0.75);
+            backdrop-filter: blur(25px) saturate(180%);
+            -webkit-backdrop-filter: blur(25px) saturate(180%);
+            border-bottom: 1px solid var(--glass-border);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
         }
 
-        .stat-card {
-            background: rgba(255, 255, 255, 0.05);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            border-radius: 16px;
+        .user-pill {
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: var(--glass-inner-shadow);
+            border-radius: 30px;
+            padding: 5px 14px;
+            font-size: 0.825rem;
+            font-weight: 500;
+            color: var(--text-primary);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .btn-apple-glass {
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            box-shadow: var(--glass-inner-shadow);
+            color: var(--text-primary);
+            border-radius: 10px;
+            padding: 6px 14px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .btn-apple-glass:hover {
+            background: rgba(255, 255, 255, 0.12);
+            border-color: rgba(255, 255, 255, 0.25);
+            color: #fff;
+            transform: translateY(-1px);
+        }
+
+        .btn-apple-danger {
+            background: rgba(255, 69, 58, 0.1);
+            border: 1px solid rgba(255, 69, 58, 0.2);
+            color: #FF453A;
+            border-radius: 10px;
+            padding: 6px 14px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .btn-apple-danger:hover {
+            background: rgba(255, 69, 58, 0.2);
+            border-color: rgba(255, 69, 58, 0.4);
+            color: #FF453A;
+        }
+
+        .liquid-glass-stat {
+            background: var(--glass-bg);
+            backdrop-filter: blur(25px) saturate(180%);
+            -webkit-backdrop-filter: blur(25px) saturate(180%);
+            border: 1px solid var(--glass-border);
+            box-shadow: 0 12px 32px rgba(0, 0, 0, 0.3), var(--glass-inner-shadow);
+            border-radius: 18px;
             padding: 1.5rem;
-            transition: all 0.3s ease;
+            text-align: center;
+            transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
-        .stat-card:hover {
-            transform: translateY(-4px);
-            border-color: rgba(102, 126, 234, 0.3);
-            box-shadow: 0 12px 35px rgba(0, 0, 0, 0.3);
+        .liquid-glass-stat:hover {
+            background: var(--glass-bg-hover);
+            border-color: var(--glass-border-hover);
+            transform: translateY(-3px);
         }
 
-        .stat-icon {
-            width: 56px;
-            height: 56px;
-            border-radius: 14px;
+        .stat-icon-badge {
+            width: 44px;
+            height: 44px;
+            border-radius: 12px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: var(--glass-inner-shadow);
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 1.5rem;
+            font-size: 1.15rem;
+            margin: 0 auto 0.75rem;
         }
 
-        .stat-icon.users { background: linear-gradient(135deg, #667eea, #764ba2); }
-        .stat-icon.roles { background: linear-gradient(135deg, #f093fb, #f5576c); }
-        .stat-icon.students { background: linear-gradient(135deg, #4facfe, #00f2fe); }
-        .stat-icon.instructors { background: linear-gradient(135deg, #43e97b, #38f9d7); }
-        .stat-icon.courses { background: linear-gradient(135deg, #fa709a, #fee140); }
-        .stat-icon.departments { background: linear-gradient(135deg, #a18cd1, #fbc2eb); }
+        .stat-icon-badge.users { color: var(--apple-purple); }
+        .stat-icon-badge.roles { color: #FF375F; }
+        .stat-icon-badge.students { color: var(--apple-blue); }
+        .stat-icon-badge.instructors { color: var(--apple-green); }
+        .stat-icon-badge.courses { color: var(--apple-cyan); }
+        .stat-icon-badge.departments { color: var(--apple-amber); }
 
-        .stat-number {
-            font-size: 2rem;
+        .stat-num {
+            font-size: 1.75rem;
             font-weight: 700;
-            color: #fff;
+            color: #F5F5F7;
+            letter-spacing: -0.02em;
         }
 
-        .stat-label {
-            color: rgba(255, 255, 255, 0.5);
-            font-size: 0.85rem;
+        .stat-lbl {
+            color: var(--text-secondary);
+            font-size: 0.75rem;
+            font-weight: 500;
             text-transform: uppercase;
-            letter-spacing: 1px;
+            letter-spacing: 0.08em;
+            margin-top: 0.2rem;
         }
 
-        .action-card {
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            border-radius: 16px;
+        .liquid-glass-action {
+            background: var(--glass-bg);
+            backdrop-filter: blur(25px) saturate(180%);
+            -webkit-backdrop-filter: blur(25px) saturate(180%);
+            border: 1px solid var(--glass-border);
+            box-shadow: 0 12px 32px rgba(0, 0, 0, 0.3), var(--glass-inner-shadow);
+            border-radius: 18px;
             padding: 1.5rem;
-            transition: all 0.3s ease;
             text-decoration: none;
-            color: #e2e8f0;
+            color: var(--text-primary);
             display: block;
+            transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
-        .action-card:hover {
-            transform: translateY(-4px);
-            border-color: rgba(102, 126, 234, 0.4);
-            box-shadow: 0 12px 35px rgba(0, 0, 0, 0.3);
+        .liquid-glass-action:hover {
+            background: var(--glass-bg-hover);
+            border-color: var(--glass-border-hover);
+            transform: translateY(-3px);
             color: #fff;
         }
 
-        .section-title {
-            color: #fff;
-            font-weight: 700;
-            position: relative;
-            padding-bottom: 0.5rem;
-        }
-
-        .section-title::after {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 60px;
-            height: 3px;
-            background: linear-gradient(135deg, #667eea, #764ba2);
-            border-radius: 2px;
-        }
-
-        .btn-admin {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            border: none;
-            border-radius: 10px;
-            padding: 8px 20px;
+        .section-heading {
+            font-size: 1.35rem;
             font-weight: 600;
-            font-size: 0.85rem;
-            transition: all 0.3s ease;
-        }
-
-        .btn-admin:hover {
-            transform: translateY(-1px);
-            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.4);
+            letter-spacing: -0.02em;
+            color: #F5F5F7;
+            margin-bottom: 1.25rem;
         }
     </style>
 </head>
 <body>
 
 <!-- Navbar -->
-<nav class="navbar navbar-expand-lg admin-navbar mb-4">
+<nav class="navbar navbar-expand-lg glass-navbar py-3">
     <div class="container">
-        <a class="navbar-brand text-white fw-bold" href="/">
-            <i class="fas fa-graduation-cap me-2"></i>University ERP
+        <a class="navbar-brand text-white fw-bold d-flex align-items-center gap-2" href="/">
+            <i class="fas fa-graduation-cap" style="color: var(--apple-blue);"></i>
+            <span>University ERP</span>
         </a>
-        <div class="navbar-nav ms-auto d-flex flex-row align-items-center gap-3">
-            <span class="text-white-50">
-                <i class="fas fa-shield-alt me-1"></i>Admin:
-                <strong class="text-white" sec:authentication="name">User</strong>
-            </span>
-            <a th:href="@{/}" class="btn btn-outline-light btn-sm">
-                <i class="fas fa-home me-1"></i>Home
+        <div class="ms-auto d-flex align-items-center gap-3">
+            <div class="user-pill">
+                <i class="fas fa-shield-alt" style="color: var(--apple-purple);"></i>
+                <span sec:authentication="name">Admin</span>
+            </div>
+            <a th:href="@{/}" class="btn btn-apple-glass">
+                <i class="fas fa-home me-1"></i> Home
             </a>
             <form th:action="@{/logout}" method="post" class="d-inline">
-                <button type="submit" class="btn btn-outline-danger btn-sm">
-                    <i class="fas fa-sign-out-alt me-1"></i>Logout
+                <button type="submit" class="btn btn-apple-danger">
+                    <i class="fas fa-power-off me-1"></i> Logout
                 </button>
             </form>
         </div>
     </div>
 </nav>
 
-<div class="container">
+<div class="container py-4">
     <!-- Header -->
     <div class="mb-4">
-        <h2 class="section-title">Admin Dashboard</h2>
-        <p class="text-white-50 mt-3">System overview and quick management actions</p>
+        <h1 class="h2 fw-bold text-white mb-1">Admin Panel</h1>
+        <p class="text-secondary mb-0">System metrics, security roles, and user administration.</p>
     </div>
 
-    <!-- Stats Cards -->
-    <div class="row g-4 mb-5">
-        <div class="col-md-4 col-lg-2">
-            <div class="stat-card text-center">
-                <div class="stat-icon users mx-auto mb-2"><i class="fas fa-users"></i></div>
-                <div class="stat-number" th:text="${totalUsers}">0</div>
-                <div class="stat-label">Users</div>
+    <!-- Stats Row -->
+    <div class="row g-3 mb-5">
+        <div class="col-6 col-md-2">
+            <div class="liquid-glass-stat">
+                <div class="stat-icon-badge users"><i class="fas fa-users"></i></div>
+                <div class="stat-num" th:text="${totalUsers}">0</div>
+                <div class="stat-lbl">Users</div>
             </div>
         </div>
-        <div class="col-md-4 col-lg-2">
-            <div class="stat-card text-center">
-                <div class="stat-icon roles mx-auto mb-2"><i class="fas fa-user-tag"></i></div>
-                <div class="stat-number" th:text="${totalRoles}">0</div>
-                <div class="stat-label">Roles</div>
+        <div class="col-6 col-md-2">
+            <div class="liquid-glass-stat">
+                <div class="stat-icon-badge roles"><i class="fas fa-user-tag"></i></div>
+                <div class="stat-num" th:text="${totalRoles}">0</div>
+                <div class="stat-lbl">Roles</div>
             </div>
         </div>
-        <div class="col-md-4 col-lg-2">
-            <div class="stat-card text-center">
-                <div class="stat-icon students mx-auto mb-2"><i class="fas fa-user-graduate"></i></div>
-                <div class="stat-number" th:text="${totalStudents}">0</div>
-                <div class="stat-label">Students</div>
+        <div class="col-6 col-md-2">
+            <div class="liquid-glass-stat">
+                <div class="stat-icon-badge students"><i class="fas fa-user-graduate"></i></div>
+                <div class="stat-num" th:text="${totalStudents}">0</div>
+                <div class="stat-lbl">Students</div>
             </div>
         </div>
-        <div class="col-md-4 col-lg-2">
-            <div class="stat-card text-center">
-                <div class="stat-icon instructors mx-auto mb-2"><i class="fas fa-chalkboard-teacher"></i></div>
-                <div class="stat-number" th:text="${totalInstructors}">0</div>
-                <div class="stat-label">Instructors</div>
+        <div class="col-6 col-md-2">
+            <div class="liquid-glass-stat">
+                <div class="stat-icon-badge instructors"><i class="fas fa-chalkboard-teacher"></i></div>
+                <div class="stat-num" th:text="${totalInstructors}">0</div>
+                <div class="stat-lbl">Instructors</div>
             </div>
         </div>
-        <div class="col-md-4 col-lg-2">
-            <div class="stat-card text-center">
-                <div class="stat-icon courses mx-auto mb-2"><i class="fas fa-book"></i></div>
-                <div class="stat-number" th:text="${totalCourses}">0</div>
-                <div class="stat-label">Courses</div>
+        <div class="col-6 col-md-2">
+            <div class="liquid-glass-stat">
+                <div class="stat-icon-badge courses"><i class="fas fa-book"></i></div>
+                <div class="stat-num" th:text="${totalCourses}">0</div>
+                <div class="stat-lbl">Courses</div>
             </div>
         </div>
-        <div class="col-md-4 col-lg-2">
-            <div class="stat-card text-center">
-                <div class="stat-icon departments mx-auto mb-2"><i class="fas fa-building"></i></div>
-                <div class="stat-number" th:text="${totalDepartments}">0</div>
-                <div class="stat-label">Departments</div>
+        <div class="col-6 col-md-2">
+            <div class="liquid-glass-stat">
+                <div class="stat-icon-badge departments"><i class="fas fa-building"></i></div>
+                <div class="stat-num" th:text="${totalDepartments}">0</div>
+                <div class="stat-lbl">Departments</div>
             </div>
         </div>
     </div>
 
-    <!-- Quick Actions -->
-    <h4 class="section-title mb-4">Quick Actions</h4>
+    <!-- Quick Administration -->
+    <h2 class="section-heading">System Administration</h2>
     <div class="row g-4 mb-5">
         <div class="col-md-4">
-            <a th:href="@{/admin/users}" class="action-card">
+            <a th:href="@{/admin/users}" class="liquid-glass-action">
                 <div class="d-flex align-items-center">
-                    <div class="stat-icon users me-3"><i class="fas fa-users-cog"></i></div>
+                    <div class="stat-icon-badge users me-3 mb-0"><i class="fas fa-users-cog"></i></div>
                     <div>
-                        <h5 class="mb-1">Manage Users</h5>
-                        <small class="text-white-50">Create, edit, and delete user accounts</small>
+                        <h3 class="h6 fw-semibold mb-1">User Management</h3>
+                        <p class="text-secondary small mb-0">Manage accounts, assign roles, and toggle user statuses.</p>
                     </div>
                 </div>
             </a>
         </div>
         <div class="col-md-4">
-            <a th:href="@{/admin/roles}" class="action-card">
+            <a th:href="@{/admin/roles}" class="liquid-glass-action">
                 <div class="d-flex align-items-center">
-                    <div class="stat-icon roles me-3"><i class="fas fa-shield-alt"></i></div>
+                    <div class="stat-icon-badge roles me-3 mb-0"><i class="fas fa-shield-alt"></i></div>
                     <div>
-                        <h5 class="mb-1">Manage Roles</h5>
-                        <small class="text-white-50">Define security roles and permissions</small>
+                        <h3 class="h6 fw-semibold mb-1">Role Definitions</h3>
+                        <p class="text-secondary small mb-0">Define system authority roles and permissions.</p>
                     </div>
                 </div>
             </a>
         </div>
         <div class="col-md-4">
-            <a th:href="@{/admin/permissions}" class="action-card">
+            <a th:href="@{/admin/permissions}" class="liquid-glass-action">
                 <div class="d-flex align-items-center">
-                    <div class="stat-icon courses me-3"><i class="fas fa-key"></i></div>
+                    <div class="stat-icon-badge courses me-3 mb-0"><i class="fas fa-key"></i></div>
                     <div>
-                        <h5 class="mb-1">Permissions</h5>
-                        <small class="text-white-50">View and manage system permissions</small>
+                        <h3 class="h6 fw-semibold mb-1">System Permissions</h3>
+                        <p class="text-secondary small mb-0">View fine-grained permission assignments.</p>
                     </div>
                 </div>
             </a>
         </div>
     </div>
 
-    <!-- Module Management -->
-    <h4 class="section-title mb-4">Module Management</h4>
-    <div class="row g-4 mb-5">
+    <!-- Academic Modules -->
+    <h2 class="section-heading">Academic Modules</h2>
+    <div class="row g-3 mb-4">
         <div class="col-md-3">
-            <a th:href="@{/students}" class="action-card">
-                <div class="text-center">
-                    <i class="fas fa-user-graduate fa-2x mb-2" style="color: #4facfe;"></i>
-                    <h6>Students</h6>
-                </div>
+            <a th:href="@{/students}" class="liquid-glass-action text-center py-3">
+                <i class="fas fa-user-graduate mb-2 fs-5" style="color: var(--apple-blue);"></i>
+                <h3 class="h6 fw-medium mb-0">Students</h3>
             </a>
         </div>
         <div class="col-md-3">
-            <a th:href="@{/instructors}" class="action-card">
-                <div class="text-center">
-                    <i class="fas fa-chalkboard-teacher fa-2x mb-2" style="color: #43e97b;"></i>
-                    <h6>Instructors</h6>
-                </div>
+            <a th:href="@{/instructors}" class="liquid-glass-action text-center py-3">
+                <i class="fas fa-chalkboard-teacher mb-2 fs-5" style="color: var(--apple-green);"></i>
+                <h3 class="h6 fw-medium mb-0">Instructors</h3>
             </a>
         </div>
         <div class="col-md-3">
-            <a th:href="@{/courses}" class="action-card">
-                <div class="text-center">
-                    <i class="fas fa-book fa-2x mb-2" style="color: #fa709a;"></i>
-                    <h6>Courses</h6>
-                </div>
+            <a th:href="@{/courses}" class="liquid-glass-action text-center py-3">
+                <i class="fas fa-book mb-2 fs-5" style="color: var(--apple-cyan);"></i>
+                <h3 class="h6 fw-medium mb-0">Courses</h3>
             </a>
         </div>
         <div class="col-md-3">
-            <a th:href="@{/departments}" class="action-card">
-                <div class="text-center">
-                    <i class="fas fa-building fa-2x mb-2" style="color: #a18cd1;"></i>
-                    <h6>Departments</h6>
-                </div>
+            <a th:href="@{/departments}" class="liquid-glass-action text-center py-3">
+                <i class="fas fa-building mb-2 fs-5" style="color: var(--apple-amber);"></i>
+                <h3 class="h6 fw-medium mb-0">Departments</h3>
             </a>
         </div>
     </div>

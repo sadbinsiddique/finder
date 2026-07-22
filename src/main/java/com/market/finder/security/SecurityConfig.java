@@ -14,8 +14,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
 /**
- * SRP: Sole responsibility is Spring Security configuration.
- * DIP: Depends on UserDetailsService interface, NOT concrete CustomUserDetailsService.
+ * SRP: Sole responsibility is Spring Security authorization matrix configuration.
+ * Enforces the exact Role Access Matrix for ADMIN, INSTRUCTOR, and STUDENT.
  */
 @Configuration
 public class SecurityConfig {
@@ -53,14 +53,58 @@ public class SecurityConfig {
                             // --- Public resources ---
                             .requestMatchers("/login", "/css/**", "/img/**", "/js/**").permitAll()
                             .requestMatchers("/swagger-ui/**", "/v3/api-docs/**", "/api-docs/**").permitAll()
-                            .requestMatchers("/error").permitAll()
+                            .requestMatchers("/error", "/access-denied").permitAll()
 
-                            // --- Admin-only endpoints ---
-                            .requestMatchers("/admin/**").hasRole("ADMIN")
-                            .requestMatchers("/users/**").hasRole("ADMIN")
-                            .requestMatchers("/roles/**").hasRole("ADMIN")
+                            // --- Admin-only management endpoints ---
+                            .requestMatchers("/admin/**", "/users/**", "/roles/**").hasRole("ADMIN")
 
-                            // --- Protected API endpoints ---
+                            // =====================================================
+                            // 1. INSTRUCTORS (Admin: Full, Student: View Only, Instructor: NO ACCESS)
+                            // =====================================================
+                            .requestMatchers(HttpMethod.GET, "/instructors", "/instructors/").hasAnyRole("ADMIN", "STUDENT")
+                            .requestMatchers("/instructors/**").hasRole("ADMIN")
+
+                            // =====================================================
+                            // 2. COURSES (Admin: Full, Student: View Only, Instructor: NO ACCESS)
+                            // =====================================================
+                            .requestMatchers(HttpMethod.GET, "/courses", "/courses/").hasAnyRole("ADMIN", "STUDENT")
+                            .requestMatchers("/courses/**").hasRole("ADMIN")
+
+                            // =====================================================
+                            // 3. DEPARTMENTS (Admin: Full, Instructor: View & Update, Student: View Only)
+                            // =====================================================
+                            .requestMatchers("/departments/delete/**").hasRole("ADMIN")
+                            .requestMatchers("/departments/new").hasRole("ADMIN")
+                            .requestMatchers("/departments/edit/**", "/departments/save").hasAnyRole("ADMIN", "INSTRUCTOR")
+                            .requestMatchers("/departments", "/departments/").hasAnyRole("ADMIN", "INSTRUCTOR", "STUDENT")
+
+                            // =====================================================
+                            // 4. STUDENTS (Admin: Full, Instructor & Student: View, Create, Edit - NO Delete)
+                            // =====================================================
+                            .requestMatchers("/students/delete/**").hasRole("ADMIN")
+                            .requestMatchers("/students/**").hasAnyRole("ADMIN", "INSTRUCTOR", "STUDENT")
+
+                            // =====================================================
+                            // 5. ENROLLMENTS (Admin & Instructor: Full CRUD, Student: View, Create/Enroll, Drop/Delete)
+                            // =====================================================
+                            .requestMatchers("/enrollments/edit").hasAnyRole("ADMIN", "INSTRUCTOR")
+                            .requestMatchers("/enrollments/**").hasAnyRole("ADMIN", "INSTRUCTOR", "STUDENT")
+
+                            // =====================================================
+                            // 6. ATTENDANCE (Admin: Full, Instructor: View, Create, Update - NO Delete, Student: View Only)
+                            // =====================================================
+                            .requestMatchers("/attendance/delete").hasRole("ADMIN")
+                            .requestMatchers("/attendance/new", "/attendance/edit", "/attendance/save").hasAnyRole("ADMIN", "INSTRUCTOR")
+                            .requestMatchers("/attendance", "/attendance/").hasAnyRole("ADMIN", "INSTRUCTOR", "STUDENT")
+
+                            // =====================================================
+                            // 7. GRADEBOOKS (Admin: Full, Instructor: View, Create, Edit, Update - NO Delete, Student: View Only)
+                            // =====================================================
+                            .requestMatchers("/gradebooks/delete").hasRole("ADMIN")
+                            .requestMatchers("/gradebooks/new", "/gradebooks/edit", "/gradebooks/save").hasAnyRole("ADMIN", "INSTRUCTOR")
+                            .requestMatchers("/gradebooks", "/gradebooks/").hasAnyRole("ADMIN", "INSTRUCTOR", "STUDENT")
+
+                            // --- Protected REST APIs ---
                             .requestMatchers(HttpMethod.GET, "/api/**").hasAnyRole("ADMIN", "USER", "INSTRUCTOR", "STUDENT")
                             .requestMatchers(HttpMethod.POST, "/api/**").hasAnyRole("ADMIN", "INSTRUCTOR")
                             .requestMatchers(HttpMethod.PUT, "/api/**").hasAnyRole("ADMIN", "INSTRUCTOR")

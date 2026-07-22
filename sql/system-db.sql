@@ -1,232 +1,257 @@
-drop schema if exists `hb-finder`;
-create schema `hb-finder`;
-use `hb-finder`;
+SET FOREIGN_KEY_CHECKS = 0;
+SET NAMES utf8mb4;
 
-# Department (01)
-drop table if exists `department`;
+DROP SCHEMA IF EXISTS `hb-finder`;
+CREATE SCHEMA `hb-finder` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+USE `hb-finder`;
+
+# -----------------------------------------------------
+# 01. Department
+# -----------------------------------------------------
+DROP TABLE IF EXISTS `department`;
 CREATE TABLE `department`
 (
     `id`   INT PRIMARY KEY AUTO_INCREMENT,
     `name` VARCHAR(255) NOT NULL
-) ENGINE = InnoDB;
+) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4;
 
-
-# Role (02)
-drop table if exists `roles`;
+# -----------------------------------------------------
+# 02. Role
+# -----------------------------------------------------
+DROP TABLE IF EXISTS `roles`;
 CREATE TABLE `roles`
 (
     `id`        INT PRIMARY KEY AUTO_INCREMENT,
-    `role_name` VARCHAR(50) UNIQUE
-) ENGINE = InnoDB;
+    `role_name` VARCHAR(50) UNIQUE NOT NULL
+) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4;
 
-# Users (03)
-drop table if exists `users`;
+# -----------------------------------------------------
+# 03. Users
+# -----------------------------------------------------
+DROP TABLE IF EXISTS `users`;
 CREATE TABLE `users`
 (
     `username` VARCHAR(50) PRIMARY KEY,
-    `enabled`  BIT(1),
-    `password` VARCHAR(68)
-) ENGINE = InnoDB;
+    `enabled`  BIT(1) NOT NULL DEFAULT b'1',
+    `password` VARCHAR(68) NOT NULL
+) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4;
 
-# User Role [user][role] (04)
-drop table if exists `user_roles`;
+# -----------------------------------------------------
+# 04. User Role Mapping
+# -----------------------------------------------------
+DROP TABLE IF EXISTS `user_roles`;
 CREATE TABLE `user_roles`
 (
-    `username` VARCHAR(50),
-    `role_id`  INT,
+    `username` VARCHAR(50) NOT NULL,
+    `role_id`  INT NOT NULL,
     PRIMARY KEY (`username`, `role_id`),
-    FOREIGN KEY (`username`) REFERENCES `users` (`username`),
-    FOREIGN KEY (`role_id`) REFERENCES `roles` (`id`)
-) ENGINE = InnoDB;
+    FOREIGN KEY (`username`) REFERENCES `users` (`username`) ON DELETE CASCADE ON UPDATE CASCADE,
+    FOREIGN KEY (`role_id`) REFERENCES `roles` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4;
 
-# Permissions (05)
-drop table if exists `permissions`;
+# -----------------------------------------------------
+# 05. Permissions
+# -----------------------------------------------------
+DROP TABLE IF EXISTS `permissions`;
 CREATE TABLE `permissions`
 (
     `id`              INT PRIMARY KEY AUTO_INCREMENT,
-    `permission_name` VARCHAR(50) UNIQUE
-) ENGINE = InnoDB;
+    `permission_name` VARCHAR(50) UNIQUE NOT NULL
+) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4;
 
-# Role Permissions [permissions] [role] (06)
-drop table if exists `role_permissions`;
+# -----------------------------------------------------
+# 06. Role Permissions Mapping
+# -----------------------------------------------------
+DROP TABLE IF EXISTS `role_permissions`;
 CREATE TABLE `role_permissions`
 (
-    `role_id`       INT,
-    `permission_id` INT,
+    `role_id`       INT NOT NULL,
+    `permission_id` INT NOT NULL,
     PRIMARY KEY (`role_id`, `permission_id`),
-    FOREIGN KEY (`role_id`) REFERENCES `roles` (`id`),
-    FOREIGN KEY (`permission_id`) REFERENCES `permissions` (`id`)
-) ENGINE = InnoDB;
+    FOREIGN KEY (`role_id`) REFERENCES `roles` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+    FOREIGN KEY (`permission_id`) REFERENCES `permissions` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4;
 
-# Instructor Detail (07)
-drop table if exists `instructor_detail`;
-create table `instructor_detail`
+# -----------------------------------------------------
+# 07. Instructor Detail
+# -----------------------------------------------------
+DROP TABLE IF EXISTS `instructor_detail`;
+CREATE TABLE `instructor_detail`
 (
-    `id`              int(11) not null auto_increment,
-    `age`             int(3)       default null,
-    `youtube_channel` varchar(128) default null,
-    primary key (`id`)
-) engine = InnoDB
-  auto_increment = 1
-  default charset = latin1;
+    `id`              INT PRIMARY KEY AUTO_INCREMENT,
+    `age`             INT DEFAULT NULL,
+    `youtube_channel` VARCHAR(128) DEFAULT NULL
+) ENGINE = InnoDB AUTO_INCREMENT = 1 DEFAULT CHARSET = utf8mb4;
 
-# Instructor [instructor_detail] (08)
-drop table if exists `instructor`;
-create table `instructor`
+# -----------------------------------------------------
+# 08. Instructor
+# -----------------------------------------------------
+DROP TABLE IF EXISTS `instructor`;
+CREATE TABLE `instructor`
 (
-    `id`                   int(11) not null auto_increment,
-    `first_name`           varchar(45) default null,
-    `last_name`            varchar(45) default null,
-    `email`                varchar(64) default null,
-    `instructor_detail_id` int(11)     default null,
-    `username`             varchar(50) default null,
+    `id`                   INT PRIMARY KEY AUTO_INCREMENT,
+    `first_name`           VARCHAR(45) DEFAULT NULL,
+    `last_name`            VARCHAR(45) DEFAULT NULL,
+    `email`                VARCHAR(64) DEFAULT NULL,
+    `instructor_detail_id` INT DEFAULT NULL,
+    `username`             VARCHAR(50) DEFAULT NULL,
 
-    primary key (`id`),
+    KEY `FK_DETAIL_idx` (`instructor_detail_id`),
+    KEY `FK_INSTRUCTOR_USER_idx` (`username`),
 
-    key `FK_DETAIL_idx` (`instructor_detail_id`),
-    key `FK_INSTRUCTOR_USER_idx` (`username`),
+    CONSTRAINT `FK_DETAIL`
+        FOREIGN KEY (`instructor_detail_id`)
+            REFERENCES `instructor_detail` (`id`)
+            ON DELETE SET NULL ON UPDATE CASCADE,
 
-    constraint `FK_DETAIL`
-        foreign key (`instructor_detail_id`)
-            references `instructor_detail` (`id`)
-            on delete no action on update no action,
+    CONSTRAINT `FK_INSTRUCTOR_USER`
+        FOREIGN KEY (`username`)
+            REFERENCES `users` (`username`)
+            ON DELETE SET NULL ON UPDATE CASCADE,
 
-    constraint `FK_INSTRUCTOR_USER`
-        foreign key (`username`)
-            references `users` (`username`)
-            on delete no action on update no action,
+    CONSTRAINT `UQ_INSTRUCTOR_USERNAME` UNIQUE (`username`)
 
-    constraint `UQ_INSTRUCTOR_USERNAME` unique (`username`)
+) ENGINE = InnoDB AUTO_INCREMENT = 1 DEFAULT CHARSET = utf8mb4;
 
-) engine = InnoDB
-  auto_increment = 1
-  default charset = latin1;
-
-# Student [department] (09)
-drop table if exists `student`;
-create table `student`
+# -----------------------------------------------------
+# 09. Student
+# -----------------------------------------------------
+DROP TABLE IF EXISTS `student`;
+CREATE TABLE `student`
 (
-    `id`            int not null auto_increment,
-    `first_name`    varchar(45) default null,
-    `last_name`     varchar(45) default null,
-    `email`         varchar(64) default null,
-    `department_id` int         default null,
-    `username`      varchar(50) default null,
+    `id`            INT PRIMARY KEY AUTO_INCREMENT,
+    `first_name`    VARCHAR(45) DEFAULT NULL,
+    `last_name`     VARCHAR(45) DEFAULT NULL,
+    `email`         VARCHAR(64) DEFAULT NULL,
+    `department_id` INT DEFAULT NULL,
+    `username`      VARCHAR(50) DEFAULT NULL,
 
-    primary key (`id`),
+    KEY `FK_STUDENT_DEPT_idx` (`department_id`),
+    KEY `FK_STUDENT_USER_idx` (`username`),
 
-    key `FK_STUDENT_DEPT_idx` (`department_id`),
-    key `FK_STUDENT_USER_idx` (`username`),
+    CONSTRAINT `FK_STUDENT_DEPT`
+        FOREIGN KEY (`department_id`)
+            REFERENCES `department` (`id`)
+            ON DELETE SET NULL ON UPDATE CASCADE,
 
-    constraint `FK_STUDENT_DEPT`
-        foreign key (`department_id`)
-            references `department` (`id`)
-            on delete no action on update no action,
+    CONSTRAINT `FK_STUDENT_USER`
+        FOREIGN KEY (`username`)
+            REFERENCES `users` (`username`)
+            ON DELETE SET NULL ON UPDATE CASCADE,
 
-    constraint `FK_STUDENT_USER`
-        foreign key (`username`)
-            references `users` (`username`)
-            on delete no action on update no action,
+    CONSTRAINT `UQ_STUDENT_USERNAME` UNIQUE (`username`)
 
-    constraint `UQ_STUDENT_USERNAME` unique (`username`)
+) ENGINE = InnoDB AUTO_INCREMENT = 1 DEFAULT CHARSET = utf8mb4;
 
-) engine = InnoDB
-  auto_increment = 1
-  default charset = latin1;
-
-# Student Detail [student] (10)
-drop table if exists `student_detail`;
+# -----------------------------------------------------
+# 10. Student Detail
+# -----------------------------------------------------
+DROP TABLE IF EXISTS `student_detail`;
 CREATE TABLE `student_detail`
 (
     `student_id`  INT PRIMARY KEY,
-    `blood_group` VARCHAR(5),
-    `address`     VARCHAR(255),
-    FOREIGN KEY (`student_id`) REFERENCES `student` (`id`)
-) ENGINE = InnoDB;
+    `blood_group` VARCHAR(5) DEFAULT NULL,
+    `address`     VARCHAR(255) DEFAULT NULL,
+    FOREIGN KEY (`student_id`) REFERENCES `student` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4;
 
-# Course (11)
-drop table if exists `course`;
+# -----------------------------------------------------
+# 11. Course
+# -----------------------------------------------------
+DROP TABLE IF EXISTS `course`;
 CREATE TABLE `course`
 (
     `id`    INT PRIMARY KEY AUTO_INCREMENT,
-    `title` VARCHAR(128) UNIQUE
-) ENGINE = InnoDB;
+    `title` VARCHAR(128) UNIQUE NOT NULL
+) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4;
 
-# Teaching Assignment [instructor][course] (12)
-drop table if exists `teaching_assignment`;
+# -----------------------------------------------------
+# 12. Teaching Assignment
+# -----------------------------------------------------
+DROP TABLE IF EXISTS `teaching_assignment`;
 CREATE TABLE `teaching_assignment`
 (
-    `instructor_id` INT,
-    `course_id`     INT,
+    `instructor_id` INT NOT NULL,
+    `course_id`     INT NOT NULL,
     PRIMARY KEY (`instructor_id`, `course_id`),
-    FOREIGN KEY (`instructor_id`) REFERENCES `instructor` (`id`),
-    FOREIGN KEY (`course_id`) REFERENCES `course` (`id`)
-) ENGINE = InnoDB;
+    FOREIGN KEY (`instructor_id`) REFERENCES `instructor` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+    FOREIGN KEY (`course_id`) REFERENCES `course` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4;
 
-# Enrollment [student][course] (13)
-drop table if exists `enrollment`;
+# -----------------------------------------------------
+# 13. Enrollment
+# -----------------------------------------------------
+DROP TABLE IF EXISTS `enrollment`;
 CREATE TABLE `enrollment`
 (
-    `student_id`      INT,
-    `course_id`       INT,
-    `enrollment_date` DATE,
+    `student_id`      INT NOT NULL,
+    `course_id`       INT NOT NULL,
+    `enrollment_date` DATE DEFAULT NULL,
     PRIMARY KEY (`student_id`, `course_id`),
-    FOREIGN KEY (`student_id`) REFERENCES `student` (`id`),
-    FOREIGN KEY (`course_id`) REFERENCES `course` (`id`)
-) ENGINE = InnoDB;
+    FOREIGN KEY (`student_id`) REFERENCES `student` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+    FOREIGN KEY (`course_id`) REFERENCES `course` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4;
 
-# Grade Book [student, assignment_name, course_id] (14)
-drop table if exists `gradebook`;
+# -----------------------------------------------------
+# 14. Gradebook
+# -----------------------------------------------------
+DROP TABLE IF EXISTS `gradebook`;
 CREATE TABLE `gradebook`
 (
-    `student_id`      INT,
-    `course_id`       INT,
-    `assignment_name` VARCHAR(100),
-    `score`           DECIMAL(5, 2),
+    `student_id`      INT NOT NULL,
+    `course_id`       INT NOT NULL,
+    `assignment_name` VARCHAR(100) NOT NULL,
+    `score`           DECIMAL(5, 2) DEFAULT NULL,
     PRIMARY KEY (`student_id`, `course_id`, `assignment_name`),
-    FOREIGN KEY (`student_id`) REFERENCES `student` (`id`),
-    FOREIGN KEY (`course_id`) REFERENCES `course` (`id`)
-) ENGINE = InnoDB;
+    FOREIGN KEY (`student_id`) REFERENCES `student` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+    FOREIGN KEY (`course_id`) REFERENCES `course` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4;
 
-# Attendance  [student, course_id] (15)
-drop table if exists `attendance`;
+# -----------------------------------------------------
+# 15. Attendance
+# -----------------------------------------------------
+DROP TABLE IF EXISTS `attendance`;
 CREATE TABLE `attendance`
 (
-    `student_id`      INT,
-    `course_id`       INT,
-    `attendance_date` DATE,
-    `status`          ENUM ('Present', 'Absent', 'Late', 'Excused'),
+    `student_id`      INT NOT NULL,
+    `course_id`       INT NOT NULL,
+    `attendance_date` DATE NOT NULL,
+    `status`          ENUM ('Present', 'Absent', 'Late', 'Excused') NOT NULL,
     PRIMARY KEY (`student_id`, `course_id`, `attendance_date`),
-    FOREIGN KEY (`student_id`) REFERENCES `student` (`id`),
-    FOREIGN KEY (`course_id`) REFERENCES `course` (`id`)
-) ENGINE = InnoDB;
+    FOREIGN KEY (`student_id`) REFERENCES `student` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+    FOREIGN KEY (`course_id`) REFERENCES `course` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4;
 
-# Employee (16)
-drop table if exists `employee`;
+# -----------------------------------------------------
+# 16. Employee
+# -----------------------------------------------------
+DROP TABLE IF EXISTS `employee`;
 CREATE TABLE `employee`
 (
     `id`        INT PRIMARY KEY AUTO_INCREMENT,
     `fast_name` VARCHAR(45) DEFAULT NULL,
     `last_name` VARCHAR(45) DEFAULT NULL,
     `email`     VARCHAR(64) DEFAULT NULL
-) ENGINE = InnoDB;
+) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4;
 
-# Staff (17)
-drop table if exists `staff`;
+# -----------------------------------------------------
+# 17. Staff
+# -----------------------------------------------------
+DROP TABLE IF EXISTS `staff`;
 CREATE TABLE `staff`
 (
     `id`         INT PRIMARY KEY AUTO_INCREMENT,
     `first_name` VARCHAR(45) DEFAULT NULL,
     `last_name`  VARCHAR(45) DEFAULT NULL,
     `email`      VARCHAR(64) DEFAULT NULL,
-    `income`     INT         DEFAULT NULL,
+    `income`     INT DEFAULT NULL,
     `title`      VARCHAR(50) DEFAULT NULL,
-    `age`        INT         DEFAULT NULL
-) ENGINE = InnoDB;
+    `age`        INT DEFAULT NULL
+) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4;
 
 
 # =====================================================
-# SEED DATA - Full Sample Database Population
+# SEED DATA - Full Population
 # =====================================================
 
 # 1. Default Roles
@@ -244,19 +269,12 @@ INSERT INTO `permissions` (`id`, `permission_name`) VALUES
 (4, 'MANAGE_USERS');
 
 # 3. Role-Permission Mappings
-# ADMIN -> All permissions
 INSERT INTO `role_permissions` (`role_id`, `permission_id`) VALUES (1, 1), (1, 2), (1, 3), (1, 4);
-# USER -> READ
 INSERT INTO `role_permissions` (`role_id`, `permission_id`) VALUES (2, 1);
-# INSTRUCTOR -> READ, WRITE
 INSERT INTO `role_permissions` (`role_id`, `permission_id`) VALUES (3, 1), (3, 2);
-# STUDENT -> READ
 INSERT INTO `role_permissions` (`role_id`, `permission_id`) VALUES (4, 1);
 
 # 4. Users (Passwords: admin -> 'admin123', others -> 'password123')
-# BCrypt hashes:
-# admin123:   $2a$10$6Ql8KoKJPXmCQ6jQQ7Yme.TIqFJLJbonbGxSVqlCXHKjhC0t.DlXe
-# password123: $2a$10$8.UnVuG9HHgffUDAlk8qfOuVGkqRzgVymGe07xD0m1bC.XjEer.x2
 INSERT INTO `users` (`username`, `enabled`, `password`) VALUES 
 ('admin',       1, '$2a$10$6Ql8KoKJPXmCQ6jQQ7Yme.TIqFJLJbonbGxSVqlCXHKjhC0t.DlXe'),
 ('instructor1', 1, '$2a$10$8.UnVuG9HHgffUDAlk8qfOuVGkqRzgVymGe07xD0m1bC.XjEer.x2'),
@@ -268,13 +286,13 @@ INSERT INTO `users` (`username`, `enabled`, `password`) VALUES
 
 # 5. User-Role Assignments
 INSERT INTO `user_roles` (`username`, `role_id`) VALUES 
-('admin',       1), # ADMIN
-('instructor1', 3), # INSTRUCTOR
-('instructor2', 3), # INSTRUCTOR
-('student1',    4), # STUDENT
-('student2',    4), # STUDENT
-('student3',    4), # STUDENT
-('user1',       2); # USER
+('admin',       1),
+('instructor1', 3),
+('instructor2', 3),
+('student1',    4),
+('student2',    4),
+('student3',    4),
+('user1',       2);
 
 # 6. Departments
 INSERT INTO `department` (`id`, `name`) VALUES 
@@ -348,3 +366,5 @@ INSERT INTO `employee` (`id`, `fast_name`, `last_name`, `email`) VALUES
 INSERT INTO `staff` (`id`, `first_name`, `last_name`, `email`, `income`, `title`, `age`) VALUES 
 (1, 'Michael', 'Scott', 'michael.scott@paper.com', 65000, 'Regional Manager', 45),
 (2, 'Dwight', 'Schrute', 'dwight.schrute@paper.com', 55000, 'Assistant Regional Manager', 40);
+
+SET FOREIGN_KEY_CHECKS = 1;

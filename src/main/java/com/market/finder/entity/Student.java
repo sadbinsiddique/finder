@@ -34,4 +34,11 @@ public class Student {
     @OneToOne(mappedBy = "student", cascade = CascadeType.ALL)
     @PrimaryKeyJoinColumn
     private StudentDetail studentDetail;
+
+    // Helper setter for User object compatibility
+    public void setUser(User user) {
+        if (user != null) {
+            this.username = user.getUsername();
+        }
+    }
 }

@@ -4,100 +4,150 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Role Form - Admin</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <style>
+        :root {
+            --bg-color: #07090e;
+            --glass-bg: rgba(255, 255, 255, 0.04);
+            --glass-border: rgba(255, 255, 255, 0.1);
+            --glass-inner-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.15);
+            --apple-blue: #0A84FF;
+            --apple-purple: #5E5CE6;
+            --text-primary: #F5F5F7;
+            --text-secondary: rgba(245, 245, 247, 0.55);
+        }
+
         body {
-            background: #0f172a;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            color: #e2e8f0;
+            background-color: var(--bg-color);
+            background-image: 
+                radial-gradient(circle at 80% 20%, rgba(94, 92, 230, 0.08) 0%, transparent 45%),
+                radial-gradient(circle at 20% 80%, rgba(10, 132, 255, 0.06) 0%, transparent 45%);
+            background-attachment: fixed;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            color: var(--text-primary);
             min-height: 100vh;
+            -webkit-font-smoothing: antialiased;
         }
 
-        .admin-navbar {
-            background: rgba(15, 23, 42, 0.95) !important;
-            backdrop-filter: blur(10px);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+        .glass-navbar {
+            background: rgba(7, 9, 14, 0.75);
+            backdrop-filter: blur(25px) saturate(180%);
+            -webkit-backdrop-filter: blur(25px) saturate(180%);
+            border-bottom: 1px solid var(--glass-border);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
         }
 
-        .form-card {
-            background: rgba(255, 255, 255, 0.05);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            border-radius: 16px;
-            padding: 2rem;
-            max-width: 500px;
+        .liquid-glass-form {
+            background: var(--glass-bg);
+            backdrop-filter: blur(30px) saturate(190%);
+            -webkit-backdrop-filter: blur(30px) saturate(190%);
+            border: 1px solid var(--glass-border);
+            border-radius: 24px;
+            padding: 2.5rem;
+            max-width: 540px;
+            width: 100%;
+            margin: 2rem auto;
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.5), var(--glass-inner-shadow);
+        }
+
+        .form-label {
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+            font-weight: 500;
+            margin-bottom: 0.4rem;
         }
 
         .form-control {
-            background: rgba(255, 255, 255, 0.08);
-            border: 1px solid rgba(255, 255, 255, 0.15);
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            border-radius: 12px;
             color: #fff;
-            border-radius: 10px;
+            padding: 12px 14px;
+            font-size: 0.95rem;
         }
 
         .form-control:focus {
-            background: rgba(255, 255, 255, 0.12);
-            border-color: #667eea;
-            box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
+            background: rgba(255, 255, 255, 0.08);
+            border-color: var(--apple-blue);
+            box-shadow: 0 0 0 4px rgba(10, 132, 255, 0.2);
             color: #fff;
         }
 
-        .form-label { color: rgba(255, 255, 255, 0.7); font-weight: 600; }
-
-        .btn-save {
-            background: linear-gradient(135deg, #667eea, #764ba2);
-            border: none;
-            border-radius: 10px;
-            font-weight: 600;
-            padding: 10px 28px;
-            transition: all 0.3s ease;
+        .btn-apple-primary {
+            background: var(--apple-blue);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 4px 14px rgba(10, 132, 255, 0.35), var(--glass-inner-shadow);
+            color: #fff;
+            border-radius: 12px;
+            padding: 10px 24px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: all 0.25s ease;
         }
 
-        .btn-save:hover {
+        .btn-apple-primary:hover {
+            background: #0071e3;
+            color: #fff;
             transform: translateY(-1px);
-            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.4);
         }
 
-        .section-title { color: #fff; font-weight: 700; }
+        .btn-apple-glass {
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            box-shadow: var(--glass-inner-shadow);
+            color: var(--text-primary);
+            border-radius: 12px;
+            padding: 10px 24px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            text-decoration: none;
+            transition: all 0.25s ease;
+        }
+
+        .btn-apple-glass:hover {
+            background: rgba(255, 255, 255, 0.12);
+            color: #fff;
+        }
     </style>
 </head>
 <body>
 
-<nav class="navbar navbar-expand-lg admin-navbar mb-4">
+<nav class="navbar navbar-expand-lg glass-navbar py-3 mb-4">
     <div class="container">
-        <a class="navbar-brand text-white fw-bold" href="/">
-            <i class="fas fa-graduation-cap me-2"></i>University ERP
+        <a class="navbar-brand text-white fw-bold d-flex align-items-center gap-2" href="/">
+            <i class="fas fa-graduation-cap" style="color: var(--apple-blue);"></i>
+            <span>University ERP</span>
         </a>
-        <div class="navbar-nav ms-auto">
-            <a th:href="@{/admin/roles}" class="btn btn-outline-light btn-sm">
-                <i class="fas fa-arrow-left me-1"></i>Back to Roles
+        <div class="ms-auto">
+            <a th:href="@{/admin/roles}" class="btn btn-apple-glass">
+                <i class="fas fa-arrow-left me-1"></i> Back to Roles
             </a>
         </div>
     </div>
 </nav>
 
-<div class="container">
-    <h2 class="section-title mb-4">
-        <i class="fas fa-shield-alt me-2"></i>
-        <span th:text="${role.id == null ? 'Create New Role' : 'Edit Role'}"></span>
-    </h2>
+<div class="container pb-5">
+    <div class="liquid-glass-form">
+        <h1 class="h3 fw-bold text-white mb-1" th:text="${role.id == null ? 'Create New Role' : 'Edit Role Definition'}">Role Form</h1>
+        <p class="text-secondary small mb-4">Specify security role identifier (e.g. ROLE_INSTRUCTOR).</p>
 
-    <div class="form-card">
         <form method="post" th:action="@{/admin/roles/save}" th:object="${role}">
             <input type="hidden" th:field="*{id}"/>
 
             <div class="mb-4">
-                <label class="form-label">Role Name</label>
-                <input type="text" class="form-control" th:field="*{roleName}" required
-                       placeholder="e.g., ROLE_ADMIN"/>
+                <label class="form-label">Role Designation</label>
+                <input type="text" class="form-control" th:field="*{roleName}" required placeholder="e.g. ROLE_INSTRUCTOR"/>
             </div>
 
-            <div class="d-flex gap-2">
-                <button type="submit" class="btn btn-save btn-primary">
-                    <i class="fas fa-save me-1"></i>Save Role
-                </button>
-                <a th:href="@{/admin/roles}" class="btn btn-outline-secondary">Cancel</a>
+            <div class="d-flex align-items-center gap-3">
+                <button type="submit" class="btn btn-apple-primary">Save Role</button>
+                <a th:href="@{/admin/roles}" class="btn btn-apple-glass">Cancel</a>
             </div>
         </form>
     </div>

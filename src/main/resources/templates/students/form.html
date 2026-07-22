@@ -2,60 +2,173 @@
 <html xmlns:th="http://www.thymeleaf.org" lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Student Form</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Profile - University ERP</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #07090e;
+            --glass-bg: rgba(255, 255, 255, 0.04);
+            --glass-border: rgba(255, 255, 255, 0.1);
+            --glass-inner-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.15);
+            --apple-blue: #0A84FF;
+            --text-primary: #F5F5F7;
+            --text-secondary: rgba(245, 245, 247, 0.55);
+        }
+
+        body {
+            background-color: var(--bg-color);
+            background-image: 
+                radial-gradient(circle at 50% 30%, rgba(10, 132, 255, 0.08) 0%, transparent 60%),
+                radial-gradient(circle at 20% 80%, rgba(94, 92, 230, 0.05) 0%, transparent 50%);
+            min-height: 100vh;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            color: var(--text-primary);
+            -webkit-font-smoothing: antialiased;
+        }
+
+        .glass-navbar {
+            background: rgba(7, 9, 14, 0.75);
+            backdrop-filter: blur(25px) saturate(180%);
+            -webkit-backdrop-filter: blur(25px) saturate(180%);
+            border-bottom: 1px solid var(--glass-border);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .liquid-glass-form {
+            background: var(--glass-bg);
+            backdrop-filter: blur(30px) saturate(190%);
+            -webkit-backdrop-filter: blur(30px) saturate(190%);
+            border: 1px solid var(--glass-border);
+            border-radius: 24px;
+            padding: 2.5rem;
+            max-width: 600px;
+            width: 100%;
+            margin: 2rem auto;
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.5), var(--glass-inner-shadow);
+        }
+
+        .form-label {
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+            font-weight: 500;
+            margin-bottom: 0.4rem;
+        }
+
+        .form-control, .form-select {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            border-radius: 12px;
+            color: #fff;
+            padding: 12px 14px;
+            font-size: 0.95rem;
+        }
+
+        .form-control:focus, .form-select:focus {
+            background: rgba(255, 255, 255, 0.08);
+            border-color: var(--apple-blue);
+            box-shadow: 0 0 0 4px rgba(10, 132, 255, 0.2);
+            color: #fff;
+        }
+
+        .form-select option {
+            background: #0d1117;
+            color: #fff;
+        }
+
+        .btn-apple-primary {
+            background: var(--apple-blue);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 4px 14px rgba(10, 132, 255, 0.35), var(--glass-inner-shadow);
+            color: #fff;
+            border-radius: 12px;
+            padding: 10px 24px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: all 0.25s ease;
+        }
+
+        .btn-apple-primary:hover {
+            background: #0071e3;
+            color: #fff;
+            transform: translateY(-1px);
+        }
+
+        .btn-apple-glass {
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            box-shadow: var(--glass-inner-shadow);
+            color: var(--text-primary);
+            border-radius: 12px;
+            padding: 10px 24px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            text-decoration: none;
+            transition: all 0.25s ease;
+        }
+
+        .btn-apple-glass:hover {
+            background: rgba(255, 255, 255, 0.12);
+            color: #fff;
+        }
+    </style>
 </head>
 <body>
-<div class="container mt-5">
-    <h2 th:text="${student.id == null ? 'Register New Student' : 'Update Student Details'}"></h2>
-    <hr/>
 
-    <form class="mt-4" method="post" style="max-width: 600px;" th:action="@{/students/save}" th:object="${student}">
+<nav class="navbar navbar-expand-lg glass-navbar py-3 mb-4">
+    <div class="container">
+        <a class="navbar-brand text-white fw-bold d-flex align-items-center gap-2" href="/">
+            <i class="fas fa-graduation-cap" style="color: var(--apple-blue);"></i>
+            <span>University ERP</span>
+        </a>
+    </div>
+</nav>
 
-        <!-- Hidden field to retain the ID for updates -->
-        <input th:field="*{id}" type="hidden"/>
+<div class="container pb-5">
+    <div class="liquid-glass-form">
+        <h1 class="h3 fw-bold text-white mb-1" th:text="${student.id == null ? 'Register New Student' : 'Update Student Details'}">Student Form</h1>
+        <p class="text-secondary small mb-4">Enter profile information and department allocation.</p>
 
-        <div class="mb-3">
-            <label class="form-label fw-bold">First Name</label>
-            <label>
-                <input class="form-control" placeholder="Enter first name" required th:field="*{firstName}" type="text"/>
-            </label>
-        </div>
+        <form method="post" th:action="@{/students/save}" th:object="${student}">
+            <input type="hidden" th:field="*{id}"/>
 
-        <div class="mb-3">
-            <label class="form-label fw-bold">Last Name</label>
-            <label>
-                <input class="form-control" placeholder="Enter last name" required th:field="*{lastName}" type="text"/>
-            </label>
-        </div>
+            <div class="mb-3">
+                <label class="form-label">First Name</label>
+                <input type="text" class="form-control" th:field="*{firstName}" placeholder="First Name" required/>
+            </div>
 
-        <div class="mb-3">
-            <label class="form-label fw-bold">Email</label>
-            <label>
-                <input class="form-control" placeholder="student@example.com" required th:field="*{email}" type="email"/>
-            </label>
-        </div>
+            <div class="mb-3">
+                <label class="form-label">Last Name</label>
+                <input type="text" class="form-control" th:field="*{lastName}" placeholder="Last Name" required/>
+            </div>
 
-        <!-- Dropdown bound to the Department entity -->
-        <div class="mb-3">
-            <label class="form-label fw-bold">Department</label>
-            <label>
+            <div class="mb-3">
+                <label class="form-label">Email Address</label>
+                <input type="email" class="form-control" th:field="*{email}" placeholder="student@university.edu" required/>
+            </div>
+
+            <div class="mb-4">
+                <label class="form-label">Department</label>
                 <select class="form-select" th:field="*{department}">
-                    <option value="">-- Select a Department --</option>
-                    <!-- Loop through the departments passed from the controller -->
-                    <option th:each="dept : ${departments}"
-                            th:text="${dept.name}"
-                            th:value="${dept.id}">
-                    </option>
+                    <option value="">-- Select Department --</option>
+                    <option th:each="dept : ${departments}" th:value="${dept.id}" th:text="${dept.name}"></option>
                 </select>
-            </label>
-        </div>
+            </div>
 
-        <div class="mt-4">
-            <button class="btn btn-success" type="submit">Save Student</button>
-            <a class="btn btn-secondary" th:href="@{/students}">Cancel</a>
-        </div>
-    </form>
+            <div class="d-flex align-items-center gap-3">
+                <button type="submit" class="btn btn-apple-primary">Save Student</button>
+                <a th:href="@{/students}" class="btn btn-apple-glass">Cancel</a>
+            </div>
+        </form>
+    </div>
 </div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
