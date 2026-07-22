@@ -32,14 +32,6 @@ public class Employee {
         this.email = email;
     }
 
-    public String getFastName() {
-        return firstName;
-    }
-
-    public void setFastName(String fastName) {
-        this.firstName = fastName;
-    }
-
     @Override
     public String toString() {
         return "Employee{" +
