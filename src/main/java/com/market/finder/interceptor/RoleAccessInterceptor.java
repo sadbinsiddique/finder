@@ -15,8 +15,8 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
- * SRP: Intercepts Spring MVC HTTP requests and enforces fine-grained Role Access Control
- * before controller execution according to the exact Role Access Matrix.
+ * SRP: Intercepts HTTP requests and enforces Dynamic Role & Permission-Based Access Control
+ * evaluated dynamically against database-loaded user authorities.
  */
 @Component
 public class RoleAccessInterceptor implements HandlerInterceptor {
@@ -36,101 +36,53 @@ public class RoleAccessInterceptor implements HandlerInterceptor {
         String uri = request.getRequestURI();
         String method = request.getMethod().toUpperCase();
         String username = auth.getName();
-        Set<String> roles = auth.getAuthorities().stream()
+        Set<String> authorities = auth.getAuthorities().stream()
                 .map(GrantedAuthority::getAuthority)
                 .collect(Collectors.toSet());
 
-        boolean isAdmin = roles.contains("ROLE_ADMIN");
-        boolean isInstructor = roles.contains("ROLE_INSTRUCTOR");
-        boolean isStudent = roles.contains("ROLE_STUDENT");
+        logger.info("[DYNAMIC-RBAC-INTERCEPTOR] User='{}' Authorities={} Method={} URI={}", username, authorities, method, uri);
 
-        logger.info("[ROLE-INTERCEPTOR] Checking User='{}' Roles={} Method={} URI={}", username, roles, method, uri);
-
-        // 1. ADMIN - Full access to all endpoints
-        if (isAdmin) {
+        // ROLE_ADMIN override
+        if (authorities.contains("ROLE_ADMIN")) {
             return true;
         }
 
-        // 2. Admin-only endpoints (/admin/**, /users/**, /roles/**)
-        if (uri.startsWith("/admin") || uri.startsWith("/users") || uri.startsWith("/roles")) {
-            return denyAccess(response, username, method, uri, "Admin path restricted to ADMIN role only");
+        // 1. Admin / System Management paths (/admin/**, /users/**, /roles/**, /permissions/**)
+        if (uri.startsWith("/admin") || uri.startsWith("/users") || uri.startsWith("/roles") || uri.startsWith("/permissions")) {
+            if (!authorities.contains("MANAGE_USERS")) {
+                return denyAccess(response, username, method, uri, "Requires MANAGE_USERS permission");
+            }
+            return true;
         }
 
-        // 3. /instructors module (Admin: Full, Student: View Only, Instructor: NO ACCESS)
-        if (uri.startsWith("/instructors")) {
-            if (isInstructor) {
-                return denyAccess(response, username, method, uri, "INSTRUCTOR role has no access to /instructors module");
-            }
-            if (isStudent && !("GET".equals(method) && isViewPath(uri))) {
-                return denyAccess(response, username, method, uri, "STUDENT role can only view /instructors");
+        // 2. Delete actions (/delete or HTTP DELETE)
+        if (uri.contains("/delete") || "DELETE".equals(method)) {
+            if (!authorities.contains("DELETE")) {
+                return denyAccess(response, username, method, uri, "Requires DELETE permission");
             }
         }
-
-        // 4. /courses module (Admin: Full, Student: View Only, Instructor: NO ACCESS)
-        if (uri.startsWith("/courses")) {
-            if (isInstructor) {
-                return denyAccess(response, username, method, uri, "INSTRUCTOR role has no access to /courses module");
-            }
-            if (isStudent && !("GET".equals(method) && isViewPath(uri))) {
-                return denyAccess(response, username, method, uri, "STUDENT role can only view /courses");
+        // 3. Write actions (/new, /edit, /save or HTTP POST/PUT/PATCH)
+        else if (uri.contains("/new") || uri.contains("/edit") || uri.contains("/save")
+                || "POST".equals(method) || "PUT".equals(method) || "PATCH".equals(method)) {
+            if (!authorities.contains("WRITE")) {
+                return denyAccess(response, username, method, uri, "Requires WRITE permission");
             }
         }
-
-        // 5. /departments module (Admin: Full, Instructor: View & Update, Student: View Only)
-        if (uri.startsWith("/departments")) {
-            if (uri.contains("/delete") || uri.contains("/new")) {
-                return denyAccess(response, username, method, uri, "Department create/delete restricted to ADMIN role");
-            }
-            if (isStudent && (uri.contains("/edit") || uri.contains("/save"))) {
-                return denyAccess(response, username, method, uri, "STUDENT role can only view /departments");
-            }
-        }
-
-        // 6. /students module (Admin: Full, Instructor & Student: View, Create, Edit - NO Delete)
-        if (uri.startsWith("/students")) {
-            if (uri.contains("/delete")) {
-                return denyAccess(response, username, method, uri, "Student deletion restricted to ADMIN role");
-            }
-        }
-
-        // 7. /attendance module (Admin: Full, Instructor: View, Create, Update - NO Delete, Student: View Only)
-        if (uri.startsWith("/attendance")) {
-            if (uri.contains("/delete")) {
-                return denyAccess(response, username, method, uri, "Attendance deletion restricted to ADMIN role");
-            }
-            if (isStudent && (uri.contains("/new") || uri.contains("/edit") || uri.contains("/save"))) {
-                return denyAccess(response, username, method, uri, "STUDENT role can only view /attendance");
-            }
-        }
-
-        // 8. /gradebooks module (Admin: Full, Instructor: View, Create, Edit, Update - NO Delete, Student: View Only)
-        if (uri.startsWith("/gradebooks")) {
-            if (uri.contains("/delete")) {
-                return denyAccess(response, username, method, uri, "Gradebook deletion restricted to ADMIN role");
-            }
-            if (isStudent && (uri.contains("/new") || uri.contains("/edit") || uri.contains("/save"))) {
-                return denyAccess(response, username, method, uri, "STUDENT role can only view /gradebooks");
-            }
-        }
-
-        // 9. /enrollments module (Admin & Instructor: Full, Student: View, Create/Enroll, Drop/Delete - NO Edit)
-        if (uri.startsWith("/enrollments")) {
-            if (isStudent && uri.contains("/edit")) {
-                return denyAccess(response, username, method, uri, "STUDENT role cannot edit existing enrollments");
+        // 4. Read actions (GET requests)
+        else {
+            if (!authorities.contains("READ")) {
+                return denyAccess(response, username, method, uri, "Requires READ permission");
             }
         }
 
         return true;
     }
 
-    private boolean isViewPath(String uri) {
-        return uri.equals("/instructors") || uri.equals("/instructors/")
-                || uri.equals("/courses") || uri.equals("/courses/");
-    }
-
     private boolean denyAccess(HttpServletResponse response, String username, String method, String uri, String reason) throws Exception {
-        logger.warn("[ROLE-INTERCEPTOR-DENIED] User='{}' Method={} URI={} Reason: {}", username, method, uri, reason);
+        logger.warn("[DYNAMIC-RBAC-DENIED] User='{}' Method={} URI={} Reason: {}", username, method, uri, reason);
         response.sendRedirect("/access-denied");
         return false;
     }
 }
+
+

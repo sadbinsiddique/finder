@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.Objects;
 import java.util.Set;
 
 @Getter
@@ -13,8 +14,9 @@ import java.util.Set;
 @Entity
 @Table(name = "users")
 public class User {
+
     @Id
-    @Column(length = 50)
+    @Column(length = 50, nullable = false)
     private String username;
 
     private Boolean enabled;
@@ -25,8 +27,21 @@ public class User {
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "user_roles",
-            joinColumns = @JoinColumn(name = "username"),
-            inverseJoinColumns = @JoinColumn(name = "role_id")
+            joinColumns = @JoinColumn(name = "username", referencedColumnName = "username"),
+            inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id")
     )
     private Set<Role> roles;
-}
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        User user = (User) o;
+        return Objects.equals(username, user.username);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(username);
+    }
+}

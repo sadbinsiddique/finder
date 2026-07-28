@@ -20,9 +20,7 @@ public class UserServiceImpl implements UserService {
     private final RoleRepository roleRepository;
     private final PasswordEncoder passwordEncoder;
 
-    public UserServiceImpl(UserRepository userRepository,
-                           RoleRepository roleRepository,
-                           PasswordEncoder passwordEncoder) {
+    public UserServiceImpl(UserRepository userRepository, RoleRepository roleRepository, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
         this.passwordEncoder = passwordEncoder;
@@ -35,7 +33,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Optional<User> findByUsername(String username) {
-        return userRepository.findById(username);
+        return userRepository.findByUsername(username);
     }
 
     @Override
@@ -53,16 +51,25 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional
     public void deleteByUsername(String username) {
-        userRepository.deleteById(username);
+        userRepository.findByUsername(username).ifPresent(user -> {
+            boolean isAdmin = user.getRoles() != null && user.getRoles().stream()
+                    .anyMatch(r -> "ROLE_ADMIN".equalsIgnoreCase(r.getRoleName()));
+            if (isAdmin) {
+                throw new IllegalStateException("Deletion prohibited: Admin users cannot be deleted.");
+            }
+            userRepository.deleteByUsername(username);
+        });
     }
+
 
     @Override
     @Transactional
     public User registerNewUser(String username, String rawPassword, String roleName) {
         // Check if user already exists
-        if (userRepository.findById(username).isPresent()) {
+        if (userRepository.findByUsername(username).isPresent()) {
             throw new RuntimeException("User already exists: " + username);
         }
+
 
         // Find the role
         Role role = roleRepository.findByRoleName(roleName)

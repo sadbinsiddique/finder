@@ -2,6 +2,7 @@ package com.market.finder.security;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import org.jspecify.annotations.NonNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.core.Authentication;
@@ -16,7 +17,7 @@ public class CustomLoggingInterceptor implements HandlerInterceptor {
     private static final Logger logger = LoggerFactory.getLogger(CustomLoggingInterceptor.class);
 
     @Override
-    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
+    public boolean preHandle(HttpServletRequest request, @NonNull HttpServletResponse response, @NonNull Object handler) throws Exception {
         request.setAttribute("startTime", System.currentTimeMillis());
 
         // Log with authentication context
@@ -32,12 +33,12 @@ public class CustomLoggingInterceptor implements HandlerInterceptor {
     }
 
     @Override
-    public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler, ModelAndView modelAndView) throws Exception {
+    public void postHandle(@NonNull HttpServletRequest request, @NonNull HttpServletResponse response, @NonNull Object handler, ModelAndView modelAndView) throws Exception {
         // Optional: Add logic after controller executes
     }
 
     @Override
-    public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) throws Exception {
+    public void afterCompletion(HttpServletRequest request, HttpServletResponse response, @NonNull Object handler, Exception ex) throws Exception {
         long startTime = (Long) request.getAttribute("startTime");
         long duration = System.currentTimeMillis() - startTime;
 

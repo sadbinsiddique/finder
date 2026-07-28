@@ -75,8 +75,14 @@ public class AdminUserController {
     }
 
     @GetMapping("/delete/{username}")
-    public String deleteUser(@PathVariable String username) {
-        userService.deleteByUsername(username);
+    public String deleteUser(@PathVariable String username, org.springframework.web.servlet.mvc.support.RedirectAttributes redirectAttributes) {
+        try {
+            userService.deleteByUsername(username);
+            redirectAttributes.addFlashAttribute("successMessage", "User deleted successfully.");
+        } catch (IllegalStateException e) {
+            redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
+        }
         return "redirect:/admin/users";
     }
+
 }

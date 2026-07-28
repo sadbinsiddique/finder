@@ -163,11 +163,32 @@
                 <input id="roleNameInput" type="text" class="form-control" th:field="*{roleName}" required placeholder="e.g. ROLE_INSTRUCTOR"/>
             </div>
 
+            <div class="mb-4">
+                <label class="form-label d-block text-white fw-medium mb-2">Assigned Permissions</label>
+                <div class="row g-2" style="max-height: 240px; overflow-y: auto; background: rgba(0,0,0,0.2); padding: 12px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.08);">
+                    <div class="col-md-6" th:each="perm : ${allPermissions}">
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" 
+                                   name="permissionIds" 
+                                   th:value="${perm.id}" 
+                                   th:id="${'perm_' + perm.id}"
+                                   th:checked="${role.permissions != null and role.permissions.contains(perm)}"/>
+                            <label class="form-check-label text-secondary small" th:for="${'perm_' + perm.id}" th:text="${perm.permissionName}">PERM_NAME</label>
+                        </div>
+                    </div>
+                    <div th:if="${#lists.isEmpty(allPermissions)}" class="col-12 text-secondary small fst-italic py-2">
+                        No system permissions available
+                    </div>
+                </div>
+            </div>
+
+
             <div class="d-flex align-items-center gap-3">
                 <button type="submit" class="btn btn-apple-primary">Save Role</button>
                 <a th:href="@{/admin/roles}" class="btn btn-apple-glass">Cancel</a>
             </div>
         </form>
+
     </div>
 </div>
 

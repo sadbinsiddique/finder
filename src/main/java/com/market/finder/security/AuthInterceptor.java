@@ -35,20 +35,8 @@ public class AuthInterceptor implements HandlerInterceptor {
                     .map(GrantedAuthority::getAuthority)
                     .collect(Collectors.joining(", "));
 
-            logger.info("[AUTH] User='{}' Roles=[{}] IP={} {} {}",
+            logger.info("[AUTH] User='{}' Authorities=[{}] IP={} {} {}",
                     username, roles, ip, method, uri);
-
-            // Check admin path access
-            if (uri.startsWith("/admin")) {
-                boolean isAdmin = auth.getAuthorities().stream()
-                        .anyMatch(a -> Objects.equals(a.getAuthority(), "ROLE_ADMIN"));
-                if (!isAdmin) {
-                    logger.warn("[AUTH-DENIED] User='{}' attempted admin access: {} {}",
-                            username, method, uri);
-                    response.sendRedirect("/access-denied");
-                    return false;
-                }
-            }
         } else {
             logger.info("[AUTH] Anonymous request: IP={} {} {}", ip, method, uri);
         }
@@ -56,3 +44,4 @@ public class AuthInterceptor implements HandlerInterceptor {
         return true;
     }
 }
+

@@ -17,10 +17,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-/**
- * SRP: Synchronizes system user credentials in the MySQL database on application startup.
- * Ensures the password hashes stored in MySQL match active system credentials (admin / admin123).
- */
 @Component
 public class DataInitializer implements CommandLineRunner {
 
@@ -28,6 +24,7 @@ public class DataInitializer implements CommandLineRunner {
 
     private final UserRepository userRepository;
     private final RoleService roleService;
+    private final PermissionService permissionService;
     private final DepartmentService departmentService;
     private final CourseService courseService;
     private final InstructorService instructorService;
@@ -39,20 +36,23 @@ public class DataInitializer implements CommandLineRunner {
     private final GradebookService gradebookService;
     private final PasswordEncoder passwordEncoder;
 
-    public DataInitializer(UserRepository userRepository,
-                           RoleService roleService,
-                           DepartmentService departmentService,
-                           CourseService courseService,
-                           InstructorService instructorService,
-                           StudentService studentService,
-                           EmployeeService employeeService,
-                           StaffService staffService,
-                           AttendanceService attendanceService,
-                           EnrollmentService enrollmentService,
-                           GradebookService gradebookService,
-                           PasswordEncoder passwordEncoder) {
+    public DataInitializer(
+            UserRepository userRepository,
+            RoleService roleService,
+            PermissionService permissionService,
+            DepartmentService departmentService,
+            CourseService courseService,
+            InstructorService instructorService,
+            StudentService studentService,
+            EmployeeService employeeService,
+            StaffService staffService,
+            AttendanceService attendanceService,
+            EnrollmentService enrollmentService,
+            GradebookService gradebookService,
+            PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
         this.roleService = roleService;
+        this.permissionService = permissionService;
         this.departmentService = departmentService;
         this.courseService = courseService;
         this.instructorService = instructorService;
@@ -80,26 +80,75 @@ public class DataInitializer implements CommandLineRunner {
     }
 
     private void seedRolesAndPermissions() {
+        if (permissionService.findAll().isEmpty()) {
+            logger.info("[SEED] Seeding system permissions into MySQL...");
+            List<String> permNames = List.of("READ", "WRITE", "DELETE", "MANAGE_USERS");
+            for (String pName : permNames) {
+                permissionService.save(new Permission(pName));
+            }
+        }
+
         if (roleService.findAll().isEmpty()) {
             logger.info("[SEED] Seeding default roles into MySQL...");
-            
+            List<Permission> allPerms = permissionService.findAll();
+
+            // Admin Permissions
             Role adminRole = new Role();
             adminRole.setRoleName("ROLE_ADMIN");
+            adminRole.setPermissions(new HashSet<>(allPerms));
             roleService.save(adminRole);
 
+            // User Permissions
             Role userRole = new Role();
             userRole.setRoleName("ROLE_USER");
+            userRole.setPermissions(getPermSet(allPerms, Set.of("READ")));
             roleService.save(userRole);
 
+            // Instructor Permissions
             Role instructorRole = new Role();
             instructorRole.setRoleName("ROLE_INSTRUCTOR");
+            instructorRole.setPermissions(getPermSet(allPerms, Set.of("READ", "WRITE")));
             roleService.save(instructorRole);
 
+            // Student Permissions
             Role studentRole = new Role();
             studentRole.setRoleName("ROLE_STUDENT");
+            studentRole.setPermissions(getPermSet(allPerms, Set.of("READ")));
             roleService.save(studentRole);
+        } else {
+            // Update existing roles if permissions were missing
+            for (Role role : roleService.findAll()) {
+                if (role.getPermissions() == null || role.getPermissions().isEmpty()) {
+                    List<Permission> allPerms = permissionService.findAll();
+                    switch (role.getRoleName()) {
+                        case "ROLE_ADMIN":
+                            role.setPermissions(new HashSet<>(allPerms));
+                            break;
+                        case "ROLE_INSTRUCTOR":
+                            role.setPermissions(getPermSet(allPerms, Set.of("READ", "WRITE")));
+                            break;
+                        case "ROLE_STUDENT":
+                        case "ROLE_USER":
+                            role.setPermissions(getPermSet(allPerms, Set.of("READ")));
+                            break;
+                    }
+                    roleService.save(role);
+                }
+            }
         }
     }
+
+
+    private Set<Permission> getPermSet(List<Permission> allPerms, Set<String> targetNames) {
+        Set<Permission> set = new HashSet<>();
+        for (Permission p : allPerms) {
+            if (targetNames.contains(p.getPermissionName())) {
+                set.add(p);
+            }
+        }
+        return set;
+    }
+
 
     private void seedUsers() {
         Role adminRole = roleService.findAll().stream()
@@ -115,7 +164,7 @@ public class DataInitializer implements CommandLineRunner {
                 .findFirst().orElse(null);
 
         // Synchronize admin user credentials directly in MySQL table 'users'
-        User admin = userRepository.findById("admin").orElseGet(() -> {
+        User admin = userRepository.findByUsername("admin").orElseGet(() -> {
             User u = new User();
             u.setUsername("admin");
             return u;
@@ -131,11 +180,12 @@ public class DataInitializer implements CommandLineRunner {
         logger.info("[DATABASE-SYNC] 'admin' user password hash updated in MySQL database for credentials (admin / admin123).");
 
         // Synchronize instructor1 user in MySQL
-        User inst1 = userRepository.findById("instructor1").orElseGet(() -> {
+        User inst1 = userRepository.findByUsername("instructor1").orElseGet(() -> {
             User u = new User();
             u.setUsername("instructor1");
             return u;
         });
+
         inst1.setPassword(passwordEncoder.encode("password123"));
         inst1.setEnabled(true);
         if (instructorRole != null && (inst1.getRoles() == null || inst1.getRoles().isEmpty())) {
@@ -146,11 +196,12 @@ public class DataInitializer implements CommandLineRunner {
         userRepository.save(inst1);
 
         // Synchronize student1 user in MySQL
-        User st1 = userRepository.findById("student1").orElseGet(() -> {
+        User st1 = userRepository.findByUsername("student1").orElseGet(() -> {
             User u = new User();
             u.setUsername("student1");
             return u;
         });
+
         st1.setPassword(passwordEncoder.encode("password123"));
         st1.setEnabled(true);
         if (studentRole != null && (st1.getRoles() == null || st1.getRoles().isEmpty())) {
@@ -159,6 +210,7 @@ public class DataInitializer implements CommandLineRunner {
             st1.setRoles(roles);
         }
         userRepository.save(st1);
+
     }
 
     private void seedDepartments() {

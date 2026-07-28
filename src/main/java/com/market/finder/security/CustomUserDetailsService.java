@@ -1,6 +1,7 @@
 package com.market.finder.security;
 
 import com.market.finder.dao.UserRepository;
+import com.market.finder.entity.Permission;
 import com.market.finder.entity.Role;
 import com.market.finder.entity.User;
 import org.jspecify.annotations.NonNull;
@@ -15,7 +16,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collection;
-import java.util.stream.Collectors;
+import java.util.HashSet;
+import java.util.Set;
+
 
 /**
  * Loads user details directly from MySQL database for Spring Security authentication.
@@ -36,11 +39,12 @@ public class CustomUserDetailsService implements UserDetailsService {
     public @NonNull UserDetails loadUserByUsername(@NonNull String username) throws UsernameNotFoundException {
         logger.info("[AUTH-QUERY] Querying MySQL database for user: '{}'", username);
 
-        User user = userRepository.findById(username)
+        User user = userRepository.findByUsername(username)
                 .orElseThrow(() -> {
                     logger.warn("[AUTH-QUERY-FAILED] User '{}' not found in MySQL database", username);
                     return new UsernameNotFoundException("User not found: " + username);
                 });
+
 
         boolean isEnabled = Boolean.TRUE.equals(user.getEnabled());
         logger.info("[AUTH-QUERY-SUCCESS] Found user '{}' in MySQL database. Enabled={}, RolesCount={}",
@@ -59,8 +63,21 @@ public class CustomUserDetailsService implements UserDetailsService {
 
     private Collection<? extends GrantedAuthority> mapRolesToAuthorities(Collection<Role> roles) {
         if (roles == null) return java.util.Collections.emptyList();
-        return roles.stream()
-                .map(role -> new SimpleGrantedAuthority(role.getRoleName()))
-                .collect(Collectors.toList());
+        Set<GrantedAuthority> authorities = new HashSet<>();
+        for (Role role : roles) {
+            if (role.getRoleName() != null) {
+                authorities.add(new SimpleGrantedAuthority(role.getRoleName()));
+            }
+            if (role.getPermissions() != null) {
+                for (Permission perm : role.getPermissions()) {
+                    if (perm.getPermissionName() != null) {
+                        authorities.add(new SimpleGrantedAuthority(perm.getPermissionName()));
+                    }
+                }
+            }
+        }
+        return authorities;
     }
+
+
 }

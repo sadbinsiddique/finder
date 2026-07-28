@@ -20,8 +20,7 @@ public class AdminController {
     private final DashboardService dashboardService;
     private final PermissionService permissionService;
 
-    public AdminController(DashboardService dashboardService,
-                           PermissionService permissionService) {
+    public AdminController(DashboardService dashboardService, PermissionService permissionService) {
         this.dashboardService = dashboardService;
         this.permissionService = permissionService;
     }
