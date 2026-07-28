@@ -9,9 +9,4 @@ import java.util.List;
 
 @Repository
 public interface GradebookRepository extends JpaRepository<Gradebook, GradebookId> {
-    List<Gradebook> findByStudent_Id(Integer studentId);
-
-    List<Gradebook> findByCourse_Id(Integer courseId);
-
-    List<Gradebook> findByStudent_IdAndCourse_Id(Integer studentId, Integer courseId);
 }

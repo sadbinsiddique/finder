@@ -9,7 +9,4 @@ import java.util.List;
 
 @Repository
 public interface EnrollmentRepository extends JpaRepository<Enrollment, EnrollmentId> {
-    List<Enrollment> findByStudent_Id(Integer studentId);
-
-    List<Enrollment> findByCourse_Id(Integer courseId);
 }

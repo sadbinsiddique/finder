@@ -7,10 +7,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-/**
- * SRP: Sole responsibility is Admin Role Management & Dynamic Permission Assignments.
- * DIP: Depends on RoleService and PermissionService interfaces.
- */
 @Controller
 @RequestMapping("/admin/roles")
 public class AdminRoleController {

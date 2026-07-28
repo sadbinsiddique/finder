@@ -85,7 +85,6 @@ public class AttendanceController {
         return "redirect:/attendance";
     }
 
-    // 5. Delete an attendance record
     @GetMapping("/delete")
     public String deleteAttendance(
             @RequestParam("studentId") Integer studentId,

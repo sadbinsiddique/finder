@@ -54,9 +54,15 @@ public class UserController {
     public String deleteUser(@PathVariable String username, org.springframework.web.servlet.mvc.support.RedirectAttributes redirectAttributes) {
         try {
             userService.deleteByUsername(username);
-            redirectAttributes.addFlashAttribute("successMessage", "User deleted successfully.");
+            redirectAttributes.addFlashAttribute(
+                    "successMessage",
+                    "User deleted successfully."
+            );
         } catch (IllegalStateException e) {
-            redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
+            redirectAttributes.addFlashAttribute(
+                    "errorMessage",
+                    e.getMessage()
+            );
         }
         return "redirect:/users";
     }

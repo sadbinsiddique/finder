@@ -6,5 +6,4 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface StudentDetailRepository extends JpaRepository<StudentDetail, Integer> {
-    // The ID type is Integer because it shares the Student's ID
 }

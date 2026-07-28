@@ -9,10 +9,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.Map;
 
-/**
- * SRP: Sole responsibility is rendering the Admin Dashboard & Permission listings.
- * DIP: Depends on DashboardService and PermissionService abstractions.
- */
 @Controller
 @RequestMapping("/admin")
 public class AdminController {
@@ -25,7 +21,6 @@ public class AdminController {
         this.permissionService = permissionService;
     }
 
-    // ===== Admin Dashboard =====
     @GetMapping
     public String showDashboard(Model model) {
         Map<String, Long> stats = dashboardService.getSystemStats();
@@ -33,7 +28,6 @@ public class AdminController {
         return "admin/dashboard";
     }
 
-    // ===== Permissions Management =====
     @GetMapping("/permissions")
     public String listPermissions(Model model) {
         model.addAttribute("permissions", permissionService.findAll());

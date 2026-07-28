@@ -5,10 +5,6 @@ import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-/**
- * SRP: This class's sole responsibility is servlet filter registration.
- * Moved from service package to config package where it belongs.
- */
 @Configuration
 public class FilterConfig {
 

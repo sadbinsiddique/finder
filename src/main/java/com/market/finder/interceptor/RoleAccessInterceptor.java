@@ -13,7 +13,6 @@ import org.springframework.web.servlet.HandlerInterceptor;
 
 import java.util.Set;
 import java.util.stream.Collectors;
-
 /**
  * SRP: Intercepts HTTP requests and enforces Dynamic Role & Permission-Based Access Control
  * evaluated dynamically against database-loaded user authorities.

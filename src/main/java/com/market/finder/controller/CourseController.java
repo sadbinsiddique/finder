@@ -42,7 +42,7 @@ public class CourseController {
         return "courses/form";
     }
 
-    // 4. Save the course (Handles both Create and Update)
+    // 4. Save the course
     @PostMapping("/save")
     public String saveCourse(@ModelAttribute("course") Course course) {
         courseService.save(course);
