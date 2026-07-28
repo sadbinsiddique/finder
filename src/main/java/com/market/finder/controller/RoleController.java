@@ -51,12 +51,12 @@ public class RoleController {
     @PostMapping("/save")
     public String saveRole(@ModelAttribute("role") Role role,
                            @RequestParam(value = "permissionIds", required = false) java.util.List<Integer> permissionIds) {
-        if (permissionIds != null && !permissionIds.isEmpty()) {
+        if (permissionIds == null || permissionIds.isEmpty()) {
+            role.setPermissions(new java.util.HashSet<>());
+        } else {
             java.util.Set<com.market.finder.entity.Permission> selectedPermissions =
                     new java.util.HashSet<>(permissionService.findAllById(permissionIds));
             role.setPermissions(selectedPermissions);
-        } else {
-            role.setPermissions(new java.util.HashSet<>());
         }
         roleService.save(role);
         return "redirect:/roles";
