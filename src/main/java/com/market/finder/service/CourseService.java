@@ -1,19 +1,8 @@
 package com.market.finder.service;
 
 import com.market.finder.entity.Course;
+import com.market.finder.service.base.BaseService;
 
-import java.util.List;
-import java.util.Optional;
-
-public interface CourseService {
-
-    List<Course> findAll();
-
-    Optional<Course> findById(Integer id);
-
-    Course save(Course course);
-
-    void deleteById(Integer id);
-
+public interface CourseService extends BaseService<Course, Integer> {
     boolean existsById(Integer id);
 }

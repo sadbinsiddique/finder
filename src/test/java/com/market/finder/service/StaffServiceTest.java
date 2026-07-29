@@ -1,6 +1,7 @@
 package com.market.finder.service;
 
 import com.market.finder.dao.StaffRepository;
+import com.market.finder.service.impl.StaffServiceImpl;
 import com.market.finder.entity.Staff;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

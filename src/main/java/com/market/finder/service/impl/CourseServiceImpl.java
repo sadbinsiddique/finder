@@ -1,7 +1,9 @@
-package com.market.finder.service;
+package com.market.finder.service.impl;
 
 import com.market.finder.dao.CourseRepository;
 import com.market.finder.entity.Course;
+import com.market.finder.service.CourseService;
+import com.market.finder.service.base.BaseServiceImpl;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
@@ -11,43 +13,41 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class CourseServiceImpl implements CourseService {
-
-    private final CourseRepository courseRepository;
+public class CourseServiceImpl extends BaseServiceImpl<Course, Integer, CourseRepository> implements CourseService {
 
     public CourseServiceImpl(CourseRepository courseRepository) {
-        this.courseRepository = courseRepository;
+        super(courseRepository);
     }
 
     @Override
     @Cacheable(value = "courses", key = "'all'")
     public List<Course> findAll() {
-        return courseRepository.findAll();
+        return super.findAll();
     }
 
     @Override
     @Cacheable(value = "courses", key = "#id")
     public Optional<Course> findById(Integer id) {
-        return courseRepository.findById(id);
+        return super.findById(id);
     }
 
     @Override
     @Transactional
     @CacheEvict(value = {"courses", "dashboard"}, allEntries = true)
     public Course save(Course course) {
-        return courseRepository.saveAndFlush(course);
+        return repository.saveAndFlush(course);
     }
 
     @Override
     @Transactional
     @CacheEvict(value = {"courses", "dashboard"}, allEntries = true)
     public void deleteById(Integer id) {
-        courseRepository.deleteById(id);
-        courseRepository.flush();
+        super.deleteById(id);
+        repository.flush();
     }
 
     @Override
     public boolean existsById(Integer id) {
-        return courseRepository.existsById(id);
+        return repository.existsById(id);
     }
 }

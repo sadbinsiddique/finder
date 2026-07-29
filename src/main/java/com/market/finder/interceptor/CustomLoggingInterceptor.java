@@ -1,4 +1,4 @@
-package com.market.finder.security;
+package com.market.finder.interceptor;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;

@@ -1,16 +1,13 @@
-package com.market.finder.service;
+package com.market.finder.service.impl;
 
 import com.market.finder.dao.*;
+import com.market.finder.service.DashboardService;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-/**
- * SRP: This service's sole responsibility is aggregating system statistics.
- * The AdminController no longer needs to know about every repository.
- */
 @Service
 public class DashboardServiceImpl implements DashboardService {
 

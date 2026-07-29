@@ -1,7 +1,9 @@
-package com.market.finder.service;
+package com.market.finder.service.impl;
 
 import com.market.finder.dao.InstructorRepository;
 import com.market.finder.entity.Instructor;
+import com.market.finder.service.InstructorService;
+import com.market.finder.service.base.BaseServiceImpl;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
@@ -11,43 +13,41 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class InstructorServiceImpl implements InstructorService {
-
-    private final InstructorRepository instructorRepository;
+public class InstructorServiceImpl extends BaseServiceImpl<Instructor, Integer, InstructorRepository> implements InstructorService {
 
     public InstructorServiceImpl(InstructorRepository instructorRepository) {
-        this.instructorRepository = instructorRepository;
+        super(instructorRepository);
     }
 
     @Override
     @Cacheable(value = "instructors", key = "'all'")
     public List<Instructor> findAll() {
-        return instructorRepository.findAll();
+        return super.findAll();
     }
 
     @Override
     @Cacheable(value = "instructors", key = "#id")
     public Optional<Instructor> findById(Integer id) {
-        return instructorRepository.findById(id);
+        return super.findById(id);
     }
 
     @Override
     @Transactional
     @CacheEvict(value = {"instructors", "dashboard"}, allEntries = true)
     public Instructor save(Instructor instructor) {
-        return instructorRepository.saveAndFlush(instructor);
+        return repository.saveAndFlush(instructor);
     }
 
     @Override
     @Transactional
     @CacheEvict(value = {"instructors", "dashboard"}, allEntries = true)
     public void deleteById(Integer id) {
-        instructorRepository.deleteById(id);
-        instructorRepository.flush();
+        super.deleteById(id);
+        repository.flush();
     }
 
     @Override
     public boolean existsById(Integer id) {
-        return instructorRepository.existsById(id);
+        return repository.existsById(id);
     }
 }

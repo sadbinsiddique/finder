@@ -1,6 +1,7 @@
 package com.market.finder.service;
 
 import com.market.finder.dao.CourseRepository;
+import com.market.finder.service.impl.CourseServiceImpl;
 import com.market.finder.entity.Course;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

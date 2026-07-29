@@ -1,8 +1,11 @@
-package com.market.finder.service;
+package com.market.finder.service.impl;
 
 import com.market.finder.dao.UserRepository;
 import com.market.finder.entity.Role;
 import com.market.finder.entity.User;
+import com.market.finder.service.RoleService;
+import com.market.finder.service.UserService;
+import com.market.finder.service.base.BaseServiceImpl;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -15,14 +18,13 @@ import java.util.Optional;
 import java.util.Set;
 
 @Service
-public class UserServiceImpl implements UserService {
+public class UserServiceImpl extends BaseServiceImpl<User, String, UserRepository> implements UserService {
 
-    private final UserRepository userRepository;
     private final RoleService roleService;
     private final PasswordEncoder passwordEncoder;
 
     public UserServiceImpl(UserRepository userRepository, RoleService roleService, PasswordEncoder passwordEncoder) {
-        this.userRepository = userRepository;
+        super(userRepository);
         this.roleService = roleService;
         this.passwordEncoder = passwordEncoder;
     }
@@ -30,13 +32,13 @@ public class UserServiceImpl implements UserService {
     @Override
     @Cacheable(value = "users", key = "'all'")
     public List<User> findAll() {
-        return userRepository.findAll();
+        return super.findAll();
     }
 
     @Override
     @Cacheable(value = "users", key = "#username")
     public Optional<User> findByUsername(String username) {
-        return userRepository.findByUsername(username);
+        return repository.findByUsername(username);
     }
 
     @Override
@@ -48,21 +50,21 @@ public class UserServiceImpl implements UserService {
                 && !user.getPassword().startsWith("$2b$")) {
             user.setPassword(passwordEncoder.encode(user.getPassword()));
         }
-        return userRepository.saveAndFlush(user);
+        return repository.saveAndFlush(user);
     }
 
     @Override
     @Transactional
     @CacheEvict(value = "users", allEntries = true)
     public void deleteByUsername(String username) {
-        userRepository.findByUsername(username).ifPresent(user -> {
+        repository.findByUsername(username).ifPresent(user -> {
             boolean isAdmin = user.getRoles() != null && user.getRoles().stream()
                     .anyMatch(r -> "ROLE_ADMIN".equalsIgnoreCase(r.getRoleName()));
             if (isAdmin) {
                 throw new IllegalStateException("Deletion prohibited: Admin users cannot be deleted.");
             }
-            userRepository.deleteByUsername(username);
-            userRepository.flush();
+            repository.deleteByUsername(username);
+            repository.flush();
         });
     }
 
@@ -86,6 +88,6 @@ public class UserServiceImpl implements UserService {
         roles.add(role);
         user.setRoles(roles);
 
-        return userRepository.saveAndFlush(user);
+        return repository.saveAndFlush(user);
     }
 }

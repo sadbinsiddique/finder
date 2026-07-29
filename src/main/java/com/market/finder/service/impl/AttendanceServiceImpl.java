@@ -1,8 +1,10 @@
-package com.market.finder.service;
+package com.market.finder.service.impl;
 
 import com.market.finder.dao.AttendanceRepository;
 import com.market.finder.entity.Attendance;
 import com.market.finder.entity.AttendanceId;
+import com.market.finder.service.AttendanceService;
+import com.market.finder.service.base.BaseServiceImpl;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
@@ -12,43 +14,41 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class AttendanceServiceImpl implements AttendanceService {
-
-    private final AttendanceRepository attendanceRepository;
+public class AttendanceServiceImpl extends BaseServiceImpl<Attendance, AttendanceId, AttendanceRepository> implements AttendanceService {
 
     public AttendanceServiceImpl(AttendanceRepository attendanceRepository) {
-        this.attendanceRepository = attendanceRepository;
+        super(attendanceRepository);
     }
 
     @Override
     @Cacheable(value = "attendance", key = "'all'")
     public List<Attendance> findAll() {
-        return attendanceRepository.findAll();
+        return super.findAll();
     }
 
     @Override
     @Cacheable(value = "attendance", key = "#id")
     public Optional<Attendance> findById(AttendanceId id) {
-        return attendanceRepository.findById(id);
+        return super.findById(id);
     }
 
     @Override
     @Transactional
     @CacheEvict(value = "attendance", allEntries = true)
     public Attendance save(Attendance attendance) {
-        return attendanceRepository.saveAndFlush(attendance);
+        return repository.saveAndFlush(attendance);
     }
 
     @Override
     @Transactional
     @CacheEvict(value = "attendance", allEntries = true)
     public void deleteById(AttendanceId id) {
-        attendanceRepository.deleteById(id);
-        attendanceRepository.flush();
+        super.deleteById(id);
+        repository.flush();
     }
 
     @Override
     public boolean existsById(AttendanceId id) {
-        return attendanceRepository.existsById(id);
+        return repository.existsById(id);
     }
 }

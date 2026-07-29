@@ -2,19 +2,8 @@ package com.market.finder.service;
 
 import com.market.finder.entity.Attendance;
 import com.market.finder.entity.AttendanceId;
+import com.market.finder.service.base.BaseService;
 
-import java.util.List;
-import java.util.Optional;
-
-public interface AttendanceService {
-
-    List<Attendance> findAll();
-
-    Optional<Attendance> findById(AttendanceId id);
-
-    Attendance save(Attendance attendance);
-
-    void deleteById(AttendanceId id);
-
+public interface AttendanceService extends BaseService<Attendance, AttendanceId> {
     boolean existsById(AttendanceId id);
 }

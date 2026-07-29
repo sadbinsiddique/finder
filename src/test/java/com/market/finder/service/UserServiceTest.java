@@ -1,6 +1,7 @@
 package com.market.finder.service;
 
 import com.market.finder.dao.UserRepository;
+import com.market.finder.service.impl.UserServiceImpl;
 import com.market.finder.entity.Role;
 import com.market.finder.entity.User;
 import org.junit.jupiter.api.BeforeEach;

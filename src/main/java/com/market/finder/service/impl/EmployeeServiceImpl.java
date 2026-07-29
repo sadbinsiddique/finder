@@ -1,7 +1,9 @@
-package com.market.finder.service;
+package com.market.finder.service.impl;
 
 import com.market.finder.dao.EmployeeRepository;
 import com.market.finder.entity.Employee;
+import com.market.finder.service.EmployeeService;
+import com.market.finder.service.base.BaseServiceImpl;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
@@ -10,43 +12,37 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.Optional;
 
-/**
- * DIP: Controller depends on EmployeeService interface, not this concrete class.
- * SRP: Only handles Employee business logic.
- */
 @Service
-public class EmployeeServiceImpl implements EmployeeService {
-
-    private final EmployeeRepository employeeRepository;
+public class EmployeeServiceImpl extends BaseServiceImpl<Employee, Integer, EmployeeRepository> implements EmployeeService {
 
     public EmployeeServiceImpl(EmployeeRepository employeeRepository) {
-        this.employeeRepository = employeeRepository;
+        super(employeeRepository);
     }
 
     @Override
     @Cacheable(value = "employees", key = "'all'")
     public List<Employee> findAll() {
-        return employeeRepository.findAllByOrderByLastNameAsc();
+        return repository.findAllByOrderByLastNameAsc();
     }
 
     @Override
     @Cacheable(value = "employees", key = "#theId")
-    public Optional<Employee> findById(int theId) {
-        return employeeRepository.findById(theId);
+    public Optional<Employee> findById(Integer theId) {
+        return super.findById(theId);
     }
 
     @Override
     @Transactional
     @CacheEvict(value = "employees", allEntries = true)
     public Employee save(Employee theEmployee) {
-        return employeeRepository.saveAndFlush(theEmployee);
+        return repository.saveAndFlush(theEmployee);
     }
 
     @Override
     @Transactional
     @CacheEvict(value = "employees", allEntries = true)
-    public void deleteById(int theId) {
-        employeeRepository.deleteById(theId);
-        employeeRepository.flush();
+    public void deleteById(Integer theId) {
+        super.deleteById(theId);
+        repository.flush();
     }
 }
