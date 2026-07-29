@@ -36,7 +36,7 @@ public class RoleAccessInterceptor implements HandlerInterceptor {
                 .map(GrantedAuthority::getAuthority)
                 .collect(Collectors.toSet());
 
-        logger.info("[DYNAMIC-RBAC-INTERCEPTOR] User='{}' Authorities={} Method={} URI={}", username, authorities, method, uri);
+        logger.info("[INTERCEPTOR] User='{}' Authorities={} Method={} URI={}", username, authorities, method, uri);
 
         if (authorities.contains("ROLE_ADMIN")) {
             return true;
@@ -72,7 +72,7 @@ public class RoleAccessInterceptor implements HandlerInterceptor {
     }
 
     private boolean denyAccess(HttpServletResponse response, String username, String method, String uri, String reason) throws Exception {
-        logger.warn("[DYNAMIC-RBAC-DENIED] User='{}' Method={} URI={} Reason: {}", username, method, uri, reason);
+        logger.warn("[RBAC-DENIED] User='{}' Method={} URI={} Reason: {}", username, method, uri, reason);
         response.sendRedirect("/access-denied");
         return false;
     }

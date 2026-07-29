@@ -1,9 +1,9 @@
 package com.market.finder.security;
 
-import com.market.finder.dao.UserRepository;
 import com.market.finder.entity.Permission;
 import com.market.finder.entity.Role;
 import com.market.finder.entity.User;
+import com.market.finder.service.UserService;
 import org.jspecify.annotations.NonNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,27 +24,19 @@ public class CustomUserDetailsService implements UserDetailsService {
 
     private static final Logger logger = LoggerFactory.getLogger(CustomUserDetailsService.class);
 
-    private final UserRepository userRepository;
+    private final UserService userService;
 
-    public CustomUserDetailsService(UserRepository userRepository) {
-        this.userRepository = userRepository;
+    public CustomUserDetailsService(UserService userService) {
+        this.userService = userService;
     }
 
     @Override
     @Transactional(readOnly = true)
     public @NonNull UserDetails loadUserByUsername(@NonNull String username) throws UsernameNotFoundException {
-        logger.info("[AUTH-QUERY] Querying MySQL database for user: '{}'", username);
-
-        User user = userRepository.findByUsername(username)
-                .orElseThrow(() -> {
-                    logger.warn("[AUTH-QUERY-FAILED] User '{}' not found in MySQL database", username);
-                    return new UsernameNotFoundException("User not found: " + username);
-                });
-
+        User user = userService.findByUsername(username)
+                .orElseThrow(() -> new UsernameNotFoundException("User not found: " + username));
 
         boolean isEnabled = Boolean.TRUE.equals(user.getEnabled());
-        logger.info("[AUTH-QUERY-SUCCESS] Found user '{}' in MySQL database. Enabled={}, RolesCount={}",
-                user.getUsername(), isEnabled, user.getRoles() != null ? user.getRoles().size() : 0);
 
         return new org.springframework.security.core.userdetails.User(
                 user.getUsername(),

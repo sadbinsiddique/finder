@@ -1,6 +1,7 @@
 package com.market.finder.service;
 
 import com.market.finder.dao.*;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.util.LinkedHashMap;
@@ -35,6 +36,7 @@ public class DashboardServiceImpl implements DashboardService {
     }
 
     @Override
+    @Cacheable(value = "dashboard", key = "'stats'")
     public Map<String, Long> getSystemStats() {
         Map<String, Long> stats = new LinkedHashMap<>();
         stats.put("totalUsers", userRepository.count());

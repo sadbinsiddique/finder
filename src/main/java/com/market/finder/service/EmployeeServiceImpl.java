@@ -2,6 +2,8 @@ package com.market.finder.service;
 
 import com.market.finder.dao.EmployeeRepository;
 import com.market.finder.entity.Employee;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -22,24 +24,29 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
+    @Cacheable(value = "employees", key = "'all'")
     public List<Employee> findAll() {
         return employeeRepository.findAllByOrderByLastNameAsc();
     }
 
     @Override
+    @Cacheable(value = "employees", key = "#theId")
     public Optional<Employee> findById(int theId) {
         return employeeRepository.findById(theId);
     }
 
     @Override
     @Transactional
+    @CacheEvict(value = "employees", allEntries = true)
     public Employee save(Employee theEmployee) {
-        return employeeRepository.save(theEmployee);
+        return employeeRepository.saveAndFlush(theEmployee);
     }
 
     @Override
     @Transactional
+    @CacheEvict(value = "employees", allEntries = true)
     public void deleteById(int theId) {
         employeeRepository.deleteById(theId);
+        employeeRepository.flush();
     }
 }

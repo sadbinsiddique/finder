@@ -2,6 +2,8 @@ package com.market.finder.service;
 
 import com.market.finder.dao.DepartmentRepository;
 import com.market.finder.entity.Department;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -18,25 +20,30 @@ public class DepartmentServiceImpl implements DepartmentService {
     }
 
     @Override
+    @Cacheable(value = "departments", key = "'all'")
     public List<Department> findAll() {
         return departmentRepository.findAll();
     }
 
     @Override
+    @Cacheable(value = "departments", key = "#id")
     public Optional<Department> findById(Integer id) {
         return departmentRepository.findById(id);
     }
 
     @Override
     @Transactional
+    @CacheEvict(value = {"departments", "dashboard"}, allEntries = true)
     public Department save(Department department) {
-        return departmentRepository.save(department);
+        return departmentRepository.saveAndFlush(department);
     }
 
     @Override
     @Transactional
+    @CacheEvict(value = {"departments", "dashboard"}, allEntries = true)
     public void deleteById(Integer id) {
         departmentRepository.deleteById(id);
+        departmentRepository.flush();
     }
 
     @Override

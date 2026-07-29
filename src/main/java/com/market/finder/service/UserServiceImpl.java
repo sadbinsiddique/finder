@@ -1,9 +1,10 @@
 package com.market.finder.service;
 
-import com.market.finder.dao.RoleRepository;
 import com.market.finder.dao.UserRepository;
 import com.market.finder.entity.Role;
 import com.market.finder.entity.User;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -27,29 +28,32 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Cacheable(value = "users", key = "'all'")
     public List<User> findAll() {
         return userRepository.findAll();
     }
 
     @Override
+    @Cacheable(value = "users", key = "#username")
     public Optional<User> findByUsername(String username) {
         return userRepository.findByUsername(username);
     }
 
     @Override
     @Transactional
+    @CacheEvict(value = "users", allEntries = true)
     public User save(User user) {
-        // If password doesn't start with BCrypt prefix, encode it
         if (user.getPassword() != null && !user.getPassword().startsWith("{bcrypt}") 
                 && !user.getPassword().startsWith("$2a$") 
                 && !user.getPassword().startsWith("$2b$")) {
             user.setPassword(passwordEncoder.encode(user.getPassword()));
         }
-        return userRepository.save(user);
+        return userRepository.saveAndFlush(user);
     }
 
     @Override
     @Transactional
+    @CacheEvict(value = "users", allEntries = true)
     public void deleteByUsername(String username) {
         userRepository.findByUsername(username).ifPresent(user -> {
             boolean isAdmin = user.getRoles() != null && user.getRoles().stream()
@@ -58,24 +62,21 @@ public class UserServiceImpl implements UserService {
                 throw new IllegalStateException("Deletion prohibited: Admin users cannot be deleted.");
             }
             userRepository.deleteByUsername(username);
+            userRepository.flush();
         });
     }
 
-
     @Override
     @Transactional
+    @CacheEvict(value = "users", allEntries = true)
     public User registerNewUser(String username, String rawPassword, String roleName) {
-        // Check if user already exists
-        if (userRepository.findByUsername(username).isPresent()) {
+        if (findByUsername(username).isPresent()) {
             throw new RuntimeException("User already exists: " + username);
         }
 
-
-        // Find the role
         Role role = roleService.findByRoleName(roleName)
                 .orElseThrow(() -> new RuntimeException("Role not found: " + roleName));
 
-        // Create new user
         User user = new User();
         user.setUsername(username);
         user.setPassword(passwordEncoder.encode(rawPassword));
@@ -85,6 +86,6 @@ public class UserServiceImpl implements UserService {
         roles.add(role);
         user.setRoles(roles);
 
-        return userRepository.save(user);
+        return userRepository.saveAndFlush(user);
     }
 }

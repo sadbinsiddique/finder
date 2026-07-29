@@ -17,7 +17,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-@Component
+// @Component -- Disabled to prevent data seeding on every application startup
 public class DataInitializer implements CommandLineRunner {
 
     private static final Logger logger = LoggerFactory.getLogger(DataInitializer.class);
@@ -68,7 +68,7 @@ public class DataInitializer implements CommandLineRunner {
     @Override
     @Transactional
     public void run(String @NonNull ... args) {
-        logger.info("[DATABASE-INIT] Synchronizing system roles and credentials in MySQL database...");
+        logger.info("[INIT] Synchronizing MySQL database...");
         seedRolesAndPermissions();
         seedUsers();
         seedDepartments();
@@ -179,7 +179,6 @@ public class DataInitializer implements CommandLineRunner {
         userRepository.save(admin);
         logger.info("[DATABASE-SYNC] 'admin' user password hash updated in MySQL database for credentials (admin / admin123).");
 
-        // Synchronize instructor1 user in MySQL
         User inst1 = userRepository.findByUsername("instructor1").orElseGet(() -> {
             User u = new User();
             u.setUsername("instructor1");

@@ -44,16 +44,17 @@ public class RoleServiceImpl implements RoleService {
 
     @Override
     @Transactional
-    @CacheEvict(value = "roles", allEntries = true)
+    @CacheEvict(value = {"roles", "users"}, allEntries = true)
     public Role save(Role role) {
-        return roleRepository.save(role);
+        return roleRepository.saveAndFlush(role);
     }
 
     @Override
     @Transactional
-    @CacheEvict(value = "roles", allEntries = true)
+    @CacheEvict(value = {"roles", "users"}, allEntries = true)
     public void deleteById(Integer id) {
         roleRepository.deleteById(id);
+        roleRepository.flush();
     }
 
     @Override

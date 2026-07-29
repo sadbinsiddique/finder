@@ -2,6 +2,8 @@ package com.market.finder.service;
 
 import com.market.finder.dao.StudentRepository;
 import com.market.finder.entity.Student;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -18,24 +20,29 @@ public class StudentServiceImpl implements StudentService {
     }
 
     @Override
+    @Cacheable(value = "students", key = "'all'")
     public List<Student> findAll() {
         return studentRepository.findAll();
     }
 
     @Override
+    @Cacheable(value = "students", key = "#id")
     public Optional<Student> findById(Integer id) {
         return studentRepository.findById(id);
     }
 
     @Override
     @Transactional
+    @CacheEvict(value = {"students", "dashboard"}, allEntries = true)
     public Student save(Student student) {
-        return studentRepository.save(student);
+        return studentRepository.saveAndFlush(student);
     }
 
     @Override
     @Transactional
+    @CacheEvict(value = {"students", "dashboard"}, allEntries = true)
     public void deleteById(Integer id) {
         studentRepository.deleteById(id);
+        studentRepository.flush();
     }
 }

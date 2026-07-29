@@ -56,35 +56,36 @@ class UserServiceTest {
 
     @Test
     void testFindByUsername_Success() {
-        when(userRepository.findById("testuser")).thenReturn(Optional.of(sampleUser));
+        when(userRepository.findByUsername("testuser")).thenReturn(Optional.of(sampleUser));
 
         Optional<User> userOpt = userService.findByUsername("testuser");
 
         assertTrue(userOpt.isPresent());
         assertEquals("testuser", userOpt.get().getUsername());
-        verify(userRepository, times(1)).findById("testuser");
+        verify(userRepository, times(1)).findByUsername("testuser");
     }
 
     @Test
     void testSaveUser_EncodesRawPassword() {
         when(passwordEncoder.encode("rawPassword")).thenReturn("$2a$10$encodedPasswordHash");
-        when(userRepository.save(any(User.class))).thenAnswer(invocation -> invocation.getArgument(0));
+        when(userRepository.saveAndFlush(any(User.class))).thenAnswer(invocation -> invocation.getArgument(0));
 
         User savedUser = userService.save(sampleUser);
 
         assertNotNull(savedUser);
         assertEquals("$2a$10$encodedPasswordHash", savedUser.getPassword());
         verify(passwordEncoder, times(1)).encode("rawPassword");
-        verify(userRepository, times(1)).save(sampleUser);
+        verify(userRepository, times(1)).saveAndFlush(sampleUser);
     }
 
     @Test
     void testDeleteByUsername() {
-        doNothing().when(userRepository).deleteById("testuser");
+        when(userRepository.findByUsername("testuser")).thenReturn(Optional.of(sampleUser));
+        doNothing().when(userRepository).deleteByUsername("testuser");
 
         userService.deleteByUsername("testuser");
 
-        verify(userRepository, times(1)).deleteById("testuser");
+        verify(userRepository, times(1)).deleteByUsername("testuser");
     }
 
     @Test
@@ -96,7 +97,7 @@ class UserServiceTest {
         when(userRepository.findByUsername("newuser")).thenReturn(Optional.empty());
         when(roleService.findByRoleName("ROLE_USER")).thenReturn(Optional.of(role));
         when(passwordEncoder.encode("pass123")).thenReturn("$2a$10$encodedHash");
-        when(userRepository.save(any(User.class))).thenAnswer(invocation -> invocation.getArgument(0));
+        when(userRepository.saveAndFlush(any(User.class))).thenAnswer(invocation -> invocation.getArgument(0));
 
         User registered = userService.registerNewUser("newuser", "pass123", "ROLE_USER");
 

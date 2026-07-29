@@ -12,8 +12,9 @@ public class WebMvcConfig implements WebMvcConfigurer {
     private final CustomLoggingInterceptor customLoggingInterceptor;
     private final RoleAccessInterceptor roleAccessInterceptor;
 
-    public WebMvcConfig(CustomLoggingInterceptor customLoggingInterceptor,
-                        RoleAccessInterceptor roleAccessInterceptor) {
+    public WebMvcConfig(
+            CustomLoggingInterceptor customLoggingInterceptor,
+            RoleAccessInterceptor roleAccessInterceptor) {
         this.customLoggingInterceptor = customLoggingInterceptor;
         this.roleAccessInterceptor = roleAccessInterceptor;
     }

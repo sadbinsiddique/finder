@@ -3,6 +3,8 @@ package com.market.finder.service;
 import com.market.finder.dao.EnrollmentRepository;
 import com.market.finder.entity.Enrollment;
 import com.market.finder.entity.EnrollmentId;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,25 +21,30 @@ public class EnrollmentServiceImpl implements EnrollmentService {
     }
 
     @Override
+    @Cacheable(value = "enrollment", key = "'all'")
     public List<Enrollment> findAll() {
         return enrollmentRepository.findAll();
     }
 
     @Override
+    @Cacheable(value = "enrollment", key = "#id")
     public Optional<Enrollment> findById(EnrollmentId id) {
         return enrollmentRepository.findById(id);
     }
 
     @Override
     @Transactional
+    @CacheEvict(value = "enrollment", allEntries = true)
     public Enrollment save(Enrollment enrollment) {
-        return enrollmentRepository.save(enrollment);
+        return enrollmentRepository.saveAndFlush(enrollment);
     }
 
     @Override
     @Transactional
+    @CacheEvict(value = "enrollment", allEntries = true)
     public void deleteById(EnrollmentId id) {
         enrollmentRepository.deleteById(id);
+        enrollmentRepository.flush();
     }
 
     @Override
