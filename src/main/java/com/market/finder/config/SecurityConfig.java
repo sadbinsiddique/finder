@@ -36,44 +36,41 @@ public class SecurityConfig {
     }
 
     @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http, PasswordEncoder passwordEncoder) {
-        try {
-            http.authenticationProvider(authenticationProvider(passwordEncoder));
+    public SecurityFilterChain filterChain(HttpSecurity http, PasswordEncoder passwordEncoder) throws Exception {
+        http.authenticationProvider(authenticationProvider(passwordEncoder));
 
-            http.authorizeHttpRequests(configurer ->
-                    configurer
-                            .requestMatchers("/login", "/css/**", "/img/**", "/js/**").permitAll()
-                            .requestMatchers("/swagger-ui/**", "/v3/api-docs/**", "/api-docs/**").permitAll()
-                            .requestMatchers("/error", "/access-denied").permitAll()
-                            .requestMatchers("/admin/**", "/users/**", "/roles/**", "/permissions/**").hasAnyAuthority("MANAGE_USERS", "ROLE_ADMIN")
-                            .anyRequest().authenticated()
-            );
+        http.authorizeHttpRequests(configurer ->
+                configurer
+                        .requestMatchers("/login", "/css/**", "/img/**", "/js/**").permitAll()
+                        .requestMatchers("/swagger-ui/**", "/v3/api-docs/**", "/api-docs/**").permitAll()
+                        .requestMatchers("/error", "/access-denied").permitAll()
+                        .requestMatchers("/admin/**", "/users/**", "/roles/**",
+                        "/permissions/**").hasAnyAuthority("MANAGE_USERS", "ROLE_ADMIN")
+                        .anyRequest().authenticated()
+        );
 
-            http.formLogin(form -> form
-                    .loginPage("/login")
-                    .loginProcessingUrl("/login")
-                    .defaultSuccessUrl("/", true)
-                    .failureUrl("/login?error=true")
-                    .permitAll()
-            );
+        http.formLogin(form -> form
+                .loginPage("/login")
+                .loginProcessingUrl("/login")
+                .defaultSuccessUrl("/", true)
+                .failureUrl("/login?error=true")
+                .permitAll()
+        );
 
-            http.logout(logout -> logout
-                    .logoutUrl("/logout")
-                    .logoutSuccessUrl("/login?logout=true")
-                    .deleteCookies("JSESSIONID")
-                    .invalidateHttpSession(true)
-                    .permitAll()
-            );
+        http.logout(logout -> logout
+                .logoutUrl("/logout")
+                .logoutSuccessUrl("/login?logout=true")
+                .deleteCookies("JSESSIONID")
+                .invalidateHttpSession(true)
+                .permitAll()
+        );
 
-            http.exceptionHandling(exception -> exception
-                    .accessDeniedPage("/access-denied")
-            );
+        http.exceptionHandling(exception -> exception
+                .accessDeniedPage("/access-denied")
+        );
 
-            http.csrf(AbstractHttpConfigurer::disable);
+        http.csrf(csrf -> csrf.disable());
 
-            return http.build();
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+        return http.build();
     }
 }

@@ -72,7 +72,7 @@ public class UserServiceImpl extends BaseServiceImpl<User, String, UserRepositor
     @Transactional
     @CacheEvict(value = "users", allEntries = true)
     public User registerNewUser(String username, String rawPassword, String roleName) {
-        if (findByUsername(username).isPresent()) {
+        if (repository.findByUsername(username).isPresent()) {
             throw new RuntimeException("User already exists: " + username);
         }
 

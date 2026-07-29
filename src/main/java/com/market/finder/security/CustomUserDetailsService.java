@@ -22,8 +22,6 @@ import java.util.Set;
 @Service
 public class CustomUserDetailsService implements UserDetailsService {
 
-    private static final Logger logger = LoggerFactory.getLogger(CustomUserDetailsService.class);
-
     private final UserService userService;
 
     public CustomUserDetailsService(UserService userService) {
