@@ -6,8 +6,6 @@ import com.market.finder.entity.User;
 import com.market.finder.service.RoleService;
 import com.market.finder.service.UserService;
 import com.market.finder.service.base.BaseServiceImpl;
-import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -30,20 +28,17 @@ public class UserServiceImpl extends BaseServiceImpl<User, String, UserRepositor
     }
 
     @Override
-    @Cacheable(value = "users", key = "'all'")
     public List<User> findAll() {
         return super.findAll();
     }
 
     @Override
-    @Cacheable(value = "users", key = "#username")
     public Optional<User> findByUsername(String username) {
         return repository.findByUsername(username);
     }
 
     @Override
     @Transactional
-    @CacheEvict(value = "users", allEntries = true)
     public User save(User user) {
         encodePasswordIfRaw(user);
         return repository.saveAndFlush(user);
@@ -51,7 +46,6 @@ public class UserServiceImpl extends BaseServiceImpl<User, String, UserRepositor
 
     @Override
     @Transactional
-    @CacheEvict(value = "users", allEntries = true)
     public void deleteByUsername(String username) {
         repository.findByUsername(username).ifPresent(user -> {
             validateAdminDeletionProtection(user);
@@ -62,7 +56,6 @@ public class UserServiceImpl extends BaseServiceImpl<User, String, UserRepositor
 
     @Override
     @Transactional
-    @CacheEvict(value = "users", allEntries = true)
     public User registerNewUser(String username, String rawPassword, String roleName) {
         if (repository.findByUsername(username).isPresent()) {
             throw new IllegalArgumentException("User already exists: " + username);

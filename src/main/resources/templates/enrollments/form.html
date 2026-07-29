@@ -158,8 +158,7 @@
             
             <div class="mb-3">
                 <label for="studentSelect" class="form-label">Student</label>
-                <select id="studentSelect" class="form-select" required th:field="*{student}"
-                        th:style="${enrollment.id != null && enrollment.id.studentId != null ? 'pointer-events: none; opacity: 0.6;' : ''}">
+                <select id="studentSelect" class="form-select" required th:field="*{student}">
                     <option value="">-- Select Student --</option>
                     <option th:each="stu : ${students}" th:value="${stu.id}" th:text="${stu.firstName + ' ' + stu.lastName}"></option>
                 </select>
@@ -167,8 +166,7 @@
 
             <div class="mb-3">
                 <label for="courseSelect" class="form-label">Course</label>
-                <select id="courseSelect" class="form-select" required th:field="*{course}"
-                        th:style="${enrollment.id != null && enrollment.id.courseId != null ? 'pointer-events: none; opacity: 0.6;' : ''}">
+                <select id="courseSelect" class="form-select" required th:field="*{course}">
                     <option value="">-- Select Course --</option>
                     <option th:each="crs : ${courses}" th:value="${crs.id}" th:text="${crs.title}"></option>
                 </select>

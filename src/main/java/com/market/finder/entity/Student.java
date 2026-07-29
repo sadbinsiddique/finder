@@ -35,7 +35,6 @@ public class Student {
     @PrimaryKeyJoinColumn
     private StudentDetail studentDetail;
 
-    // Helper setter for User object compatibility
     public void setUser(User user) {
         if (user != null) {
             this.username = user.getUsername();

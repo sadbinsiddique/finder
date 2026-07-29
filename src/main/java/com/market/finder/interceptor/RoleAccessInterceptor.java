@@ -79,8 +79,7 @@ public class RoleAccessInterceptor implements HandlerInterceptor {
     }
 
     private boolean isWriteOperation(String uri, String method) {
-        return uri.contains("/new") || uri.contains("/edit") || uri.contains("/save")
-                || "POST".equals(method) || "PUT".equals(method) || "PATCH".equals(method);
+        return uri.contains("/new") || uri.contains("/edit") || uri.contains("/save")|| "POST".equals(method) || "PUT".equals(method) || "PATCH".equals(method);
     }
 
     private boolean denyAccess(HttpServletResponse response, String username, String method, String uri, String reason) throws IOException {

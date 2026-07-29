@@ -10,6 +10,15 @@
     <h2>System Users</h2>
     <hr/>
 
+    <div th:if="${successMessage}" class="alert alert-success alert-dismissible fade show mb-3" role="alert">
+        <span th:text="${successMessage}"></span>
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+    <div th:if="${errorMessage}" class="alert alert-danger alert-dismissible fade show mb-3" role="alert">
+        <span th:text="${errorMessage}"></span>
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+
     <a class="btn btn-primary mb-3" th:href="@{/users/new}">Add New User</a>
     <a class="btn btn-secondary mb-3" th:href="@{/}">Back to Home</a>
 

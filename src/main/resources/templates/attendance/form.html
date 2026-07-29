@@ -158,8 +158,7 @@
             
             <div class="mb-3">
                 <label for="studentSelect" class="form-label">Student</label>
-                <select id="studentSelect" class="form-select" required th:field="*{student}"
-                        th:style="${attendance.id != null && attendance.id.studentId != null ? 'pointer-events: none; opacity: 0.6;' : ''}">
+                <select id="studentSelect" class="form-select" required th:field="*{student}">
                     <option value="">-- Select Student --</option>
                     <option th:each="stu : ${students}" th:value="${stu.id}" th:text="${stu.firstName + ' ' + stu.lastName}"></option>
                 </select>
@@ -167,8 +166,7 @@
 
             <div class="mb-3">
                 <label for="courseSelect" class="form-label">Course</label>
-                <select id="courseSelect" class="form-select" required th:field="*{course}"
-                        th:style="${attendance.id != null && attendance.id.courseId != null ? 'pointer-events: none; opacity: 0.6;' : ''}">
+                <select id="courseSelect" class="form-select" required th:field="*{course}">
                     <option value="">-- Select Course --</option>
                     <option th:each="crs : ${courses}" th:value="${crs.id}" th:text="${crs.title}"></option>
                 </select>
@@ -176,8 +174,7 @@
 
             <div class="mb-3">
                 <label for="attendanceDateInput" class="form-label">Attendance Date</label>
-                <input id="attendanceDateInput" type="date" class="form-control" th:field="*{id.attendanceDate}" required
-                       th:readonly="${attendance.id != null && attendance.id.attendanceDate != null}"/>
+                <input id="attendanceDateInput" type="date" class="form-control" th:field="*{id.attendanceDate}" required/>
             </div>
 
             <div class="mb-4">

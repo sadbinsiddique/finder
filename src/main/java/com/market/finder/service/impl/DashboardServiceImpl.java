@@ -7,7 +7,6 @@ import com.market.finder.dao.RoleRepository;
 import com.market.finder.dao.StudentRepository;
 import com.market.finder.dao.UserRepository;
 import com.market.finder.service.DashboardService;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.util.LinkedHashMap;
@@ -38,7 +37,6 @@ public class DashboardServiceImpl implements DashboardService {
     }
 
     @Override
-    @Cacheable(value = "dashboard", key = "'stats'")
     public Map<String, Long> getSystemStats() {
         Map<String, Long> stats = new LinkedHashMap<>();
         stats.put("totalUsers", userRepository.count());

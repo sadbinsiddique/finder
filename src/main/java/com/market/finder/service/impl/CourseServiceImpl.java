@@ -4,8 +4,6 @@ import com.market.finder.dao.CourseRepository;
 import com.market.finder.entity.Course;
 import com.market.finder.service.CourseService;
 import com.market.finder.service.base.BaseServiceImpl;
-import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,27 +18,23 @@ public class CourseServiceImpl extends BaseServiceImpl<Course, Integer, CourseRe
     }
 
     @Override
-    @Cacheable(value = "courses", key = "'all'")
     public List<Course> findAll() {
         return super.findAll();
     }
 
     @Override
-    @Cacheable(value = "courses", key = "#id")
     public Optional<Course> findById(Integer id) {
         return super.findById(id);
     }
 
     @Override
     @Transactional
-    @CacheEvict(value = {"courses", "dashboard"}, allEntries = true)
     public Course save(Course course) {
         return repository.saveAndFlush(course);
     }
 
     @Override
     @Transactional
-    @CacheEvict(value = {"courses", "dashboard"}, allEntries = true)
     public void deleteById(Integer id) {
         super.deleteById(id);
         repository.flush();

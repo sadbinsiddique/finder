@@ -23,6 +23,6 @@ public class StudentDetail {
     @Column(name = "blood_group", length = 5)
     private String bloodGroup;
 
-    @Column(length = 255)
+    @Column()
     private String address;
 }

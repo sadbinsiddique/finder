@@ -38,14 +38,14 @@ public class PermissionServiceImpl extends BaseServiceImpl<Permission, Integer, 
 
     @Override
     @Transactional
-    @CacheEvict(value = "permissions", allEntries = true)
+    @CacheEvict(value = {"permissions", "roles"}, allEntries = true)
     public Permission save(Permission permission) {
         return repository.saveAndFlush(permission);
     }
 
     @Override
     @Transactional
-    @CacheEvict(value = "permissions", allEntries = true)
+    @CacheEvict(value = {"permissions", "roles"}, allEntries = true)
     public List<Permission> saveAll(Iterable<Permission> permissions) {
         List<Permission> saved = repository.saveAll(permissions);
         repository.flush();

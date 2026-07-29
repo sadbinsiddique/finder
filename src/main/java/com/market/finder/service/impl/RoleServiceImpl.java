@@ -1,6 +1,7 @@
 package com.market.finder.service.impl;
 
 import com.market.finder.dao.RoleRepository;
+import com.market.finder.entity.Permission;
 import com.market.finder.entity.Role;
 import com.market.finder.service.RoleService;
 import com.market.finder.service.base.BaseServiceImpl;
@@ -9,8 +10,13 @@ import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 public class RoleServiceImpl extends BaseServiceImpl<Role, Integer, RoleRepository> implements RoleService {
@@ -43,15 +49,32 @@ public class RoleServiceImpl extends BaseServiceImpl<Role, Integer, RoleReposito
     }
 
     @Override
+    @Transactional(readOnly = true)
+    @Cacheable(value = "roles", key = "'role_permissions_map'")
+    public Map<String, Set<String>> getRolePermissionsMap() {
+        Map<String, Set<String>> rolePermissionsMap = new HashMap<>();
+        List<Role> roles = repository.findAll();
+        for (Role role : roles) {
+            Set<String> permissionNames = role.getPermissions() != null
+                    ? role.getPermissions().stream()
+                            .map(Permission::getPermissionName)
+                            .collect(Collectors.toSet())
+                    : Collections.emptySet();
+            rolePermissionsMap.put(role.getRoleName(), permissionNames);
+        }
+        return rolePermissionsMap;
+    }
+
+    @Override
     @Transactional
-    @CacheEvict(value = {"roles", "users"}, allEntries = true)
+    @CacheEvict(value = {"roles", "permissions"}, allEntries = true)
     public Role save(Role role) {
         return repository.saveAndFlush(role);
     }
 
     @Override
     @Transactional
-    @CacheEvict(value = {"roles", "users"}, allEntries = true)
+    @CacheEvict(value = {"roles", "permissions"}, allEntries = true)
     public void deleteById(Integer id) {
         super.deleteById(id);
         repository.flush();

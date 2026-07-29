@@ -18,11 +18,11 @@
             --glass-border: rgba(255, 255, 255, 0.08);
             --glass-border-hover: rgba(255, 255, 255, 0.18);
             --glass-inner-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.1);
-            --apple-blue: #0A84FF;
-            --apple-purple: #5E5CE6;
-            --apple-cyan: #64D2FF;
-            --apple-green: #30D158;
-            --text-primary: #F5F5F7;
+            --apple-blue: #0a84ff;
+            --apple-purple: #5e5ce6;
+            --apple-cyan: #64d2ff;
+            --apple-green: #30d158;
+            --text-primary: #f5f5f7;
             --text-secondary: rgba(245, 245, 247, 0.55);
         }
 
@@ -109,7 +109,7 @@
     <div class="container">
         <a class="navbar-brand text-white fw-bold d-flex align-items-center gap-2" href="/">
             <i class="fas fa-globe logo-glow fs-4 me-1"></i>
-            <span>University ERP</span>
+            <span>University Portal</span>
         </a>
         <div class="ms-auto d-flex align-items-center gap-3">
             <a th:href="@{/}" class="btn btn-apple-glass">
@@ -127,7 +127,7 @@
 <div class="container pb-5">
     <div class="mb-4">
         <h1 class="h2 fw-bold text-white mb-1">Admin Control Center</h1>
-        <p class="text-secondary mb-0">System administration, security role assignments, and directory management.</p>
+        <p class="text-secondary mb-0">System administration.</p>
     </div>
 
     <!-- Quick Stats -->
@@ -135,21 +135,21 @@
         <div class="col-md-4">
             <div class="liquid-glass-card">
                 <div class="text-secondary small mb-1">TOTAL USERS</div>
-                <div class="stat-value text-white" th:text="${userCount}">0</div>
+                <div class="stat-value text-white" th:text="${totalUsers != null ? totalUsers : (userCount != null ? userCount : 0)}">0</div>
                 <div class="small text-secondary mt-2"><i class="fas fa-user-shield me-1" style="color: var(--apple-blue);"></i> Active MySQL accounts</div>
             </div>
         </div>
         <div class="col-md-4">
             <div class="liquid-glass-card">
                 <div class="text-secondary small mb-1">SECURITY ROLES</div>
-                <div class="stat-value text-white" th:text="${roleCount}">0</div>
+                <div class="stat-value text-white" th:text="${totalRoles != null ? totalRoles : (roleCount != null ? roleCount : 0)}">0</div>
                 <div class="small text-secondary mt-2"><i class="fas fa-key me-1" style="color: var(--apple-purple);"></i> System authority sets</div>
             </div>
         </div>
         <div class="col-md-4">
             <div class="liquid-glass-card">
                 <div class="text-secondary small mb-1">TOTAL STUDENTS</div>
-                <div class="stat-value text-white" th:text="${studentCount}">0</div>
+                <div class="stat-value text-white" th:text="${totalStudents != null ? totalStudents : (studentCount != null ? studentCount : 0)}">0</div>
                 <div class="small text-secondary mt-2"><i class="fas fa-graduation-cap me-1" style="color: var(--apple-green);"></i> Enrolled student roster</div>
             </div>
         </div>
@@ -166,7 +166,7 @@
                     <i class="fas fa-chevron-right text-secondary"></i>
                 </div>
                 <h5 class="fw-bold mb-1">User Management</h5>
-                <p class="text-secondary small mb-0">Create, edit, enable/disable system user accounts and assign security roles.</p>
+                <p class="text-secondary small mb-0">system user accounts and assign security roles.</p>
             </a>
         </div>
 
@@ -192,7 +192,7 @@
                     <i class="fas fa-chevron-right text-secondary"></i>
                 </div>
                 <h5 class="fw-bold mb-1">Permissions Registry</h5>
-                <p class="text-secondary small mb-0">View fine-grained security permissions defined in system.</p>
+                <p class="text-secondary small mb-0">View security permissions defined in system.</p>
             </a>
         </div>
     </div>

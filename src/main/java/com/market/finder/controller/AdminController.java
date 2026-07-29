@@ -25,6 +25,9 @@ public class AdminController {
     public String showDashboard(Model model) {
         Map<String, Long> stats = dashboardService.getSystemStats();
         model.addAllAttributes(stats);
+        model.addAttribute("userCount", stats.getOrDefault("totalUsers", 0L));
+        model.addAttribute("roleCount", stats.getOrDefault("totalRoles", 0L));
+        model.addAttribute("studentCount", stats.getOrDefault("totalStudents", 0L));
         return "admin/dashboard";
     }
 
