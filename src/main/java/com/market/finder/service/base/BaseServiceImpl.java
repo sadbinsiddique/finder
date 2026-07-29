@@ -29,11 +29,12 @@ public abstract class BaseServiceImpl<T, ID, R extends JpaRepository<T, ID>> imp
 
     @Override
     public T save(T entity) {
-        return repository.save(entity);
+        return repository.saveAndFlush(entity);
     }
 
     @Override
     public void deleteById(ID id) {
         repository.deleteById(id);
+        repository.flush();
     }
 }

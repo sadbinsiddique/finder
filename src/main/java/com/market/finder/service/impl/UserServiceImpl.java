@@ -45,11 +45,7 @@ public class UserServiceImpl extends BaseServiceImpl<User, String, UserRepositor
     @Transactional
     @CacheEvict(value = "users", allEntries = true)
     public User save(User user) {
-        if (user.getPassword() != null && !user.getPassword().startsWith("{bcrypt}") 
-                && !user.getPassword().startsWith("$2a$") 
-                && !user.getPassword().startsWith("$2b$")) {
-            user.setPassword(passwordEncoder.encode(user.getPassword()));
-        }
+        encodePasswordIfRaw(user);
         return repository.saveAndFlush(user);
     }
 
@@ -58,11 +54,7 @@ public class UserServiceImpl extends BaseServiceImpl<User, String, UserRepositor
     @CacheEvict(value = "users", allEntries = true)
     public void deleteByUsername(String username) {
         repository.findByUsername(username).ifPresent(user -> {
-            boolean isAdmin = user.getRoles() != null && user.getRoles().stream()
-                    .anyMatch(r -> "ROLE_ADMIN".equalsIgnoreCase(r.getRoleName()));
-            if (isAdmin) {
-                throw new IllegalStateException("Deletion prohibited: Admin users cannot be deleted.");
-            }
+            validateAdminDeletionProtection(user);
             repository.deleteByUsername(username);
             repository.flush();
         });
@@ -73,12 +65,38 @@ public class UserServiceImpl extends BaseServiceImpl<User, String, UserRepositor
     @CacheEvict(value = "users", allEntries = true)
     public User registerNewUser(String username, String rawPassword, String roleName) {
         if (repository.findByUsername(username).isPresent()) {
-            throw new RuntimeException("User already exists: " + username);
+            throw new IllegalArgumentException("User already exists: " + username);
         }
 
         Role role = roleService.findByRoleName(roleName)
-                .orElseThrow(() -> new RuntimeException("Role not found: " + roleName));
+                .orElseThrow(() -> new IllegalArgumentException("Role not found: " + roleName));
 
+        User user = buildUserEntity(username, rawPassword, role);
+        return repository.saveAndFlush(user);
+    }
+
+    private void encodePasswordIfRaw(User user) {
+        String password = user.getPassword();
+        if (password != null && isRawPassword(password)) {
+            user.setPassword(passwordEncoder.encode(password));
+        }
+    }
+
+    private boolean isRawPassword(String password) {
+        return !password.startsWith("{bcrypt}")
+                && !password.startsWith("$2a$")
+                && !password.startsWith("$2b$");
+    }
+
+    private void validateAdminDeletionProtection(User user) {
+        boolean isAdmin = user.getRoles() != null && user.getRoles().stream()
+                .anyMatch(r -> "ROLE_ADMIN".equalsIgnoreCase(r.getRoleName()));
+        if (isAdmin) {
+            throw new IllegalStateException("Deletion prohibited: Admin users cannot be deleted.");
+        }
+    }
+
+    private User buildUserEntity(String username, String rawPassword, Role role) {
         User user = new User();
         user.setUsername(username);
         user.setPassword(passwordEncoder.encode(rawPassword));
@@ -87,7 +105,6 @@ public class UserServiceImpl extends BaseServiceImpl<User, String, UserRepositor
         Set<Role> roles = new HashSet<>();
         roles.add(role);
         user.setRoles(roles);
-
-        return repository.saveAndFlush(user);
+        return user;
     }
 }
