@@ -69,7 +69,7 @@ public class SecurityConfig {
                 .accessDeniedPage("/access-denied")
         );
 
-        http.csrf(csrf -> csrf.disable());
+        http.csrf(AbstractHttpConfigurer::disable);
 
         return http.build();
     }
