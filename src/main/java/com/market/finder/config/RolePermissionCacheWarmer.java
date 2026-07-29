@@ -1,0 +1,31 @@
+package com.market.finder.config;
+
+import com.market.finder.service.PermissionService;
+import com.market.finder.service.RoleService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.boot.context.event.ApplicationReadyEvent;
+import org.springframework.context.event.EventListener;
+import org.springframework.stereotype.Component;
+
+@Component
+public class RolePermissionCacheWarmer {
+
+    private static final Logger logger = LoggerFactory.getLogger(RolePermissionCacheWarmer.class);
+    private final RoleService roleService;
+    private final PermissionService permissionService;
+
+    public RolePermissionCacheWarmer(RoleService roleService, PermissionService permissionService) {
+        this.roleService = roleService;
+        this.permissionService = permissionService;
+    }
+
+    @EventListener(ApplicationReadyEvent.class)
+    public void warmRolePermissionCache() {
+        logger.info("[CACHE WARMUP] Pre-loading Role and Permission caches at application startup...");
+        permissionService.findAll();
+        roleService.findAll();
+        roleService.getRolePermissionsMap();
+        logger.info("[CACHE WARMUP] Role and Permission caches successfully pre-loaded into memory.");
+    }
+}
