@@ -1,6 +1,5 @@
 package com.market.finder.service;
 
-import com.market.finder.dao.RoleRepository;
 import com.market.finder.dao.UserRepository;
 import com.market.finder.entity.Role;
 import com.market.finder.entity.User;
@@ -26,7 +25,7 @@ class UserServiceTest {
     private UserRepository userRepository;
 
     @Mock
-    private RoleRepository roleRepository;
+    private RoleService roleService;
 
     @Mock
     private PasswordEncoder passwordEncoder;
@@ -94,8 +93,8 @@ class UserServiceTest {
         role.setId(1);
         role.setRoleName("ROLE_USER");
 
-        when(userRepository.findById("newuser")).thenReturn(Optional.empty());
-        when(roleRepository.findByRoleName("ROLE_USER")).thenReturn(Optional.of(role));
+        when(userRepository.findByUsername("newuser")).thenReturn(Optional.empty());
+        when(roleService.findByRoleName("ROLE_USER")).thenReturn(Optional.of(role));
         when(passwordEncoder.encode("pass123")).thenReturn("$2a$10$encodedHash");
         when(userRepository.save(any(User.class))).thenAnswer(invocation -> invocation.getArgument(0));
 

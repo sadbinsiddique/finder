@@ -14,6 +14,8 @@ public interface RoleService {
 
     Optional<Role> findById(Integer id);
 
+    Optional<Role> findByRoleName(String roleName);
+
     List<Role> findAllById(Iterable<Integer> ids);
 
     Role save(Role role);

@@ -17,12 +17,12 @@ import java.util.Set;
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
-    private final RoleRepository roleRepository;
+    private final RoleService roleService;
     private final PasswordEncoder passwordEncoder;
 
-    public UserServiceImpl(UserRepository userRepository, RoleRepository roleRepository, PasswordEncoder passwordEncoder) {
+    public UserServiceImpl(UserRepository userRepository, RoleService roleService, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
-        this.roleRepository = roleRepository;
+        this.roleService = roleService;
         this.passwordEncoder = passwordEncoder;
     }
 
@@ -72,7 +72,7 @@ public class UserServiceImpl implements UserService {
 
 
         // Find the role
-        Role role = roleRepository.findByRoleName(roleName)
+        Role role = roleService.findByRoleName(roleName)
                 .orElseThrow(() -> new RuntimeException("Role not found: " + roleName));
 
         // Create new user
