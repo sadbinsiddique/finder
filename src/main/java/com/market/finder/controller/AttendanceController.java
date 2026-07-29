@@ -13,9 +13,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
 
-/**
- * DIP: Depends on AttendanceService, StudentService, and CourseService abstractions.
- */
 @Controller
 @RequestMapping("/attendance")
 public class AttendanceController {
@@ -32,14 +29,12 @@ public class AttendanceController {
         this.courseService = courseService;
     }
 
-    // 1. Show all attendance records
     @GetMapping
     public String listAttendance(Model model) {
         model.addAttribute("attendanceRecords", attendanceService.findAll());
         return "attendance/list";
     }
 
-    // 2. Show the form to record new attendance
     @GetMapping("/new")
     public String showCreateForm(Model model) {
         model.addAttribute("attendance", new Attendance());
@@ -49,7 +44,6 @@ public class AttendanceController {
         return "attendance/form";
     }
 
-    // 3. Show the form to edit an existing attendance record
     @GetMapping("/edit")
     public String showEditForm(
             @RequestParam("studentId") Integer studentId,
@@ -68,7 +62,6 @@ public class AttendanceController {
         return "attendance/form";
     }
 
-    // 4. Save the attendance record
     @PostMapping("/save")
     public String saveAttendance(@ModelAttribute("attendance") Attendance attendance) {
         if (attendance.getId() == null) {

@@ -9,9 +9,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-/**
- * DIP: Depends on GradebookService, StudentService, and CourseService abstractions.
- */
 @Controller
 @RequestMapping("/gradebooks")
 public class GradebookController {
@@ -28,14 +25,12 @@ public class GradebookController {
         this.courseService = courseService;
     }
 
-    // 1. Show all grades
     @GetMapping
     public String listGradebooks(Model model) {
         model.addAttribute("gradebooks", gradebookService.findAll());
         return "gradebooks/list";
     }
 
-    // 2. Show the form to record a new grade
     @GetMapping("/new")
     public String showCreateForm(Model model) {
         model.addAttribute("gradebook", new Gradebook());
@@ -44,7 +39,6 @@ public class GradebookController {
         return "gradebooks/form";
     }
 
-    // 3. Show the form to edit an existing grade
     @GetMapping("/edit")
     public String showEditForm(
             @RequestParam("studentId") Integer studentId,
@@ -62,7 +56,6 @@ public class GradebookController {
         return "gradebooks/form";
     }
 
-    // 4. Save the gradebook entry
     @PostMapping("/save")
     public String saveGradebook(@ModelAttribute("gradebook") Gradebook gradebook) {
         if (gradebook.getId() == null) {
@@ -79,7 +72,6 @@ public class GradebookController {
         return "redirect:/gradebooks";
     }
 
-    // 5. Delete a gradebook entry
     @GetMapping("/delete")
     public String deleteGradebook(
             @RequestParam("studentId") Integer studentId,

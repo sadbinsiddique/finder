@@ -19,10 +19,6 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
-
-/**
- * Loads user details directly from MySQL database for Spring Security authentication.
- */
 @Service
 public class CustomUserDetailsService implements UserDetailsService {
 
@@ -78,6 +74,4 @@ public class CustomUserDetailsService implements UserDetailsService {
         }
         return authorities;
     }
-
-
 }

@@ -22,7 +22,6 @@ public class EnrollmentId implements Serializable {
     @Column(name = "course_id")
     private Integer courseId;
 
-    // equals and hashCode are required for Composite Keys
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

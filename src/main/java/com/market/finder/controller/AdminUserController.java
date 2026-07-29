@@ -7,15 +7,12 @@ import com.market.finder.service.UserService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-/**
- * SRP: Sole responsibility is Admin User Management.
- * DIP: Depends on UserService and RoleService interfaces.
- */
 @Controller
 @RequestMapping("/admin/users")
 public class AdminUserController {
@@ -51,10 +48,10 @@ public class AdminUserController {
     }
 
     @PostMapping("/save")
-    public String saveUser(@ModelAttribute("user") User user,
-                           @RequestParam(value = "roleIds", required = false) List<Integer> roleIds) {
-        
-        // Preserve existing password if editing user and password field was left empty
+    public String saveUser(
+            @ModelAttribute("user") User user,
+            @RequestParam(value = "roleIds", required = false) List<Integer> roleIds) {
+
         if (user.getUsername() != null && !user.getUsername().trim().isEmpty()) {
             userService.findByUsername(user.getUsername()).ifPresent(existingUser -> {
                 if (user.getPassword() == null || user.getPassword().trim().isEmpty()) {
@@ -75,7 +72,7 @@ public class AdminUserController {
     }
 
     @GetMapping("/delete/{username}")
-    public String deleteUser(@PathVariable String username, org.springframework.web.servlet.mvc.support.RedirectAttributes redirectAttributes) {
+    public String deleteUser(@PathVariable String username, RedirectAttributes redirectAttributes) {
         try {
             userService.deleteByUsername(username);
             redirectAttributes.addFlashAttribute("successMessage", "User deleted successfully.");

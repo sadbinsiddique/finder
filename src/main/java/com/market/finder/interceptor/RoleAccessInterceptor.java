@@ -13,10 +13,7 @@ import org.springframework.web.servlet.HandlerInterceptor;
 
 import java.util.Set;
 import java.util.stream.Collectors;
-/**
- * SRP: Intercepts HTTP requests and enforces Dynamic Role & Permission-Based Access Control
- * evaluated dynamically against database-loaded user authorities.
- */
+
 @Component
 public class RoleAccessInterceptor implements HandlerInterceptor {
 
@@ -29,7 +26,7 @@ public class RoleAccessInterceptor implements HandlerInterceptor {
 
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         if (auth == null || !auth.isAuthenticated() || "anonymousUser".equals(auth.getPrincipal())) {
-            return true; // Unauthenticated requests are handled by Spring Security filter chain
+            return true;
         }
 
         String uri = request.getRequestURI();
@@ -41,12 +38,10 @@ public class RoleAccessInterceptor implements HandlerInterceptor {
 
         logger.info("[DYNAMIC-RBAC-INTERCEPTOR] User='{}' Authorities={} Method={} URI={}", username, authorities, method, uri);
 
-        // ROLE_ADMIN override
         if (authorities.contains("ROLE_ADMIN")) {
             return true;
         }
 
-        // 1. Admin / System Management paths (/admin/**, /users/**, /roles/**, /permissions/**)
         if (uri.startsWith("/admin") || uri.startsWith("/users") || uri.startsWith("/roles") || uri.startsWith("/permissions")) {
             if (!authorities.contains("MANAGE_USERS")) {
                 return denyAccess(response, username, method, uri, "Requires MANAGE_USERS permission");
@@ -54,20 +49,19 @@ public class RoleAccessInterceptor implements HandlerInterceptor {
             return true;
         }
 
-        // 2. Delete actions (/delete or HTTP DELETE)
         if (uri.contains("/delete") || "DELETE".equals(method)) {
             if (!authorities.contains("DELETE")) {
                 return denyAccess(response, username, method, uri, "Requires DELETE permission");
             }
         }
-        // 3. Write actions (/new, /edit, /save or HTTP POST/PUT/PATCH)
+
         else if (uri.contains("/new") || uri.contains("/edit") || uri.contains("/save")
                 || "POST".equals(method) || "PUT".equals(method) || "PATCH".equals(method)) {
             if (!authorities.contains("WRITE")) {
                 return denyAccess(response, username, method, uri, "Requires WRITE permission");
             }
         }
-        // 4. Read actions (GET requests)
+
         else {
             if (!authorities.contains("READ")) {
                 return denyAccess(response, username, method, uri, "Requires READ permission");

@@ -9,9 +9,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-/**
- * DIP: Depends on EnrollmentService, StudentService, and CourseService abstractions.
- */
 @Controller
 @RequestMapping("/enrollments")
 public class EnrollmentController {
@@ -28,14 +25,12 @@ public class EnrollmentController {
         this.courseService = courseService;
     }
 
-    // 1. Show all enrollments
     @GetMapping
     public String listEnrollments(Model model) {
         model.addAttribute("enrollments", enrollmentService.findAll());
         return "enrollments/list";
     }
 
-    // 2. Show the form to enroll a student
     @GetMapping("/new")
     public String showCreateForm(Model model) {
         model.addAttribute("enrollment", new Enrollment());
@@ -44,7 +39,6 @@ public class EnrollmentController {
         return "enrollments/form";
     }
 
-    // 3. Show the form to edit an existing enrollment
     @GetMapping("/edit")
     public String showEditForm(
             @RequestParam("studentId") Integer studentId,
@@ -61,7 +55,6 @@ public class EnrollmentController {
         return "enrollments/form";
     }
 
-    // 4. Save the enrollment
     @PostMapping("/save")
     public String saveEnrollment(@ModelAttribute("enrollment") Enrollment enrollment) {
         if (enrollment.getId() == null) {
@@ -78,7 +71,6 @@ public class EnrollmentController {
         return "redirect:/enrollments";
     }
 
-    // 5. Delete an enrollment (Drop Course)
     @GetMapping("/delete")
     public String dropCourse(
             @RequestParam("studentId") Integer studentId,

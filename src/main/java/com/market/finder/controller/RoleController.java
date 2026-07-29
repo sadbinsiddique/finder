@@ -7,9 +7,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-/**
- * DIP: Depends on RoleService and PermissionService abstractions.
- */
 @Controller
 @RequestMapping("/roles")
 public class RoleController {
@@ -22,14 +19,12 @@ public class RoleController {
         this.permissionService = permissionService;
     }
 
-    // 1. Show all roles
     @GetMapping
     public String listRoles(Model model) {
         model.addAttribute("roles", roleService.findAll());
         return "roles/list";
     }
 
-    // 2. Show the form to create a new role
     @GetMapping("/new")
     public String showCreateForm(Model model) {
         model.addAttribute("role", new Role());
@@ -37,7 +32,6 @@ public class RoleController {
         return "roles/form";
     }
 
-    // 3. Show the form to edit an existing role
     @GetMapping("/edit/{id}")
     public String showEditForm(@PathVariable Integer id, Model model) {
         Role role = roleService.findById(id)
@@ -47,7 +41,6 @@ public class RoleController {
         return "roles/form";
     }
 
-    // 4. Save the role (Handles both Create and Update)
     @PostMapping("/save")
     public String saveRole(@ModelAttribute("role") Role role,
                            @RequestParam(value = "permissionIds", required = false) java.util.List<Integer> permissionIds) {
@@ -62,8 +55,6 @@ public class RoleController {
         return "redirect:/roles";
     }
 
-
-    // 5. Delete a role
     @GetMapping("/delete/{id}")
     public String deleteRole(@PathVariable Integer id, org.springframework.web.servlet.mvc.support.RedirectAttributes redirectAttributes) {
         Role role = roleService.findById(id).orElse(null);

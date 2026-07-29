@@ -7,9 +7,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-/**
- * DIP: Depends on StudentService and DepartmentService abstractions.
- */
 @Controller
 @RequestMapping("/students")
 public class StudentController {

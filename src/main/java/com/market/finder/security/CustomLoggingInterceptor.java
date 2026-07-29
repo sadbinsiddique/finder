@@ -20,7 +20,6 @@ public class CustomLoggingInterceptor implements HandlerInterceptor {
     public boolean preHandle(HttpServletRequest request, @NonNull HttpServletResponse response, @NonNull Object handler) throws Exception {
         request.setAttribute("startTime", System.currentTimeMillis());
 
-        // Log with authentication context
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         String username = (auth != null && auth.isAuthenticated()
                 && !"anonymousUser".equals(auth.getPrincipal()))
@@ -34,7 +33,6 @@ public class CustomLoggingInterceptor implements HandlerInterceptor {
 
     @Override
     public void postHandle(@NonNull HttpServletRequest request, @NonNull HttpServletResponse response, @NonNull Object handler, ModelAndView modelAndView) throws Exception {
-        // Optional: Add logic after controller executes
     }
 
     @Override

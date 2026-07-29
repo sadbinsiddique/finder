@@ -8,9 +8,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-/**
- * DIP: Depends on EmployeeService abstraction.
- */
 @Controller
 @RequestMapping("/employees")
 public class EmployeeController {
