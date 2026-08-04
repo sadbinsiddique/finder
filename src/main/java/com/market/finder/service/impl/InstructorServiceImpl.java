@@ -1,6 +1,6 @@
 package com.market.finder.service.impl;
 
-import com.market.finder.dao.InstructorRepository;
+import com.market.finder.dto.InstructorRepository;
 import com.market.finder.entity.Instructor;
 import com.market.finder.service.InstructorService;
 import com.market.finder.service.base.BaseServiceImpl;

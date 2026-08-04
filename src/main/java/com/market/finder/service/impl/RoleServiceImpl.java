@@ -1,6 +1,6 @@
 package com.market.finder.service.impl;
 
-import com.market.finder.dao.RoleRepository;
+import com.market.finder.dto.RoleRepository;
 import com.market.finder.entity.Permission;
 import com.market.finder.entity.Role;
 import com.market.finder.service.RoleService;

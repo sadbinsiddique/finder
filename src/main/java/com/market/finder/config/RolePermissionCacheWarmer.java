@@ -23,9 +23,13 @@ public class RolePermissionCacheWarmer {
     @EventListener(ApplicationReadyEvent.class)
     public void warmRolePermissionCache() {
         logger.info("[CACHE WARMUP] Pre-loading Role and Permission caches at application startup...");
-        permissionService.findAll();
-        roleService.findAll();
-        roleService.getRolePermissionsMap();
-        logger.info("[CACHE WARMUP] Role and Permission caches successfully pre-loaded into memory.");
+        try {
+            permissionService.findAll();
+            roleService.findAll();
+            roleService.getRolePermissionsMap();
+            logger.info("[CACHE WARMUP] Role and Permission caches successfully pre-loaded into memory.");
+        } catch (Exception e) {
+            logger.error("[CACHE WARMUP] Error during cache warmup: {}", e.getMessage(), e);
+        }
     }
 }

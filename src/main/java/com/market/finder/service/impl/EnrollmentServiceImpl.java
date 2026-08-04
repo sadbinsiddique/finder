@@ -1,6 +1,6 @@
 package com.market.finder.service.impl;
 
-import com.market.finder.dao.EnrollmentRepository;
+import com.market.finder.dto.EnrollmentRepository;
 import com.market.finder.entity.Enrollment;
 import com.market.finder.entity.EnrollmentId;
 import com.market.finder.service.EnrollmentService;

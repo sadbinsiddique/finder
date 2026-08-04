@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cache Management - Admin Panel</title>
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'><path fill='%23ff9f0a' d='M512 256C512 397.4 397.4 512 256 512C114.6 512 0 397.4 0 256C0 114.6 114.6 0 256 0C397.4 0 512 114.6 512 256z'/></svg>">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #07090e;
+            --glass-bg: rgba(255, 255, 255, 0.03);
+            --glass-bg-hover: rgba(255, 255, 255, 0.06);
+            --glass-border: rgba(255, 255, 255, 0.08);
+            --glass-border-hover: rgba(255, 255, 255, 0.18);
+            --glass-inner-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.1);
+            --apple-blue: #0a84ff;
+            --apple-purple: #5e5ce6;
+            --apple-cyan: #64d2ff;
+            --apple-green: #30d158;
+            --apple-orange: #ff9f0a;
+            --apple-red: #ff453a;
+            --text-primary: #f5f5f7;
+            --text-secondary: rgba(245, 245, 247, 0.55);
+        }
+
+        body {
+            background-color: var(--bg-color);
+            background-image: 
+                radial-gradient(circle at 80% 20%, rgba(255, 159, 10, 0.08) 0%, transparent 45%),
+                radial-gradient(circle at 20% 80%, rgba(10, 132, 255, 0.06) 0%, transparent 45%);
+            background-attachment: fixed;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            color: var(--text-primary);
+            min-height: 100vh;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        .glass-navbar {
+            background: rgba(7, 9, 14, 0.75);
+            backdrop-filter: blur(25px) saturate(180%);
+            -webkit-backdrop-filter: blur(25px) saturate(180%);
+            border-bottom: 1px solid var(--glass-border);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .btn-apple-glass {
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            box-shadow: var(--glass-inner-shadow);
+            color: var(--text-primary);
+            border-radius: 10px;
+            padding: 6px 14px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            transition: all 0.25s ease;
+            text-decoration: none;
+        }
+
+        .btn-apple-glass:hover {
+            background: rgba(255, 255, 255, 0.12);
+            border-color: rgba(255, 255, 255, 0.25);
+            color: #fff;
+        }
+
+        .liquid-glass-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(25px) saturate(180%);
+            -webkit-backdrop-filter: blur(25px) saturate(180%);
+            border: 1px solid var(--glass-border);
+            box-shadow: 0 16px 40px rgba(0, 0, 0, 0.35), var(--glass-inner-shadow);
+            border-radius: 20px;
+            padding: 1.5rem;
+            height: 100%;
+            transition: all 0.3s ease;
+            color: var(--text-primary);
+        }
+
+        .stat-value {
+            font-size: 2.25rem;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+            color: #fff;
+        }
+
+        .glass-table {
+            color: var(--text-primary);
+            vertical-align: middle;
+        }
+
+        .glass-table th {
+            background: rgba(255, 255, 255, 0.05);
+            color: var(--text-secondary);
+            font-weight: 600;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            border-bottom: 1px solid var(--glass-border);
+            padding: 1rem;
+        }
+
+        .glass-table td {
+            background: transparent;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            padding: 1rem;
+            color: var(--text-primary);
+        }
+
+        .glass-badge {
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            color: var(--text-primary);
+            font-size: 0.75rem;
+            padding: 4px 8px;
+            border-radius: 6px;
+            font-family: monospace;
+        }
+
+        .glass-modal {
+            background: rgba(14, 18, 26, 0.95);
+            backdrop-filter: blur(25px);
+            border: 1px solid var(--glass-border-hover);
+            color: var(--text-primary);
+            border-radius: 20px;
+        }
+
+        .form-control-glass {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--glass-border);
+            color: #fff;
+            border-radius: 10px;
+        }
+
+        .form-control-glass:focus {
+            background: rgba(255, 255, 255, 0.08);
+            border-color: var(--apple-blue);
+            color: #fff;
+            box-shadow: none;
+        }
+    </style>
+</head>
+<body>
+
+<nav class="navbar navbar-expand-lg glass-navbar py-3 mb-4">
+    <div class="container">
+        <a class="navbar-brand text-white fw-bold d-flex align-items-center gap-2" href="/admin/dashboard">
+            <i class="fas fa-memory text-warning fs-4 me-1"></i>
+            <span>Cache Manager</span>
+        </a>
+        <div class="ms-auto d-flex align-items-center gap-2">
+            <a th:href="@{/admin/dashboard}" class="btn btn-apple-glass">
+                <i class="fas fa-sliders-h me-1"></i> Admin Dashboard
+            </a>
+            <a th:href="@{/}" class="btn btn-apple-glass">
+                <i class="fas fa-home me-1"></i> Main Portal
+            </a>
+            <form th:action="@{/logout}" method="post" class="d-inline ms-2">
+                <button type="submit" class="btn btn-apple-glass text-danger">
+                    <i class="fas fa-power-off me-1"></i> Logout
+                </button>
+            </form>
+        </div>
+    </div>
+</nav>
+
+<div class="container pb-5">
+
+    <!-- Flash Notifications -->
+    <div th:if="${successMessage}" class="alert alert-success alert-dismissible fade show border-0 shadow-lg text-white mb-4" style="background: rgba(48, 209, 88, 0.2); border-left: 4px solid var(--apple-green) !important;" role="alert">
+        <i class="fas fa-check-circle me-2"></i> <span th:text="${successMessage}">Operation completed successfully.</span>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="alert"></button>
+    </div>
+
+    <div th:if="${errorMessage}" class="alert alert-danger alert-dismissible fade show border-0 shadow-lg text-white mb-4" style="background: rgba(255, 69, 58, 0.2); border-left: 4px solid var(--apple-red) !important;" role="alert">
+        <i class="fas fa-exclamation-triangle me-2"></i> <span th:text="${errorMessage}">An error occurred.</span>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="alert"></button>
+    </div>
+
+    <!-- Header Section -->
+    <div class="d-flex flex-column flex-md-row align-items-md-center justify-content-between mb-4 gap-3">
+        <div>
+            <h1 class="h2 fw-bold text-white mb-1">
+                <i class="fas fa-database text-warning me-2"></i>Dedicated Cache Control Panel
+            </h1>
+            <p class="text-secondary mb-0">Manage, flush, backup, restore, and warm Spring in-memory caches.</p>
+        </div>
+        <div class="d-flex flex-wrap gap-2">
+            <form th:action="@{/admin/cache/flush-all}" method="post" class="d-inline" onsubmit="return confirm('Are you sure you want to FLUSH ALL CACHES?');">
+                <button type="submit" class="btn btn-danger px-3 py-2 rounded-3 shadow-sm">
+                    <i class="fas fa-trash-alt me-1"></i> Flush All Caches
+                </button>
+            </form>
+
+            <form th:action="@{/admin/cache/warmup}" method="post" class="d-inline">
+                <button type="submit" class="btn btn-warning px-3 py-2 rounded-3 text-dark fw-medium shadow-sm">
+                    <i class="fas fa-fire me-1"></i> Warmup Caches
+                </button>
+            </form>
+
+            <a th:href="@{/admin/cache/export}" class="btn btn-success px-3 py-2 rounded-3 shadow-sm text-white">
+                <i class="fas fa-download me-1"></i> Export Backup (JSON)
+            </a>
+
+            <button type="button" class="btn btn-info px-3 py-2 rounded-3 text-white shadow-sm" data-bs-toggle="modal" data-bs-target="#importModal">
+                <i class="fas fa-upload me-1"></i> Import Restore
+            </button>
+        </div>
+    </div>
+
+    <!-- Stats Overview Cards -->
+    <div class="row g-4 mb-4">
+        <div class="col-md-3">
+            <div class="liquid-glass-card">
+                <div class="text-secondary small mb-1">REGISTERED CACHES</div>
+                <div class="stat-value text-warning" th:text="${totalCaches}">0</div>
+                <div class="small text-secondary mt-2"><i class="fas fa-server me-1" style="color: var(--apple-orange);"></i> ConcurrentMap Caches</div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="liquid-glass-card">
+                <div class="text-secondary small mb-1">CACHED ENTRIES</div>
+                <div class="stat-value text-info" th:text="${totalKeys}">0</div>
+                <div class="small text-secondary mt-2"><i class="fas fa-key me-1" style="color: var(--apple-cyan);"></i> Active memory keys</div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="liquid-glass-card">
+                <div class="text-secondary small mb-1">AUTO PRE-WARMER</div>
+                <div class="stat-value text-success">Enabled</div>
+                <div class="small text-secondary mt-2"><i class="fas fa-bolt me-1" style="color: var(--apple-green);"></i> Runs at boot & manually</div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="liquid-glass-card">
+                <div class="text-secondary small mb-1">LAST CHECK TIME</div>
+                <div class="fs-5 fw-semibold text-white mt-2" th:text="${currentTime}">2026-07-30</div>
+                <div class="small text-secondary mt-3"><i class="fas fa-clock me-1" style="color: var(--apple-purple);"></i> System server time</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Active Caches Table Card -->
+    <div class="liquid-glass-card p-4">
+        <div class="d-flex align-items-center justify-content-between mb-4">
+            <h4 class="fw-bold mb-0 text-white"><i class="fas fa-list-ul text-primary me-2"></i>Active Cache Stores</h4>
+            <span class="badge bg-secondary rounded-pill px-3 py-2" th:text="|${totalCaches} Stores Active|">0 Stores</span>
+        </div>
+
+        <div class="table-responsive">
+            <table class="table glass-table align-middle">
+                <thead>
+                    <tr>
+                        <th>Cache Name</th>
+                        <th>Storage Implementation</th>
+                        <th>Cached Keys Count</th>
+                        <th>Key Samples</th>
+                        <th class="text-end">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="cache : ${caches}">
+                        <td>
+                            <span class="fw-bold text-white fs-6" th:text="${cache.name}">cache_name</span>
+                        </td>
+                        <td>
+                            <span class="badge bg-dark border border-secondary text-secondary font-monospace" th:text="${cache.nativeStoreType}">ConcurrentHashMap</span>
+                        </td>
+                        <td>
+                            <span class="badge rounded-pill bg-warning text-dark fs-6" th:text="${cache.keyCount}">0</span>
+                        </td>
+                        <td>
+                            <div class="d-flex flex-wrap gap-1" th:if="${cache.keys != null and !cache.keys.isEmpty()}">
+                                <span class="glass-badge" th:each="k : ${cache.keys}" th:text="${k}">key</span>
+                            </div>
+                            <span class="text-muted italic small" th:if="${cache.keys == null or cache.keys.isEmpty()}">No active keys</span>
+                        </td>
+                        <td class="text-end">
+                            <div class="d-inline-flex gap-2">
+                                <form th:action="@{/admin/cache/flush}" method="post" class="d-inline" onsubmit="return confirm('Flush this specific cache?');">
+                                    <input type="hidden" name="cacheName" th:value="${cache.name}">
+                                    <button type="submit" class="btn btn-sm btn-outline-danger rounded-2">
+                                        <i class="fas fa-broom me-1"></i> Flush Cache
+                                    </button>
+                                </form>
+                                <button type="button" class="btn btn-sm btn-outline-warning rounded-2"
+                                        th:data-cache-name="${cache.name}"
+                                        onclick="openEvictModal(this.getAttribute('data-cache-name'))">
+                                    <i class="fas fa-eraser me-1"></i> Evict Key
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr th:if="${caches.isEmpty()}">
+                        <td colspan="5" class="text-center py-4 text-secondary">
+                            No caches currently initialized in memory. Click <strong>Warmup Caches</strong> to populate initial stores.
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- Import Cache Restore Modal -->
+<div class="modal fade" id="importModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content glass-modal shadow-lg">
+            <div class="modal-header border-bottom border-secondary">
+                <h5 class="modal-title fw-bold text-white"><i class="fas fa-upload text-info me-2"></i>Import & Restore Cache Snapshot</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <form th:action="@{/admin/cache/import}" method="post" enctype="multipart/form-data">
+                <div class="modal-body p-4">
+                    <p class="text-secondary small mb-3">Upload a previously exported <code>finder-cache-backup-*.json</code> file or paste JSON payload to restore cache data into Spring CacheManager.</p>
+                    
+                    <div class="mb-4">
+                        <label class="form-label text-white fw-medium">Upload JSON Backup File</label>
+                        <input type="file" name="file" class="form-control form-control-glass" accept=".json">
+                    </div>
+
+                    <div class="text-center text-secondary my-2">— OR PASTE RAW JSON —</div>
+
+                    <div class="mb-3">
+                        <label class="form-label text-white fw-medium">Paste Backup JSON Content</label>
+                        <textarea name="jsonText" rows="6" class="form-control form-control-glass font-monospace small" placeholder='{"caches": {"roles": {"all": [...]}}}'></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer border-top border-secondary">
+                    <button type="button" class="btn btn-apple-glass" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-info text-white fw-medium px-4">
+                        <i class="fas fa-check-circle me-1"></i> Restore Cache Data
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Evict Key Modal -->
+<div class="modal fade" id="evictModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content glass-modal shadow-lg">
+            <div class="modal-header border-bottom border-secondary">
+                <h5 class="modal-title fw-bold text-white"><i class="fas fa-eraser text-warning me-2"></i>Evict Specific Cache Key</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <form th:action="@{/admin/cache/evict-key}" method="post">
+                <div class="modal-body p-4">
+                    <div class="mb-3">
+                        <label class="form-label text-white fw-medium">Target Cache Name</label>
+                        <input type="text" id="evictCacheName" name="cacheName" class="form-control form-control-glass" required readonly>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label text-white fw-medium">Key to Evict</label>
+                        <input type="text" name="key" class="form-control form-control-glass" placeholder="e.g. all or role_permissions_map" required>
+                    </div>
+                </div>
+                <div class="modal-footer border-top border-secondary">
+                    <button type="button" class="btn btn-apple-glass" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-warning text-dark fw-medium px-4">
+                        <i class="fas fa-trash me-1"></i> Evict Key
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    function openEvictModal(cacheName) {
+        document.getElementById('evictCacheName').value = cacheName;
+        const modal = new bootstrap.Modal(document.getElementById('evictModal'));
+        modal.show();
+    }
+</script>
+</body>
+</html>

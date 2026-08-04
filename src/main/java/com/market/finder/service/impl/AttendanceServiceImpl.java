@@ -1,6 +1,6 @@
 package com.market.finder.service.impl;
 
-import com.market.finder.dao.AttendanceRepository;
+import com.market.finder.dto.AttendanceRepository;
 import com.market.finder.entity.Attendance;
 import com.market.finder.entity.AttendanceId;
 import com.market.finder.service.AttendanceService;

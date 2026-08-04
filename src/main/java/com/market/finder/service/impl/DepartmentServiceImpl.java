@@ -1,6 +1,6 @@
 package com.market.finder.service.impl;
 
-import com.market.finder.dao.DepartmentRepository;
+import com.market.finder.dto.DepartmentRepository;
 import com.market.finder.entity.Department;
 import com.market.finder.service.DepartmentService;
 import com.market.finder.service.base.BaseServiceImpl;

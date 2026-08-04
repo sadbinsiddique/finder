@@ -1,6 +1,6 @@
 package com.market.finder.service.impl;
 
-import com.market.finder.dao.UserRepository;
+import com.market.finder.dto.UserRepository;
 import com.market.finder.entity.Role;
 import com.market.finder.entity.User;
 import com.market.finder.service.RoleService;

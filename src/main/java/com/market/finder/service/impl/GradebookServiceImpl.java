@@ -1,6 +1,6 @@
 package com.market.finder.service.impl;
 
-import com.market.finder.dao.GradebookRepository;
+import com.market.finder.dto.GradebookRepository;
 import com.market.finder.entity.Gradebook;
 import com.market.finder.entity.GradebookId;
 import com.market.finder.service.GradebookService;

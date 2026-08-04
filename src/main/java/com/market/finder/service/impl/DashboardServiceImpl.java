@@ -1,11 +1,11 @@
 package com.market.finder.service.impl;
 
-import com.market.finder.dao.CourseRepository;
-import com.market.finder.dao.DepartmentRepository;
-import com.market.finder.dao.InstructorRepository;
-import com.market.finder.dao.RoleRepository;
-import com.market.finder.dao.StudentRepository;
-import com.market.finder.dao.UserRepository;
+import com.market.finder.dto.CourseRepository;
+import com.market.finder.dto.DepartmentRepository;
+import com.market.finder.dto.InstructorRepository;
+import com.market.finder.dto.RoleRepository;
+import com.market.finder.dto.StudentRepository;
+import com.market.finder.dto.UserRepository;
 import com.market.finder.service.DashboardService;
 import org.springframework.stereotype.Service;
 

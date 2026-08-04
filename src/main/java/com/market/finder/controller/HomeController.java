@@ -1,5 +1,7 @@
 package com.market.finder.controller;
 
+import com.market.finder.dto.WeatherDto;
+import com.market.finder.service.WetherService;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
@@ -11,6 +13,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("/")
 public class HomeController {
 
+    private final WetherService wetherService;
+
+    public HomeController(WetherService wetherService) {
+        this.wetherService = wetherService;
+    }
+
     @GetMapping
     public String showHome(Model model) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
@@ -18,6 +26,14 @@ public class HomeController {
                 && !"anonymousUser".equals(auth.getPrincipal())) {
             model.addAttribute("username", auth.getName());
         }
+
+        boolean enabled = wetherService.isEnabled();
+        model.addAttribute("weatherEnabled", enabled);
+        if (enabled) {
+            WeatherDto weather = wetherService.getDefaultWeatherData();
+            model.addAttribute("weather", weather);
+        }
+
         return "index";
     }
 }

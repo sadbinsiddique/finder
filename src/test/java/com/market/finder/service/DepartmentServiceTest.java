@@ -1,6 +1,6 @@
 package com.market.finder.service;
 
-import com.market.finder.dao.DepartmentRepository;
+import com.market.finder.dto.DepartmentRepository;
 import com.market.finder.service.impl.DepartmentServiceImpl;
 import com.market.finder.entity.Department;
 import org.junit.jupiter.api.BeforeEach;
