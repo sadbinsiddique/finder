@@ -1,7 +1,7 @@
 package com.market.finder.controller;
 
 import com.market.finder.entity.Instructor;
-import com.market.finder.service.InstructorService;
+import com.market.finder.service.instructor.InstructorService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;

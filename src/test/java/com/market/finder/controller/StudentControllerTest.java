@@ -1,8 +1,8 @@
 package com.market.finder.controller;
 
 import com.market.finder.entity.Student;
-import com.market.finder.service.DepartmentService;
-import com.market.finder.service.StudentService;
+import com.market.finder.service.department.DepartmentService;
+import com.market.finder.service.student.StudentService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

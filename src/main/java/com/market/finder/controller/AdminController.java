@@ -1,9 +1,9 @@
 package com.market.finder.controller;
 
-import com.market.finder.dto.WeatherDto;
-import com.market.finder.service.DashboardService;
-import com.market.finder.service.PermissionService;
-import com.market.finder.service.WetherService;
+import com.market.finder.entity.WeatherDto;
+import com.market.finder.service.dashboard.DashboardService;
+import com.market.finder.service.permission.PermissionService;
+import com.market.finder.service.weather.WetherService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;

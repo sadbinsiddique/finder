@@ -1,7 +1,7 @@
 package com.market.finder.controller;
 
-import com.market.finder.dto.WeatherDto;
-import com.market.finder.service.WetherService;
+import com.market.finder.entity.WeatherDto;
+import com.market.finder.service.weather.WetherService;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;

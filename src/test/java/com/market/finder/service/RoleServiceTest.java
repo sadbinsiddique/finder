@@ -1,9 +1,10 @@
 package com.market.finder.service;
 
 import com.market.finder.config.CacheConfig;
-import com.market.finder.service.impl.RoleServiceImpl;
-import com.market.finder.dto.RoleRepository;
 import com.market.finder.entity.Role;
+import com.market.finder.repository.RoleRepository;
+import com.market.finder.service.role.RoleService;
+import com.market.finder.service.role.RoleServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -153,5 +154,23 @@ class RoleServiceTest {
         // Subsequent call should hit repository again
         roleService.findById(1);
         verify(roleRepository, times(2)).findById(1);
+    }
+
+    @Test
+    void testGetRolePermissionsMap_CachingBehavior() {
+        Role adminRole = new Role();
+        adminRole.setId(1);
+        adminRole.setRoleName("ROLE_ADMIN");
+
+        when(roleRepository.findAll()).thenReturn(List.of(adminRole));
+
+        var map1 = roleService.getRolePermissionsMap();
+        assertNotNull(map1);
+        assertTrue(map1.containsKey("ROLE_ADMIN"));
+
+        var map2 = roleService.getRolePermissionsMap();
+        assertNotNull(map2);
+
+        verify(roleRepository, times(1)).findAll();
     }
 }

@@ -1,9 +1,10 @@
 package com.market.finder.service;
 
-import com.market.finder.dto.UserRepository;
-import com.market.finder.service.impl.UserServiceImpl;
 import com.market.finder.entity.Role;
 import com.market.finder.entity.User;
+import com.market.finder.repository.UserRepository;
+import com.market.finder.service.role.RoleService;
+import com.market.finder.service.user.UserServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

@@ -1,8 +1,8 @@
 package com.market.finder.service;
 
-import com.market.finder.dto.CourseRepository;
-import com.market.finder.service.impl.CourseServiceImpl;
 import com.market.finder.entity.Course;
+import com.market.finder.repository.CourseRepository;
+import com.market.finder.service.course.CourseServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -58,13 +58,13 @@ class CourseServiceTest {
 
     @Test
     void testSaveCourse() {
-        when(courseRepository.save(sampleCourse)).thenReturn(sampleCourse);
+        when(courseRepository.saveAndFlush(sampleCourse)).thenReturn(sampleCourse);
 
         Course saved = courseService.save(sampleCourse);
 
         assertNotNull(saved);
         assertEquals("Computer Science 101", saved.getTitle());
-        verify(courseRepository, times(1)).save(sampleCourse);
+        verify(courseRepository, times(1)).saveAndFlush(sampleCourse);
     }
 
     @Test
@@ -74,5 +74,6 @@ class CourseServiceTest {
         courseService.deleteById(101);
 
         verify(courseRepository, times(1)).deleteById(101);
+        verify(courseRepository, times(1)).flush();
     }
 }
