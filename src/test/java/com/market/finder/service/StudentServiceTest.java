@@ -43,7 +43,7 @@ class StudentServiceTest {
         List<Student> students = studentService.findAll();
 
         assertEquals(1, students.size());
-        assertEquals("Alice", students.getFirst().getFirstName());
+        assertEquals("Alice", students.get(0).getFirstName());
         verify(studentRepository, times(1)).findAll();
     }
 

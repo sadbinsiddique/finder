@@ -44,7 +44,7 @@ class StaffServiceTest {
         List<Staff> list = staffService.findAll();
 
         assertEquals(1, list.size());
-        assertEquals("Sarah", list.getFirst().getFirstName());
+        assertEquals("Sarah", list.get(0).getFirstName());
         verify(staffRepository, times(1)).findAll();
     }
 
@@ -55,7 +55,7 @@ class StaffServiceTest {
         List<Staff> list = staffService.findAllByOrderByAgeAsc();
 
         assertEquals(1, list.size());
-        assertEquals(30, list.getFirst().getAge());
+        assertEquals(30, list.get(0).getAge());
         verify(staffRepository, times(1)).findAllByOrderByAgeAsc();
     }
 
@@ -66,7 +66,7 @@ class StaffServiceTest {
         List<Staff> list = staffService.findAllByOrderByIncomeAsc();
 
         assertEquals(1, list.size());
-        assertEquals(50000, list.getFirst().getIncome());
+        assertEquals(50000, list.get(0).getIncome());
         verify(staffRepository, times(1)).findAllByOrderByIncomeAsc();
     }
 
