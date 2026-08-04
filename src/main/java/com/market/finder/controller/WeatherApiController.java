@@ -3,7 +3,6 @@ package com.market.finder.controller;
 import com.market.finder.dto.WeatherDto;
 import com.market.finder.service.WetherService;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/weather")
@@ -39,7 +38,6 @@ public class WeatherApiController {
         return ResponseEntity.ok(java.util.Collections.singletonMap("enabled", wetherService.isEnabled()));
     }
 
-    @PostMapping("/toggle")
     public ResponseEntity<java.util.Map<String, Boolean>> toggleWeather(@RequestParam(name = "enabled") boolean enabled) {
         wetherService.setEnabled(enabled);
         return ResponseEntity.ok(java.util.Collections.singletonMap("enabled", wetherService.isEnabled()));
