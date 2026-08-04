@@ -28,7 +28,7 @@
     </scm>
 
     <properties>
-        <java.version>26</java.version>
+        <java.version>17</java.version>
         <!-- Centralized the Lombok version property -->
         <lombok.version>1.18.38</lombok.version>
     </properties>
