@@ -1,8 +1,8 @@
 package com.market.finder.controller;
 
 import com.market.finder.entity.User;
-import com.market.finder.service.RoleService;
-import com.market.finder.service.UserService;
+import com.market.finder.service.role.RoleService;
+import com.market.finder.service.user.UserService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -95,8 +95,9 @@ class AdminUserControllerTest {
     @Test
     void testDeleteUser() {
         doNothing().when(userService).deleteByUsername("testadmin");
+        org.springframework.web.servlet.mvc.support.RedirectAttributes redirectAttributes = new org.springframework.web.servlet.mvc.support.RedirectAttributesModelMap();
 
-        String view = adminUserController.deleteUser("testadmin");
+        String view = adminUserController.deleteUser("testadmin", redirectAttributes);
 
         assertEquals("redirect:/admin/users", view);
         verify(userService, times(1)).deleteByUsername("testadmin");

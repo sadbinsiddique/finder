@@ -1,8 +1,16 @@
 package com.market.finder.controller;
 
-import com.market.finder.dto.WeatherDto;
-import com.market.finder.service.WetherService;
+import com.market.finder.entity.WeatherDto;
+import com.market.finder.service.weather.WetherService;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
+import java.util.Collections;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/weather")
@@ -19,7 +27,7 @@ public class WeatherApiController {
             @RequestParam(name = "city", required = false) String city,
             @RequestParam(name = "lat", required = false) Double lat,
             @RequestParam(name = "lon", required = false) Double lon) {
-        
+
         if (!wetherService.isEnabled()) {
             return ResponseEntity.ok(WeatherDto.error("Weather service is disabled"));
         }
@@ -34,12 +42,13 @@ public class WeatherApiController {
     }
 
     @GetMapping("/status")
-    public ResponseEntity<java.util.Map<String, Boolean>> getStatus() {
-        return ResponseEntity.ok(java.util.Collections.singletonMap("enabled", wetherService.isEnabled()));
+    public ResponseEntity<Map<String, Boolean>> getStatus() {
+        return ResponseEntity.ok(Collections.singletonMap("enabled", wetherService.isEnabled()));
     }
 
-    public ResponseEntity<java.util.Map<String, Boolean>> toggleWeather(@RequestParam(name = "enabled") boolean enabled) {
+    @PostMapping("/toggle")
+    public ResponseEntity<Map<String, Boolean>> toggleWeather(@RequestParam(name = "enabled") boolean enabled) {
         wetherService.setEnabled(enabled);
-        return ResponseEntity.ok(java.util.Collections.singletonMap("enabled", wetherService.isEnabled()));
+        return ResponseEntity.ok(Collections.singletonMap("enabled", wetherService.isEnabled()));
     }
 }

@@ -1,8 +1,8 @@
 package com.market.finder.service;
 
-import com.market.finder.dto.InstructorRepository;
-import com.market.finder.service.impl.InstructorServiceImpl;
 import com.market.finder.entity.Instructor;
+import com.market.finder.repository.InstructorRepository;
+import com.market.finder.service.instructor.InstructorServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -60,13 +60,13 @@ class InstructorServiceTest {
 
     @Test
     void testSaveInstructor() {
-        when(instructorRepository.save(sampleInstructor)).thenReturn(sampleInstructor);
+        when(instructorRepository.saveAndFlush(sampleInstructor)).thenReturn(sampleInstructor);
 
         Instructor saved = instructorService.save(sampleInstructor);
 
         assertNotNull(saved);
         assertEquals("John", saved.getFirstName());
-        verify(instructorRepository, times(1)).save(sampleInstructor);
+        verify(instructorRepository, times(1)).saveAndFlush(sampleInstructor);
     }
 
     @Test
@@ -76,5 +76,6 @@ class InstructorServiceTest {
         instructorService.deleteById(1);
 
         verify(instructorRepository, times(1)).deleteById(1);
+        verify(instructorRepository, times(1)).flush();
     }
 }

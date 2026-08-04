@@ -3,7 +3,7 @@ package com.market.finder.security;
 import com.market.finder.entity.Permission;
 import com.market.finder.entity.Role;
 import com.market.finder.entity.User;
-import com.market.finder.service.UserService;
+import com.market.finder.service.user.UserService;
 import org.jspecify.annotations.NonNull;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;

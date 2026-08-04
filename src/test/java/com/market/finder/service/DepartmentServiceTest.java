@@ -1,8 +1,8 @@
 package com.market.finder.service;
 
-import com.market.finder.dto.DepartmentRepository;
-import com.market.finder.service.impl.DepartmentServiceImpl;
 import com.market.finder.entity.Department;
+import com.market.finder.repository.DepartmentRepository;
+import com.market.finder.service.department.DepartmentServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -58,13 +58,13 @@ class DepartmentServiceTest {
 
     @Test
     void testSaveDepartment() {
-        when(departmentRepository.save(sampleDept)).thenReturn(sampleDept);
+        when(departmentRepository.saveAndFlush(sampleDept)).thenReturn(sampleDept);
 
         Department saved = departmentService.save(sampleDept);
 
         assertNotNull(saved);
         assertEquals("Computer Science", saved.getName());
-        verify(departmentRepository, times(1)).save(sampleDept);
+        verify(departmentRepository, times(1)).saveAndFlush(sampleDept);
     }
 
     @Test
@@ -74,5 +74,6 @@ class DepartmentServiceTest {
         departmentService.deleteById(1);
 
         verify(departmentRepository, times(1)).deleteById(1);
+        verify(departmentRepository, times(1)).flush();
     }
 }

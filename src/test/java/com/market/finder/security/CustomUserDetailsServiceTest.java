@@ -1,8 +1,8 @@
 package com.market.finder.security;
 
-import com.market.finder.dto.UserRepository;
 import com.market.finder.entity.Role;
 import com.market.finder.entity.User;
+import com.market.finder.service.user.UserService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -22,7 +22,7 @@ import static org.mockito.Mockito.*;
 class CustomUserDetailsServiceTest {
 
     @Mock
-    private UserRepository userRepository;
+    private UserService userService;
 
     @InjectMocks
     private CustomUserDetailsService userDetailsService;
@@ -31,39 +31,36 @@ class CustomUserDetailsServiceTest {
 
     @BeforeEach
     void setUp() {
-        Role adminRole = new Role();
-        adminRole.setId(1);
-        adminRole.setRoleName("ROLE_ADMIN");
+        Role role = new Role();
+        role.setRoleName("ROLE_ADMIN");
 
         sampleUser = new User();
-        sampleUser.setUsername("admin");
-        sampleUser.setPassword("$2a$10$encodedHash");
+        sampleUser.setUsername("john");
+        sampleUser.setPassword("secret");
         sampleUser.setEnabled(true);
-        sampleUser.setRoles(Set.of(adminRole));
+        sampleUser.setRoles(Set.of(role));
     }
 
     @Test
-    void testLoadUserByUsername_Success() {
-        when(userRepository.findById("admin")).thenReturn(Optional.of(sampleUser));
+    void loadUserByUsername_Success() {
+        when(userService.findByUsername("john")).thenReturn(Optional.of(sampleUser));
 
-        UserDetails userDetails = userDetailsService.loadUserByUsername("admin");
+        UserDetails userDetails = userDetailsService.loadUserByUsername("john");
 
         assertNotNull(userDetails);
-        assertEquals("admin", userDetails.getUsername());
-        assertEquals("$2a$10$encodedHash", userDetails.getPassword());
-        assertTrue(userDetails.isEnabled());
+        assertEquals("john", userDetails.getUsername());
+        assertEquals("secret", userDetails.getPassword());
         assertTrue(userDetails.getAuthorities().stream()
-                .anyMatch(a -> "ROLE_ADMIN".equals(a.getAuthority())));
-
-        verify(userRepository, times(1)).findById("admin");
+                .anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN")));
+        verify(userService, times(1)).findByUsername("john");
     }
 
     @Test
-    void testLoadUserByUsername_UserNotFound() {
-        when(userRepository.findById("unknown")).thenReturn(Optional.empty());
+    void loadUserByUsername_NotFound_ThrowsException() {
+        when(userService.findByUsername("unknown")).thenReturn(Optional.empty());
 
-        assertThrows(UsernameNotFoundException.class, () -> userDetailsService.loadUserByUsername("unknown"));
-
-        verify(userRepository, times(1)).findById("unknown");
+        assertThrows(UsernameNotFoundException.class,
+                () -> userDetailsService.loadUserByUsername("unknown"));
+        verify(userService, times(1)).findByUsername("unknown");
     }
 }

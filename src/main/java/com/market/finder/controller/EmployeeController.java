@@ -1,7 +1,7 @@
 package com.market.finder.controller;
 
 import com.market.finder.entity.Employee;
-import com.market.finder.service.EmployeeService;
+import com.market.finder.service.employee.EmployeeService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;

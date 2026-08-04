@@ -1,6 +1,6 @@
 package com.market.finder.controller;
 
-import com.market.finder.service.CacheManagementService;
+import com.market.finder.service.cache.CacheManagementService;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;

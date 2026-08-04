@@ -2,9 +2,9 @@ package com.market.finder.controller;
 
 import com.market.finder.entity.Enrollment;
 import com.market.finder.entity.EnrollmentId;
-import com.market.finder.service.CourseService;
-import com.market.finder.service.EnrollmentService;
-import com.market.finder.service.StudentService;
+import com.market.finder.service.course.CourseService;
+import com.market.finder.service.enrollment.EnrollmentService;
+import com.market.finder.service.student.StudentService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;

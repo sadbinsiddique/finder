@@ -1,9 +1,10 @@
 package com.market.finder.service;
 
 import com.market.finder.config.CacheConfig;
-import com.market.finder.service.impl.RoleServiceImpl;
-import com.market.finder.dto.RoleRepository;
 import com.market.finder.entity.Role;
+import com.market.finder.repository.RoleRepository;
+import com.market.finder.service.role.RoleService;
+import com.market.finder.service.role.RoleServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

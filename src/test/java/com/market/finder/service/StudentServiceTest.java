@@ -1,8 +1,8 @@
 package com.market.finder.service;
 
-import com.market.finder.dto.StudentRepository;
-import com.market.finder.service.impl.StudentServiceImpl;
 import com.market.finder.entity.Student;
+import com.market.finder.repository.StudentRepository;
+import com.market.finder.service.student.StudentServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -60,13 +60,13 @@ class StudentServiceTest {
 
     @Test
     void testSaveStudent() {
-        when(studentRepository.save(sampleStudent)).thenReturn(sampleStudent);
+        when(studentRepository.saveAndFlush(sampleStudent)).thenReturn(sampleStudent);
 
         Student saved = studentService.save(sampleStudent);
 
         assertNotNull(saved);
         assertEquals("Alice", saved.getFirstName());
-        verify(studentRepository, times(1)).save(sampleStudent);
+        verify(studentRepository, times(1)).saveAndFlush(sampleStudent);
     }
 
     @Test
@@ -76,5 +76,6 @@ class StudentServiceTest {
         studentService.deleteById(1);
 
         verify(studentRepository, times(1)).deleteById(1);
+        verify(studentRepository, times(1)).flush();
     }
 }

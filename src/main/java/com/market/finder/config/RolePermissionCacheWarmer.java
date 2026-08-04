@@ -1,7 +1,7 @@
 package com.market.finder.config;
 
-import com.market.finder.service.PermissionService;
-import com.market.finder.service.RoleService;
+import com.market.finder.service.permission.PermissionService;
+import com.market.finder.service.role.RoleService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.context.event.ApplicationReadyEvent;

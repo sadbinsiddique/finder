@@ -1,8 +1,8 @@
 package com.market.finder.service;
 
-import com.market.finder.dto.StaffRepository;
-import com.market.finder.service.impl.StaffServiceImpl;
 import com.market.finder.entity.Staff;
+import com.market.finder.repository.StaffRepository;
+import com.market.finder.service.staff.StaffServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -83,13 +83,13 @@ class StaffServiceTest {
 
     @Test
     void testSave() {
-        when(staffRepository.save(sampleStaff)).thenReturn(sampleStaff);
+        when(staffRepository.saveAndFlush(sampleStaff)).thenReturn(sampleStaff);
 
         Staff saved = staffService.save(sampleStaff);
 
         assertNotNull(saved);
         assertEquals("Sarah", saved.getFirstName());
-        verify(staffRepository, times(1)).save(sampleStaff);
+        verify(staffRepository, times(1)).saveAndFlush(sampleStaff);
     }
 
     @Test
@@ -99,5 +99,6 @@ class StaffServiceTest {
         staffService.deleteById(1);
 
         verify(staffRepository, times(1)).deleteById(1);
+        verify(staffRepository, times(1)).flush();
     }
 }

@@ -1,8 +1,8 @@
 package com.market.finder.controller;
 
 import com.market.finder.entity.Role;
-import com.market.finder.service.PermissionService;
-import com.market.finder.service.RoleService;
+import com.market.finder.service.permission.PermissionService;
+import com.market.finder.service.role.RoleService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
