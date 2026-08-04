@@ -1,6 +1,6 @@
 package com.market.finder.service.impl;
 
-import com.market.finder.dao.EmployeeRepository;
+import com.market.finder.dto.EmployeeRepository;
 import com.market.finder.entity.Employee;
 import com.market.finder.service.EmployeeService;
 import com.market.finder.service.base.BaseServiceImpl;

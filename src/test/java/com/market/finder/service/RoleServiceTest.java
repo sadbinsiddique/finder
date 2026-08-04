@@ -2,7 +2,7 @@ package com.market.finder.service;
 
 import com.market.finder.config.CacheConfig;
 import com.market.finder.service.impl.RoleServiceImpl;
-import com.market.finder.dao.RoleRepository;
+import com.market.finder.dto.RoleRepository;
 import com.market.finder.entity.Role;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

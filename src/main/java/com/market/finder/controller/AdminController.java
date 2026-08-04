@@ -1,7 +1,9 @@
 package com.market.finder.controller;
 
+import com.market.finder.dto.WeatherDto;
 import com.market.finder.service.DashboardService;
 import com.market.finder.service.PermissionService;
+import com.market.finder.service.WetherService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,10 +17,12 @@ public class AdminController {
 
     private final DashboardService dashboardService;
     private final PermissionService permissionService;
+    private final WetherService wetherService;
 
-    public AdminController(DashboardService dashboardService, PermissionService permissionService) {
+    public AdminController(DashboardService dashboardService, PermissionService permissionService, WetherService wetherService) {
         this.dashboardService = dashboardService;
         this.permissionService = permissionService;
+        this.wetherService = wetherService;
     }
 
     @GetMapping
@@ -28,6 +32,14 @@ public class AdminController {
         model.addAttribute("userCount", stats.getOrDefault("totalUsers", 0L));
         model.addAttribute("roleCount", stats.getOrDefault("totalRoles", 0L));
         model.addAttribute("studentCount", stats.getOrDefault("totalStudents", 0L));
+        
+        boolean enabled = wetherService.isEnabled();
+        model.addAttribute("weatherEnabled", enabled);
+        if (enabled) {
+            WeatherDto weather = wetherService.getDefaultWeatherData();
+            model.addAttribute("weather", weather);
+        }
+
         return "admin/dashboard";
     }
 

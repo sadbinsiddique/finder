@@ -1,6 +1,6 @@
 package com.market.finder.security;
 
-import com.market.finder.dao.UserRepository;
+import com.market.finder.dto.UserRepository;
 import com.market.finder.entity.Role;
 import com.market.finder.entity.User;
 import org.junit.jupiter.api.BeforeEach;

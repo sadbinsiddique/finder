@@ -1,4 +1,4 @@
-package com.market.finder.dao;
+package com.market.finder.dto;
 
 import com.market.finder.entity.StudentDetail;
 import org.springframework.data.jpa.repository.JpaRepository;

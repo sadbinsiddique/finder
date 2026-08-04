@@ -1,6 +1,6 @@
 package com.market.finder.service.impl;
 
-import com.market.finder.dao.StudentRepository;
+import com.market.finder.dto.StudentRepository;
 import com.market.finder.entity.Student;
 import com.market.finder.service.StudentService;
 import com.market.finder.service.base.BaseServiceImpl;

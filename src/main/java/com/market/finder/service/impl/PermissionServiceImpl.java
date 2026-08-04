@@ -1,6 +1,6 @@
 package com.market.finder.service.impl;
 
-import com.market.finder.dao.PermissionRepository;
+import com.market.finder.dto.PermissionRepository;
 import com.market.finder.entity.Permission;
 import com.market.finder.service.PermissionService;
 import com.market.finder.service.base.BaseServiceImpl;
@@ -50,5 +50,13 @@ public class PermissionServiceImpl extends BaseServiceImpl<Permission, Integer, 
         List<Permission> saved = repository.saveAll(permissions);
         repository.flush();
         return saved;
+    }
+
+    @Override
+    @Transactional
+    @CacheEvict(value = {"permissions", "roles"}, allEntries = true)
+    public void deleteById(Integer id) {
+        super.deleteById(id);
+        repository.flush();
     }
 }

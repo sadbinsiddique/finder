@@ -28,10 +28,13 @@ public class CacheConfig {
     @Bean
     public CacheManager cacheManager() {
         return new ConcurrentMapCacheManager() {
+            private final java.util.Map<String, Cache> wrapperMap = new java.util.concurrent.ConcurrentHashMap<>();
+
             @Override
             public Cache getCache(@NonNull String name) {
                 Cache cache = super.getCache(name);
-                return cache != null ? new LoggingCacheWrapper(cache) : null;
+                if (cache == null) return null;
+                return wrapperMap.computeIfAbsent(name, n -> new LoggingCacheWrapper(cache));
             }
         };
     }
