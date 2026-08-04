@@ -50,7 +50,7 @@ public class RoleServiceImpl extends BaseServiceImpl<Role, Integer, RoleReposito
     @Override
     @Transactional(readOnly = true)
     @Cacheable(value = "roles", key = "'role_permissions_map'")
-    public void getRolePermissionsMap() {
+    public Map<String, Set<String>> getRolePermissionsMap() {
         Map<String, Set<String>> rolePermissionsMap = new HashMap<>();
         List<Role> roles = repository.findAll();
         for (Role role : roles) {
@@ -61,6 +61,7 @@ public class RoleServiceImpl extends BaseServiceImpl<Role, Integer, RoleReposito
                     : Collections.emptySet();
             rolePermissionsMap.put(role.getRoleName(), permissionNames);
         }
+        return rolePermissionsMap;
     }
 
     @Override
