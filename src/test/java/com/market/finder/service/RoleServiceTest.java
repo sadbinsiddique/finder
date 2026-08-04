@@ -155,4 +155,22 @@ class RoleServiceTest {
         roleService.findById(1);
         verify(roleRepository, times(2)).findById(1);
     }
+
+    @Test
+    void testGetRolePermissionsMap_CachingBehavior() {
+        Role adminRole = new Role();
+        adminRole.setId(1);
+        adminRole.setRoleName("ROLE_ADMIN");
+
+        when(roleRepository.findAll()).thenReturn(List.of(adminRole));
+
+        var map1 = roleService.getRolePermissionsMap();
+        assertNotNull(map1);
+        assertTrue(map1.containsKey("ROLE_ADMIN"));
+
+        var map2 = roleService.getRolePermissionsMap();
+        assertNotNull(map2);
+
+        verify(roleRepository, times(1)).findAll();
+    }
 }

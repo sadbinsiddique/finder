@@ -8,6 +8,9 @@ import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 
+import java.util.Map;
+import java.util.Set;
+
 @Component
 public class RolePermissionCacheWarmer {
 
@@ -26,8 +29,8 @@ public class RolePermissionCacheWarmer {
         try {
             permissionService.findAll();
             roleService.findAll();
-            roleService.getRolePermissionsMap();
-            logger.info("[CACHE WARMUP] Role and Permission caches successfully pre-loaded into memory.");
+            Map<String, Set<String>> roleMap = roleService.getRolePermissionsMap();
+            logger.info("[CACHE WARMUP] Role and Permission caches successfully pre-loaded with {} roles.", roleMap != null ? roleMap.size() : 0);
         } catch (Exception e) {
             logger.error("[CACHE WARMUP] Error during cache warmup: {}", e.getMessage(), e);
         }
