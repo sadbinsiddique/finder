@@ -43,7 +43,10 @@ public class WetherServiceImpl implements WetherService {
     @Cacheable(value = "weatherCity", key = "#city != null ? #city : 'default'", unless = "#result == null || !#result.isSuccess()")
     public WeatherDto getWeatherData(String city) {
         String targetCity = (city == null || city.trim().isEmpty()) ? defaultCity : city.trim();
+        return fetchWeatherDataForCity(targetCity);
+    }
 
+    private WeatherDto fetchWeatherDataForCity(String targetCity) {
         try {
             String rawJson = apiClient.fetchByCity(targetCity);
             if (rawJson == null) {
@@ -88,7 +91,7 @@ public class WetherServiceImpl implements WetherService {
     @Override
     public WeatherDto getDefaultWeatherData() {
         String detectedCity = geoLocationService.detectCurrentLocationName();
-        return getWeatherData(detectedCity);
+        return fetchWeatherDataForCity(detectedCity);
     }
 
     @Override

@@ -12,6 +12,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
+import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 
@@ -51,7 +52,7 @@ class CustomUserDetailsServiceTest {
         assertEquals("john", userDetails.getUsername());
         assertEquals("secret", userDetails.getPassword());
         assertTrue(userDetails.getAuthorities().stream()
-                .anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN")));
+                .anyMatch(a -> Objects.equals(a.getAuthority(), "ROLE_ADMIN")));
         verify(userService, times(1)).findByUsername("john");
     }
 

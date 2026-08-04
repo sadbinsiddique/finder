@@ -4,6 +4,7 @@ import com.market.finder.service.cache.CacheBackupService;
 import com.market.finder.service.cache.CacheInspectorService;
 import com.market.finder.service.cache.CacheManagementService;
 import com.market.finder.service.cache.CacheOperatorService;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -17,9 +18,9 @@ public class CacheManagementServiceImpl implements CacheManagementService {
     private final CacheBackupService backupService;
 
     public CacheManagementServiceImpl(
-            CacheInspectorService inspectorService,
-            CacheOperatorService operatorService,
-            CacheBackupService backupService) {
+            @Qualifier("cacheInspectorServiceImpl") CacheInspectorService inspectorService,
+            @Qualifier("cacheOperatorServiceImpl") CacheOperatorService operatorService,
+            @Qualifier("cacheBackupServiceImpl") CacheBackupService backupService) {
         this.inspectorService = inspectorService;
         this.operatorService = operatorService;
         this.backupService = backupService;

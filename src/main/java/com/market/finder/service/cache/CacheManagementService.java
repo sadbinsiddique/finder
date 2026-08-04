@@ -10,9 +10,5 @@ public interface CacheManagementService extends CacheInspectorService, CacheOper
             String nativeStoreType,
             List<String> keys
     ) {
-        public String getName() { return name; }
-        public int getKeyCount() { return keyCount; }
-        public String getNativeStoreType() { return nativeStoreType; }
-        public List<String> getKeys() { return keys; }
     }
 }

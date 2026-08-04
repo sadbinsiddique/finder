@@ -6,12 +6,14 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.cache.Cache;
 import org.springframework.cache.CacheManager;
+import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
 
 import java.util.LinkedHashSet;
 import java.util.Set;
 
 @Service
+@Primary
 public class CacheOperatorServiceImpl implements CacheOperatorService {
 
     private static final Logger logger = LoggerFactory.getLogger(CacheOperatorServiceImpl.class);

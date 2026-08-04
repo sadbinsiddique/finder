@@ -4,11 +4,13 @@ import com.market.finder.service.cache.CacheManagementService.CacheDetailDTO;
 import com.market.finder.service.cache.CacheInspectorService;
 import org.springframework.cache.Cache;
 import org.springframework.cache.CacheManager;
+import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
 
 @Service
+@Primary
 public class CacheInspectorServiceImpl implements CacheInspectorService {
 
     private final CacheManager cacheManager;
@@ -30,7 +32,7 @@ public class CacheInspectorServiceImpl implements CacheInspectorService {
 
             Object nativeCache = cache.getNativeCache();
             int keyCount = 0;
-            String storeType = nativeCache != null ? nativeCache.getClass().getSimpleName() : "Unknown";
+            String storeType = nativeCache.getClass().getSimpleName();
             List<String> keys = new ArrayList<>();
 
             if (nativeCache instanceof Map<?, ?> map) {

@@ -9,12 +9,14 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.cache.Cache;
 import org.springframework.cache.CacheManager;
+import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.*;
 
 @Service
+@Primary
 public class CacheBackupServiceImpl implements CacheBackupService {
 
     private static final Logger logger = LoggerFactory.getLogger(CacheBackupServiceImpl.class);
