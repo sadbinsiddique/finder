@@ -2,7 +2,7 @@
 module.exports = {
     content: [
         "./src/main/resources/templates/**/*.html",
-        "./src/main/resources/static/**/*.js" // If you use JS files with Tailwind classes
+        "./src/main/resources/static/**/*.js"
     ],
     theme: {
         extend: {},
