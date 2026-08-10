@@ -1,2 +1,44 @@
+# version attribute removed (Docker Compose v2+ uses default schema)
+
 services:
-  $END$
+  # MySQL 8.0 Database Service
+  mysql:
+    image: mysql:8.0
+    container_name: finder-mysql
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_DATABASE: hb-finder
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ./sql/system-db.sql:/docker-entrypoint-initdb.d/01-system-db.sql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-ppassword"]
+      timeout: 10s
+      retries: 5
+      interval: 5s
+
+  # Spring Boot Backend Service
+  finder-app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: finder-java-app
+    restart: unless-stopped
+    ports:
+      - "8080:8080"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/hb-finder?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true&createDatabaseIfNotExist=true&autoReconnect=true
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: password
+    volumes:
+      - app_logs:/app/logs
+    depends_on:
+      mysql:
+        condition: service_healthy
+
+volumes:
+  mysql_data:
+  app_logs:
