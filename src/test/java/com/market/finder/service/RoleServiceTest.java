@@ -137,23 +137,34 @@ class RoleServiceTest {
 
     @Test
     void testDeleteById_EvictsCache() {
+        Role userRole = new Role();
+        userRole.setId(2);
+        userRole.setRoleName("ROLE_USER");
+
+        when(roleRepository.findById(2)).thenReturn(Optional.of(userRole));
+        doNothing().when(roleRepository).deleteById(2);
+
+        // Populate cache
+        roleService.findById(2);
+        verify(roleRepository, times(1)).findById(2);
+
+        // Delete evicts cache
+        roleService.deleteById(2);
+
+        // Subsequent call should hit repository again
+        roleService.findById(2);
+        verify(roleRepository, times(2)).findById(2);
+    }
+
+    @Test
+    void testDeleteById_RoleAdminProhibited() {
         Role adminRole = new Role();
         adminRole.setId(1);
         adminRole.setRoleName("ROLE_ADMIN");
 
         when(roleRepository.findById(1)).thenReturn(Optional.of(adminRole));
-        doNothing().when(roleRepository).deleteById(1);
 
-        // Populate cache
-        roleService.findById(1);
-        verify(roleRepository, times(1)).findById(1);
-
-        // Delete evicts cache
-        roleService.deleteById(1);
-
-        // Subsequent call should hit repository again
-        roleService.findById(1);
-        verify(roleRepository, times(2)).findById(1);
+        assertThrows(IllegalStateException.class, () -> roleService.deleteById(1));
     }
 
     @Test

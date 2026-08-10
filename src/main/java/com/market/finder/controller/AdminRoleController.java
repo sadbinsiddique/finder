@@ -58,14 +58,13 @@ public class AdminRoleController {
 
     @GetMapping("/delete/{id}")
     public String deleteRole(@PathVariable Integer id, org.springframework.web.servlet.mvc.support.RedirectAttributes redirectAttributes) {
-        Role role = roleService.findById(id).orElse(null);
-        if (role != null && "ROLE_ADMIN".equalsIgnoreCase(role.getRoleName())) {
-            redirectAttributes.addFlashAttribute("errorMessage", "The ROLE_ADMIN role cannot be deleted.");
-            return "redirect:/admin/roles";
-        }
-        if (roleService.existsById(id)) {
-            roleService.deleteById(id);
-            redirectAttributes.addFlashAttribute("successMessage", "Role deleted successfully.");
+        try {
+            if (roleService.existsById(id)) {
+                roleService.deleteById(id);
+                redirectAttributes.addFlashAttribute("successMessage", "Role deleted successfully.");
+            }
+        } catch (IllegalStateException e) {
+            redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
         }
         return "redirect:/admin/roles";
     }

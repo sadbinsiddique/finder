@@ -1,4 +1,4 @@
-package com.market.finder.interceptor;
+package com.market.finder.filter;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;

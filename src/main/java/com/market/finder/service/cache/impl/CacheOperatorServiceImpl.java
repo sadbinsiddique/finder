@@ -1,6 +1,6 @@
 package com.market.finder.service.cache.impl;
 
-import com.market.finder.config.RolePermissionCacheWarmer;
+import com.market.finder.event.RolePermissionCacheWarmer;
 import com.market.finder.service.cache.CacheOperatorService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

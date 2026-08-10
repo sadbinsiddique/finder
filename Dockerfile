@@ -6,7 +6,7 @@ WORKDIR /app
 COPY pom.xml .
 
 # Pre-fetch Maven dependencies
-RUN mvn dependency:go-offline -B
+RUN mvn dependency:go-offline -B || true
 
 # Copy the source code and build the application package
 COPY src ./src

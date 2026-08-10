@@ -2,7 +2,7 @@ package com.market.finder.service.weather;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.market.finder.entity.WeatherDto;
+import com.market.finder.dto.WeatherDto;
 import org.springframework.stereotype.Component;
 
 @Component

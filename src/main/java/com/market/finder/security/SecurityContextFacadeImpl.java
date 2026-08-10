@@ -37,8 +37,6 @@ public class SecurityContextFacadeImpl implements SecurityContextFacade {
         Authentication auth = getAuthentication();
         if (auth == null) {
             return Collections.emptySet();
-        } else {
-            auth.getAuthorities();
         }
         return auth.getAuthorities().stream()
                 .map(GrantedAuthority::getAuthority)

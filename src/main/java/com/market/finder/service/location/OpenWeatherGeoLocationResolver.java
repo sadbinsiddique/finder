@@ -2,11 +2,11 @@ package com.market.finder.service.location;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.market.finder.service.helper.HttpHelperService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
-import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.util.UriComponentsBuilder;
 
 @Component
@@ -23,11 +23,11 @@ public class OpenWeatherGeoLocationResolver implements GeoLocationService {
     @Value("${weather.api.default-city:Dhaka}")
     private String defaultCity;
 
-    private final WebClient webClient;
+    private final HttpHelperService httpHelperService;
     private final ObjectMapper objectMapper;
 
-    public OpenWeatherGeoLocationResolver(WebClient webClient, ObjectMapper objectMapper) {
-        this.webClient = webClient;
+    public OpenWeatherGeoLocationResolver(HttpHelperService httpHelperService, ObjectMapper objectMapper) {
+        this.httpHelperService = httpHelperService;
         this.objectMapper = objectMapper;
     }
 
@@ -41,11 +41,7 @@ public class OpenWeatherGeoLocationResolver implements GeoLocationService {
                     .queryParam("appid", apiKey)
                     .toUriString();
 
-            String response = webClient.get()
-                    .uri(url)
-                    .retrieve()
-                    .bodyToMono(String.class)
-                    .block();
+            String response = httpHelperService.get(url);
 
             if (response != null && !response.trim().isEmpty()) {
                 JsonNode array = objectMapper.readTree(response);
@@ -65,11 +61,7 @@ public class OpenWeatherGeoLocationResolver implements GeoLocationService {
     @Override
     public String detectCurrentLocationName() {
         try {
-            String response = webClient.get()
-                    .uri("http://ip-api.com/json/")
-                    .retrieve()
-                    .bodyToMono(String.class)
-                    .block();
+            String response = httpHelperService.get("http://ip-api.com/json/");
 
             if (response != null && !response.trim().isEmpty()) {
                 JsonNode root = objectMapper.readTree(response);
@@ -84,3 +76,4 @@ public class OpenWeatherGeoLocationResolver implements GeoLocationService {
         return defaultCity;
     }
 }
+

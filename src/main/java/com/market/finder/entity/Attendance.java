@@ -26,4 +26,16 @@ public class Attendance {
 
     @Enumerated(EnumType.STRING)
     private AttendanceStatus status;
+
+    public void prepareId() {
+        if (id == null) {
+            id = new AttendanceId();
+        }
+        if (student != null) {
+            id.setStudentId(student.getId());
+        }
+        if (course != null) {
+            id.setCourseId(course.getId());
+        }
+    }
 }

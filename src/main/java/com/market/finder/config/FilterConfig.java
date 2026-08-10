@@ -1,6 +1,6 @@
 package com.market.finder.config;
 
-import com.market.finder.interceptor.CustomLoggingFilter;
+import com.market.finder.filter.CustomLoggingFilter;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -17,3 +17,4 @@ public class FilterConfig {
         return registrationBean;
     }
 }
+

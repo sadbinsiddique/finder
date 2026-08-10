@@ -28,4 +28,16 @@ public class Enrollment {
 
     @Column(name = "enrollment_date")
     private LocalDate enrollmentDate;
+
+    public void prepareId() {
+        if (id == null) {
+            id = new EnrollmentId();
+        }
+        if (student != null) {
+            id.setStudentId(student.getId());
+        }
+        if (course != null) {
+            id.setCourseId(course.getId());
+        }
+    }
 }

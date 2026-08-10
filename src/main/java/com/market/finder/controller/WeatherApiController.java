@@ -1,7 +1,7 @@
 package com.market.finder.controller;
 
-import com.market.finder.entity.WeatherDto;
-import com.market.finder.service.weather.WetherService;
+import com.market.finder.dto.WeatherDto;
+import com.market.finder.service.weather.WeatherService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -16,10 +16,10 @@ import java.util.Map;
 @RequestMapping("/api/weather")
 public class WeatherApiController {
 
-    private final WetherService wetherService;
+    private final WeatherService weatherService;
 
-    public WeatherApiController(WetherService wetherService) {
-        this.wetherService = wetherService;
+    public WeatherApiController(WeatherService weatherService) {
+        this.weatherService = weatherService;
     }
 
     @GetMapping
@@ -28,27 +28,28 @@ public class WeatherApiController {
             @RequestParam(name = "lat", required = false) Double lat,
             @RequestParam(name = "lon", required = false) Double lon) {
 
-        if (!wetherService.isEnabled()) {
+        if (!weatherService.isEnabled()) {
             return ResponseEntity.ok(WeatherDto.error("Weather service is disabled"));
         }
 
         WeatherDto weather;
         if (lat != null && lon != null) {
-            weather = wetherService.getWeatherDataByCoords(lat, lon);
+            weather = weatherService.getWeatherDataByCoords(lat, lon);
         } else {
-            weather = wetherService.getWeatherData(city);
+            weather = weatherService.getWeatherData(city);
         }
         return ResponseEntity.ok(weather);
     }
 
     @GetMapping("/status")
     public ResponseEntity<Map<String, Boolean>> getStatus() {
-        return ResponseEntity.ok(Collections.singletonMap("enabled", wetherService.isEnabled()));
+        return ResponseEntity.ok(Collections.singletonMap("enabled", weatherService.isEnabled()));
     }
 
     @PostMapping("/toggle")
     public ResponseEntity<Map<String, Boolean>> toggleWeather(@RequestParam(name = "enabled") boolean enabled) {
-        wetherService.setEnabled(enabled);
-        return ResponseEntity.ok(Collections.singletonMap("enabled", wetherService.isEnabled()));
+        weatherService.setEnabled(enabled);
+        return ResponseEntity.ok(Collections.singletonMap("enabled", weatherService.isEnabled()));
     }
 }
+

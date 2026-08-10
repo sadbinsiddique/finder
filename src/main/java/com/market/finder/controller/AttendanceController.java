@@ -64,16 +64,7 @@ public class AttendanceController {
 
     @PostMapping("/save")
     public String saveAttendance(@ModelAttribute("attendance") Attendance attendance) {
-        if (attendance.getId() == null) {
-            attendance.setId(new AttendanceId());
-        }
-        if (attendance.getStudent() != null) {
-            attendance.getId().setStudentId(attendance.getStudent().getId());
-        }
-        if (attendance.getCourse() != null) {
-            attendance.getId().setCourseId(attendance.getCourse().getId());
-        }
-
+        attendance.prepareId();
         attendanceService.save(attendance);
         return "redirect:/attendance";
     }

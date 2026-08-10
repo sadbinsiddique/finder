@@ -1,34 +1,26 @@
-package com.market.finder.entity;
+package com.market.finder.dto;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Getter
 @Setter
+@NoArgsConstructor
 public class WeatherDto {
     private String cityName;
     private String country;
-    private Double temperature;
-    private Double feelsLike;
-    private Double tempMin;
-    private Double tempMax;
-    private Integer humidity;
-    private Double windSpeed;
+    private double temperature;
+    private double feelsLike;
+    private double tempMin;
+    private double tempMax;
+    private int humidity;
+    private double windSpeed;
     private String condition;
     private String description;
     private String icon;
-    private String iconUrl;
     private boolean success = true;
     private String errorMessage;
-
-    public WeatherDto() {}
-
-    public void setIcon(String icon) {
-        this.icon = icon;
-        if (icon != null && !icon.isEmpty()) {
-            this.iconUrl = "https://openweathermap.org/img/wn/" + icon + "@2x.png";
-        }
-    }
 
     public static WeatherDto error(String message) {
         WeatherDto dto = new WeatherDto();

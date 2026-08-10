@@ -57,16 +57,7 @@ public class EnrollmentController {
 
     @PostMapping("/save")
     public String saveEnrollment(@ModelAttribute("enrollment") Enrollment enrollment) {
-        if (enrollment.getId() == null) {
-            enrollment.setId(new EnrollmentId());
-        }
-        if (enrollment.getStudent() != null) {
-            enrollment.getId().setStudentId(enrollment.getStudent().getId());
-        }
-        if (enrollment.getCourse() != null) {
-            enrollment.getId().setCourseId(enrollment.getCourse().getId());
-        }
-
+        enrollment.prepareId();
         enrollmentService.save(enrollment);
         return "redirect:/enrollments";
     }

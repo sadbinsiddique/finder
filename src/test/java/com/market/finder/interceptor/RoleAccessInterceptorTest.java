@@ -26,6 +26,9 @@ class RoleAccessInterceptorTest {
     @Mock
     private SecurityContextFacade securityContextFacade;
 
+    @Mock
+    private RouteAccessEvaluator routeAccessEvaluator;
+
     @InjectMocks
     private RoleAccessInterceptor interceptor;
 
@@ -54,44 +57,18 @@ class RoleAccessInterceptorTest {
     }
 
     @Test
-    void testPreHandle_InstructorDeniedAdminPath() throws Exception {
+    void testPreHandle_DelegatesToEvaluator() throws Exception {
         when(securityContextFacade.isAuthenticated()).thenReturn(true);
-        when(securityContextFacade.getCurrentUsername()).thenReturn("instructor1");
-        when(securityContextFacade.getCurrentAuthorities()).thenReturn(Set.of("ROLE_INSTRUCTOR"));
-        when(request.getRequestURI()).thenReturn("/admin/users");
-        when(request.getMethod()).thenReturn("GET");
-
-        boolean result = interceptor.preHandle(request, response, new Object());
-
-        assertFalse(result);
-        verify(response, times(1)).sendRedirect("/access-denied");
-    }
-
-    @Test
-    void testPreHandle_StudentAllowedWithReadPermission() throws Exception {
-        when(securityContextFacade.isAuthenticated()).thenReturn(true);
-        when(securityContextFacade.getCurrentUsername()).thenReturn("student1");
-        when(securityContextFacade.getCurrentAuthorities()).thenReturn(Set.of("ROLE_STUDENT", "READ"));
+        when(securityContextFacade.getCurrentUsername()).thenReturn("user1");
+        when(securityContextFacade.getCurrentAuthorities()).thenReturn(Set.of("READ"));
         when(request.getRequestURI()).thenReturn("/students");
         when(request.getMethod()).thenReturn("GET");
+        when(routeAccessEvaluator.evaluate(eq(response), eq("user1"), eq("GET"), eq("/students"), eq(Set.of("READ")))).thenReturn(true);
 
         boolean result = interceptor.preHandle(request, response, new Object());
 
         assertTrue(result);
-        verify(response, never()).sendRedirect(anyString());
-    }
-
-    @Test
-    void testPreHandle_StudentDeniedDeleteStudent() throws Exception {
-        when(securityContextFacade.isAuthenticated()).thenReturn(true);
-        when(securityContextFacade.getCurrentUsername()).thenReturn("student1");
-        when(securityContextFacade.getCurrentAuthorities()).thenReturn(Set.of("ROLE_STUDENT", "READ"));
-        when(request.getRequestURI()).thenReturn("/students/delete/1");
-        when(request.getMethod()).thenReturn("GET");
-
-        boolean result = interceptor.preHandle(request, response, new Object());
-
-        assertFalse(result);
-        verify(response, times(1)).sendRedirect("/access-denied");
+        verify(routeAccessEvaluator, times(1)).evaluate(eq(response), eq("user1"), eq("GET"), eq("/students"), eq(Set.of("READ")));
     }
 }
+

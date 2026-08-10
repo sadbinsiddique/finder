@@ -28,4 +28,16 @@ public class Gradebook {
 
     @Column(precision = 5, scale = 2)
     private BigDecimal score;
+
+    public void prepareId() {
+        if (id == null) {
+            id = new GradebookId();
+        }
+        if (student != null) {
+            id.setStudentId(student.getId());
+        }
+        if (course != null) {
+            id.setCourseId(course.getId());
+        }
+    }
 }

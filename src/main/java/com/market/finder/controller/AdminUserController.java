@@ -52,14 +52,6 @@ public class AdminUserController {
             @ModelAttribute("user") User user,
             @RequestParam(value = "roleIds", required = false) List<Integer> roleIds) {
 
-        if (user.getUsername() != null && !user.getUsername().trim().isEmpty()) {
-            userService.findByUsername(user.getUsername()).ifPresent(existingUser -> {
-                if (user.getPassword() == null || user.getPassword().trim().isEmpty()) {
-                    user.setPassword(existingUser.getPassword());
-                }
-            });
-        }
-
         if (roleIds != null && !roleIds.isEmpty()) {
             Set<Role> selectedRoles = new HashSet<>(roleService.findAllById(roleIds));
             user.setRoles(selectedRoles);

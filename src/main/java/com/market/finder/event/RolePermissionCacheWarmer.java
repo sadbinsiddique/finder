@@ -1,4 +1,4 @@
-package com.market.finder.config;
+package com.market.finder.event;
 
 import com.market.finder.service.permission.PermissionService;
 import com.market.finder.service.role.RoleService;
@@ -25,12 +25,13 @@ public class RolePermissionCacheWarmer {
 
     @EventListener(ApplicationReadyEvent.class)
     public void warmRolePermissionCache() {
-        logger.info("[CACHE WARMUP] Pre-loading Role and Permission caches at application startup...");
+        logger.info("[CACHE WARMUP] Pre-loading caches at application startup...");
         try {
             permissionService.findAll();
             roleService.findAll();
             Map<String, Set<String>> roleMap = roleService.getRolePermissionsMap();
-            logger.info("[CACHE WARMUP] Role and Permission caches successfully pre-loaded with {} roles.", roleMap != null ? roleMap.size() : 0);
+            logger.info("[CACHE WARMUP] Caches successfully pre-loaded with {} roles.", roleMap != null ?
+                    roleMap.size() : 0);
         } catch (Exception e) {
             logger.error("[CACHE WARMUP] Error during cache warmup: {}", e.getMessage(), e);
         }

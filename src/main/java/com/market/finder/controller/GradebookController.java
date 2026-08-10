@@ -58,16 +58,7 @@ public class GradebookController {
 
     @PostMapping("/save")
     public String saveGradebook(@ModelAttribute("gradebook") Gradebook gradebook) {
-        if (gradebook.getId() == null) {
-            gradebook.setId(new GradebookId());
-        }
-        if (gradebook.getStudent() != null) {
-            gradebook.getId().setStudentId(gradebook.getStudent().getId());
-        }
-        if (gradebook.getCourse() != null) {
-            gradebook.getId().setCourseId(gradebook.getCourse().getId());
-        }
-
+        gradebook.prepareId();
         gradebookService.save(gradebook);
         return "redirect:/gradebooks";
     }

@@ -75,6 +75,10 @@ public class RoleServiceImpl extends BaseServiceImpl<Role, Integer, RoleReposito
     @Transactional
     @CacheEvict(value = {"roles", "permissions"}, allEntries = true)
     public void deleteById(Integer id) {
+        Role role = findById(id).orElse(null);
+        if (role != null && "ROLE_ADMIN".equalsIgnoreCase(role.getRoleName())) {
+            throw new IllegalStateException("Deletion prohibited: The ROLE_ADMIN role cannot be deleted.");
+        }
         super.deleteById(id);
         repository.flush();
     }

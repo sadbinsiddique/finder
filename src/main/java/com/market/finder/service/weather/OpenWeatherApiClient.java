@@ -1,8 +1,8 @@
 package com.market.finder.service.weather;
 
+import com.market.finder.service.helper.HttpHelperService;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
-import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.util.UriComponentsBuilder;
 
 @Component
@@ -14,10 +14,10 @@ public class OpenWeatherApiClient implements WeatherApiClient {
     @Value("${weather.api.url:https://api.openweathermap.org/data/2.5/weather}")
     private String apiUrl;
 
-    private final WebClient webClient;
+    private final HttpHelperService httpHelperService;
 
-    public OpenWeatherApiClient(WebClient webClient) {
-        this.webClient = webClient;
+    public OpenWeatherApiClient(HttpHelperService httpHelperService) {
+        this.httpHelperService = httpHelperService;
     }
 
     @Override
@@ -28,11 +28,7 @@ public class OpenWeatherApiClient implements WeatherApiClient {
                 .queryParam("units", "metric")
                 .toUriString();
 
-        return webClient.get()
-                .uri(url)
-                .retrieve()
-                .bodyToMono(String.class)
-                .block();
+        return httpHelperService.get(url);
     }
 
     @Override
@@ -44,10 +40,7 @@ public class OpenWeatherApiClient implements WeatherApiClient {
                 .queryParam("units", "metric")
                 .toUriString();
 
-        return webClient.get()
-                .uri(url)
-                .retrieve()
-                .bodyToMono(String.class)
-                .block();
+        return httpHelperService.get(url);
     }
 }
+

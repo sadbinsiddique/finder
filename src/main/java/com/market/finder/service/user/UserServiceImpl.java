@@ -39,6 +39,13 @@ public class UserServiceImpl extends BaseServiceImpl<User, String, UserRepositor
     @Override
     @Transactional
     public User save(User user) {
+        if (user.getUsername() != null && !user.getUsername().trim().isEmpty()) {
+            repository.findByUsername(user.getUsername()).ifPresent(existingUser -> {
+                if (user.getPassword() == null || user.getPassword().trim().isEmpty()) {
+                    user.setPassword(existingUser.getPassword());
+                }
+            });
+        }
         encodePasswordIfRaw(user);
         return repository.saveAndFlush(user);
     }

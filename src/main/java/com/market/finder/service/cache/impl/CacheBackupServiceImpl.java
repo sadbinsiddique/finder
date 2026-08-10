@@ -25,13 +25,10 @@ public class CacheBackupServiceImpl implements CacheBackupService {
     private final List<CacheValueDeserializerStrategy> deserializerStrategies;
     private final ObjectMapper objectMapper;
 
-    public CacheBackupServiceImpl(CacheManager cacheManager, List<CacheValueDeserializerStrategy> deserializerStrategies) {
+    public CacheBackupServiceImpl(CacheManager cacheManager, List<CacheValueDeserializerStrategy> deserializerStrategies, ObjectMapper objectMapper) {
         this.cacheManager = cacheManager;
         this.deserializerStrategies = deserializerStrategies;
-        this.objectMapper = new ObjectMapper()
-                .registerModule(new JavaTimeModule())
-                .disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS)
-                .configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
+        this.objectMapper = objectMapper;
     }
 
     @Override

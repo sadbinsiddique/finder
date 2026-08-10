@@ -1,6 +1,6 @@
 package com.market.finder.service.weather;
 
-import com.market.finder.entity.WeatherDto;
+import com.market.finder.dto.WeatherDto;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
