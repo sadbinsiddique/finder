@@ -1,0 +1,231 @@
+/* ==========================================================================
+   Finder Enterprise Application - Centralized CSS Design System
+   ========================================================================== */
+
+:root {
+    --bg-color: #07090e;
+    --glass-bg: rgba(255, 255, 255, 0.03);
+    --glass-bg-hover: rgba(255, 255, 255, 0.06);
+    --glass-border: rgba(255, 255, 255, 0.08);
+    --glass-border-hover: rgba(255, 255, 255, 0.18);
+    --glass-inner-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.1);
+    
+    --apple-blue: #0A84FF;
+    --apple-purple: #5E5CE6;
+    --apple-green: #30D158;
+    --apple-orange: #FF9F0A;
+    --apple-red: #FF453A;
+    --apple-teal: #64D2FF;
+    --apple-indigo: #5E5CE6;
+    
+    --text-primary: #F5F5F7;
+    --text-secondary: rgba(245, 245, 247, 0.6);
+    --text-tertiary: rgba(245, 245, 247, 0.35);
+    
+    --card-radius: 18px;
+    --btn-radius: 12px;
+    --input-radius: 10px;
+    
+    --transition-smooth: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+body {
+    background-color: var(--bg-color);
+    color: var(--text-primary);
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    min-height: 100vh;
+    overflow-x: hidden;
+}
+
+/* Background Glowing Elements */
+.bg-glow-blue {
+    position: fixed;
+    top: -10%;
+    left: -10%;
+    width: 45vw;
+    height: 45vw;
+    background: radial-gradient(circle, rgba(10, 132, 255, 0.12) 0%, rgba(7, 9, 14, 0) 70%);
+    z-index: -1;
+    pointer-events: none;
+}
+
+.bg-glow-purple {
+    position: fixed;
+    bottom: -10%;
+    right: -10%;
+    width: 45vw;
+    height: 45vw;
+    background: radial-gradient(circle, rgba(94, 92, 230, 0.1) 0%, rgba(7, 9, 14, 0) 70%);
+    z-index: -1;
+    pointer-events: none;
+}
+
+/* Glassmorphism Cards & Panels */
+.glass-card {
+    background: var(--glass-bg);
+    backdrop-filter: blur(25px);
+    -webkit-backdrop-filter: blur(25px);
+    border: 1px solid var(--glass-border);
+    box-shadow: var(--glass-inner-shadow), 0 20px 40px rgba(0, 0, 0, 0.4);
+    border-radius: var(--card-radius);
+    transition: var(--transition-smooth);
+}
+
+.glass-card:hover {
+    border-color: var(--glass-border-hover);
+    box-shadow: var(--glass-inner-shadow), 0 25px 50px rgba(0, 0, 0, 0.5);
+}
+
+.hover-lift:hover {
+    transform: translateY(-3px);
+}
+
+/* Glass Navbar */
+.glass-navbar {
+    background: rgba(7, 9, 14, 0.75);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-bottom: 1px solid var(--glass-border);
+    z-index: 1030;
+}
+
+.brand-gradient {
+    background: linear-gradient(135deg, var(--apple-blue), var(--apple-purple));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    font-weight: 700;
+}
+
+/* Buttons */
+.btn-glass-primary {
+    background: linear-gradient(135deg, var(--apple-blue), var(--apple-purple));
+    color: #FFF;
+    border: none;
+    border-radius: var(--btn-radius);
+    padding: 0.5rem 1.25rem;
+    font-weight: 500;
+    transition: var(--transition-smooth);
+    box-shadow: 0 4px 15px rgba(10, 132, 255, 0.25);
+}
+
+.btn-glass-primary:hover {
+    color: #FFF;
+    opacity: 0.9;
+    transform: translateY(-1px);
+    box-shadow: 0 6px 20px rgba(10, 132, 255, 0.35);
+}
+
+.btn-glass-danger {
+    background: rgba(255, 69, 58, 0.15);
+    color: var(--apple-red);
+    border: 1px solid rgba(255, 69, 58, 0.3);
+    border-radius: var(--btn-radius);
+    padding: 0.4rem 1rem;
+    font-size: 0.875rem;
+    transition: var(--transition-smooth);
+}
+
+.btn-glass-danger:hover {
+    background: rgba(255, 69, 58, 0.3);
+    color: #FFF;
+}
+
+.btn-glass-secondary {
+    background: var(--glass-bg);
+    color: var(--text-primary);
+    border: 1px solid var(--glass-border);
+    border-radius: var(--btn-radius);
+    padding: 0.5rem 1.25rem;
+    transition: var(--transition-smooth);
+}
+
+.btn-glass-secondary:hover {
+    background: var(--glass-bg-hover);
+    color: var(--text-primary);
+    border-color: var(--glass-border-hover);
+}
+
+/* Tables */
+.glass-table {
+    color: var(--text-primary);
+    margin-bottom: 0;
+}
+
+.glass-table th {
+    background: rgba(255, 255, 255, 0.02);
+    color: var(--text-secondary);
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    border-bottom: 1px solid var(--glass-border);
+    padding: 1rem;
+}
+
+.glass-table td {
+    padding: 1rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+    vertical-align: middle;
+}
+
+.glass-table tbody tr {
+    transition: var(--transition-smooth);
+}
+
+.glass-table tbody tr:hover {
+    background: rgba(255, 255, 255, 0.03);
+}
+
+/* Form Controls */
+.glass-input {
+    background: rgba(255, 255, 255, 0.04) !important;
+    border: 1px solid var(--glass-border) !important;
+    color: var(--text-primary) !important;
+    border-radius: var(--input-radius) !important;
+    padding: 0.6rem 1rem !important;
+    transition: var(--transition-smooth) !important;
+}
+
+.glass-input:focus {
+    background: rgba(255, 255, 255, 0.07) !important;
+    border-color: var(--apple-blue) !important;
+    box-shadow: 0 0 0 3px rgba(10, 132, 255, 0.25) !important;
+}
+
+.glass-input::placeholder {
+    color: var(--text-tertiary);
+}
+
+/* Badges & Status Pills */
+.badge-status {
+    padding: 0.35em 0.75em;
+    font-size: 0.75rem;
+    font-weight: 600;
+    border-radius: 50rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+}
+
+.badge-present {
+    background: rgba(48, 209, 88, 0.15);
+    color: var(--apple-green);
+    border: 1px solid rgba(48, 209, 88, 0.3);
+}
+
+.badge-absent {
+    background: rgba(255, 69, 58, 0.15);
+    color: var(--apple-red);
+    border: 1px solid rgba(255, 69, 58, 0.3);
+}
+
+.badge-late {
+    background: rgba(255, 159, 10, 0.15);
+    color: var(--apple-orange);
+    border: 1px solid rgba(255, 159, 10, 0.3);
+}
+
+.badge-role {
+    background: rgba(94, 92, 230, 0.15);
+    color: var(--apple-purple);
+    border: 1px solid rgba(94, 92, 230, 0.3);
+}
