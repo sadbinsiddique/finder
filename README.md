@@ -1,98 +1,91 @@
-# 🎓 Finder - Enterprise Academic & Resource Management Platform
+# Finder: Enterprise Academic and Resource Management Platform
 
-[![Java Version](https://img.shields.io/badge/Java-21-orange.svg)](https://www.oracle.com/java/)
-[![Spring Boot](https://img.shields.io/badge/Spring%20Boot-4.0.7-brightgreen.svg)](https://spring.io/projects/spring-boot)
-[![Spring Security](https://img.shields.io/badge/Spring%20Security-6.x-blue.svg)](https://spring.io/projects/spring-security)
-[![Architecture](https://img.shields.io/badge/Architecture-SOLID%20Clean%20Design-blueviolet.svg)](#-solid-architectural-compliance)
-[![Build Status](https://img.shields.io/badge/Build-Passing-success.svg)](#-getting-started)
-[![License](https://img.shields.io/badge/License-MIT-purple.svg)](LICENSE)
-
-**Finder** is a state-of-the-art, high-performance enterprise resource and academic management web application built with **Java 21**, **Spring Boot 4.0.7**, **Spring Security 6**, and **Thymeleaf**. Designed from the ground up to showcase industry-standard software architecture, Finder incorporates Role-Based Access Control (RBAC), fine-grained permission evaluation, resilient OpenWeather API integration, custom cache decorators, containerized Docker deployment, and complete **S.O.L.I.D.** object-oriented design principles.
+Finder is a modular, high-throughput enterprise resource and academic management system built on Java 21 and Spring Boot 4.0.7. The platform provides enterprise Role-Based Access Control (RBAC), resilient third-party integrations (OpenWeather API), decorated in-memory cache operations, and comprehensive object-oriented SOLID software design patterns.
 
 ---
 
-## 📋 Table of Contents
-1. [Key Features](#-key-features)
-2. [Technology Stack](#-technology-stack)
-3. [SOLID Architectural Compliance](#-solid-architectural-compliance)
-4. [Security & Role-Based Access Control (RBAC)](#-security--role-based-access-control-rbac)
-5. [Project Package Structure](#-project-package-structure)
-6. [Database Schema & Data Model](#-database-schema--data-model)
-7. [API & Controller Specifications](#-api--controller-specifications)
-8. [Getting Started & Deployment](#-getting-started--deployment)
-9. [Verification & Testing](#-verification--testing)
+## Table of Contents
+- [1. System Architecture and Technology Stack](#1-system-architecture-and-technology-stack)
+- [2. SOLID Design Principles Implementation](#2-solid-design-principles-implementation)
+- [3. Security and Role-Based Access Control (RBAC)](#3-security-and-role-based-access-control-rbac)
+- [4. Project Topology and Package Structure](#4-project-topology-and-package-structure)
+- [5. Relational Database Schema](#5-relational-database-schema)
+- [6. Component Infrastructure](#6-component-infrastructure)
+- [7. Local Environment and Container Deployment](#7-local-environment-and-container-deployment)
+- [8. Build and Test Verification](#8-build-and-test-verification)
 
 ---
 
-## ✨ Key Features
+## 1. System Architecture and Technology Stack
 
-- 👥 **Comprehensive Academic Administration**: Manage Students, Instructors, Departments, Courses, Staff, and Corporate Employees with full CRUD interfaces.
-- 📊 **Gradebook & Attendance Tracking**: Record student grades, track daily attendance statuses (`PRESENT`, `ABSENT`, `LATE`, `EXCUSED`), and manage course enrollments with composite key entities.
-- 🔒 **Enterprise RBAC & Custom Interceptors**: Granular permission enforcement (`READ`, `WRITE`, `DELETE`, `MANAGE_USERS`) powered by `RoleAccessInterceptor` and `DefaultRouteAccessEvaluator`.
-- 🌤️ **Live Weather & Geo-Location Integration**: Real-time OpenWeather API integration with IP-to-city resolution, fallback providers, and asynchronous HTTP client abstractions.
-- ⚡ **Decorated Cache Operations**: Spring Cache abstraction enhanced with `LoggingCacheWrapper` for real-time cache tracking, cache warming listeners, and JSON backup/restore tools.
-- 🐳 **Docker & CI/CD Pipeline**: Multi-stage `Dockerfile` and automated GitHub Actions CI workflow for seamless deployment.
+The Finder platform utilizes a layered model separating web presentation, business logic, security interceptors, caching, and persistence mechanisms.
 
----
+### Technology Matrix
 
-## 🛠️ Technology Stack
-
-| Layer | Technology / Tool | Purpose |
+| Layer / Subsystem | Technology | Specification / Details |
 | :--- | :--- | :--- |
-| **Language** | Java 21 | High-performance LTS Java runtime |
-| **Framework** | Spring Boot 4.0.7 | Modern microservice & web foundation |
-| **Security** | Spring Security 6.x | Authentication & Authorization |
-| **Persistence** | Spring Data JPA / Hibernate | Object-Relational Mapping (ORM) |
-| **View Engine** | Thymeleaf 3.x | Server-side template rendering |
-| **UI Components** | Bootstrap 5, FontAwesome 6, Inter Font | Responsive client interface |
-| **Database** | MySQL 8.0 / H2 (In-Memory Testing) | Relational persistence |
-| **HTTP Client** | Spring WebClient (WebFlux) | Asynchronous non-blocking web requests |
-| **Caching** | Spring Cache Abstraction | High-speed data caching |
-| **Containerization**| Docker & Docker Compose | Containerization & service orchestration |
-| **CI/CD** | GitHub Actions | Automated build & verification pipeline |
+| **Runtime Environment** | Java OpenJDK / Temurin 21 | LTS Java Virtual Machine |
+| **Core Framework** | Spring Boot 4.0.7 | Spring Framework 6.x foundation |
+| **Security Framework** | Spring Security 6.x | BCrypt password hashing & WebSecurityConfigurer |
+| **View Engine** | Thymeleaf 3.x | HTML5 server-side template engine |
+| **UI Framework** | Bootstrap 5.3 & FontAwesome 6 | CSS styling loaded via CDN assets |
+| **Persistence Layer** | Spring Data JPA / Hibernate | Object-Relational Mapping with MySQL 8.0 |
+| **Asynchronous I/O** | Spring WebClient (WebFlux) | Non-blocking HTTP integration for external APIs |
+| **Caching Layer** | Spring Cache Abstraction | In-memory cache manager with custom decorators |
+| **Containerization** | Docker & Docker Compose | Multi-stage OCI container image packaging |
+| **Build Automation** | Apache Maven 3.9 | Dependency management and test automation |
 
 ---
 
-## 🏛️ SOLID Architectural Compliance
+## 2. SOLID Design Principles Implementation
 
-The codebase strictly satisfies all **5 SOLID principles** across all components:
+The architecture strictly complies with all five SOLID design principles across all 112+ application source files.
 
-### 1. Single Responsibility Principle (SRP)
-- **Web Controllers** (`com.market.finder.controller`): Focus solely on HTTP request routing, model binding, and template rendering. All business logic (e.g. `ROLE_ADMIN` deletion prohibition, password retention on update) is encapsulated within service implementations.
-- **Embedded Key Entities**: Composite key entities ([Attendance](file:///e:/finder/src/main/java/com/market/finder/entity/Attendance.java), [Enrollment](file:///e:/finder/src/main/java/com/market/finder/entity/Enrollment.java), [Gradebook](file:///e:/finder/src/main/java/com/market/finder/entity/Gradebook.java)) encapsulate primary key synchronization in a dedicated `prepareId()` method.
-- **Micro-Services**: OpenWeather API logic is divided into single-purpose components: [OpenWeatherApiClient](file:///e:/finder/src/main/java/com/market/finder/service/weather/OpenWeatherApiClient.java) (URL building), [OpenWeatherJsonParser](file:///e:/finder/src/main/java/com/market/finder/service/weather/OpenWeatherJsonParser.java) (JSON parsing), and [DefaultWeatherFallbackProvider](file:///e:/finder/src/main/java/com/market/finder/service/weather/DefaultWeatherFallbackProvider.java) (fallback handling).
+### 2.1 Single Responsibility Principle (SRP)
+- **Web Controllers** (`com.market.finder.controller`): Web controllers manage request mapping, parameter binding, and view routing. Domain rules—such as password retention during updates and administrative role deletion protection—are isolated inside service implementations.
+- **Embedded Entity Entities**: Composite primary key entities (`Attendance`, `Enrollment`, `Gradebook`) encapsulate primary key synchronization logic in a dedicated `prepareId()` method.
+- **Micro-Components**: The OpenWeather service subsystem is decomposed into focused classes:
+  - `OpenWeatherApiClient`: Builds API target URIs.
+  - `OpenWeatherJsonParser`: Parses raw JSON responses into `WeatherDto`.
+  - `DefaultWeatherFallbackProvider`: Generates static fallback metrics during network failures.
 
-### 2. Open/Closed Principle (OCP)
-- **Route Authorization**: [RoleAccessInterceptor](file:///e:/finder/src/main/java/com/market/finder/interceptor/RoleAccessInterceptor.java) delegates URI matching and permission evaluation to [RouteAccessEvaluator](file:///e:/finder/src/main/java/com/market/finder/interceptor/RouteAccessEvaluator.java). New route rules can be introduced without modifying interceptor logic.
-- **Cache Deserialization**: [CacheBackupServiceImpl](file:///e:/finder/src/main/java/com/market/finder/service/cache/impl/CacheBackupServiceImpl.java) uses `List<CacheValueDeserializerStrategy>` to allow new cache types to be backed up/restored seamlessly.
-- **Cache Logging Decorator**: [CacheConfig](file:///e:/finder/src/main/java/com/market/finder/config/CacheConfig.java) uses `LoggingCacheWrapper` (Decorator Pattern) to log cache events without altering underlying cache providers.
+### 2.2 Open/Closed Principle (OCP)
+- **Route Access Authorization**: `RoleAccessInterceptor` delegates path authorization decisions to `RouteAccessEvaluator`. New route rules or custom security evaluators can be added without modifying the interceptor lifecycle.
+- **Cache Deserialization**: `CacheBackupServiceImpl` uses polymorphic `CacheValueDeserializerStrategy` implementations (`PermissionCacheValueDeserializer`, `RoleCacheValueDeserializer`, `DefaultCacheValueDeserializer`), enabling support for new entity types without modifying backup processing logic.
+- **Cache Decorator**: `CacheConfig` uses `LoggingCacheWrapper` to extend Spring's `Cache` interface with hit/miss logging without modifying framework source code.
 
-### 3. Liskov Substitution Principle (LSP)
-- **Generic Base Service**: Domain services ([StudentServiceImpl](file:///e:/finder/src/main/java/com/market/finder/service/student/StudentServiceImpl.java), [CourseServiceImpl](file:///e:/finder/src/main/java/com/market/finder/service/course/CourseServiceImpl.java)) extend [BaseServiceImpl](file:///e:/finder/src/main/java/com/market/finder/service/base/BaseServiceImpl.java) and implement [BaseService](file:///e:/finder/src/main/java/com/market/finder/service/base/BaseService.java), ensuring uniform behavioral contracts.
-- **Weather Service Alias**: [WeatherServiceImpl](file:///e:/finder/src/main/java/com/market/finder/service/weather/impl/WeatherServiceImpl.java) implements `WeatherService`. The legacy `@Deprecated` `WetherServiceImpl` extends `WeatherServiceImpl`, maintaining 100% backward substitutability.
+### 2.3 Liskov Substitution Principle (LSP)
+- **Base Service Abstraction**: All domain services (`StudentServiceImpl`, `CourseServiceImpl`, `RoleServiceImpl`, `UserServiceImpl`) extend `BaseServiceImpl<T, ID, R>` and implement `BaseService<T, ID>`. Subtypes preserve contracts and can be substituted anywhere `BaseService` is required.
+- **Weather Service Alias**: `WeatherServiceImpl` implements `WeatherService`. The deprecated `WetherServiceImpl` extends `WeatherServiceImpl` to guarantee complete backward compatibility.
 
-### 4. Interface Segregation Principle (ISP)
-- **Segregated Cache Interfaces**: Cache functionality is divided into fine-grained interfaces: [CacheInspectorService](file:///e:/finder/src/main/java/com/market/finder/service/cache/CacheInspectorService.java), [CacheOperatorService](file:///e:/finder/src/main/java/com/market/finder/service/cache/CacheOperatorService.java), and [CacheBackupService](file:///e:/finder/src/main/java/com/market/finder/service/cache/CacheBackupService.java). Clients depend only on the methods they use.
+### 2.4 Interface Segregation Principle (ISP)
+- **Segregated Cache Interfaces**: Cache services are decoupled into single-purpose interfaces:
+  - `CacheInspectorService`: Read-only cache metadata and entry count inspection.
+  - `CacheOperatorService`: Flushes, clears, and warms caches.
+  - `CacheBackupService`: Exports and restores cache JSON snapshots.
+  - `CacheManagementService`: Aggregates the three interfaces for administrative tooling.
 
-### 5. Dependency Inversion Principle (DIP)
-- **Interface Inversion**: Controllers and interceptors inject interface abstractions ([SecurityContextFacade](file:///e:/finder/src/main/java/com/market/finder/security/SecurityContextFacade.java), [WeatherService](file:///e:/finder/src/main/java/com/market/finder/service/weather/WeatherService.java), [HttpHelperService](file:///e:/finder/src/main/java/com/market/finder/service/helper/HttpHelperService.java)) rather than concrete implementations or static singletons.
+### 2.5 Dependency Inversion Principle (DIP)
+- **Abstraction Inversion**: High-level controllers and security components depend on interface abstractions (`SecurityContextFacade`, `WeatherService`, `HttpHelperService`, `UserService`, `RoleService`) rather than concrete implementations or static context holders.
 
 ---
 
-## 🔒 Security & Role-Based Access Control (RBAC)
+## 3. Security and Role-Based Access Control (RBAC)
 
-System permissions are managed through dynamic authority assignments linked to roles:
+Spring Security configures form-based authentication and URL authorization rules. Fine-grained permission checks are evaluated by `RoleAccessInterceptor` and `DefaultRouteAccessEvaluator`.
 
-| Role Name | Description | Default Permissions |
+### Role and Permission Matrix
+
+| Role | Role Description | Assigned Granted Authorities |
 | :--- | :--- | :--- |
-| **`ROLE_ADMIN`** | System Administrator | `READ`, `WRITE`, `DELETE`, `MANAGE_USERS` |
-| **`ROLE_INSTRUCTOR`** | Academic Faculty Member | `READ`, `WRITE` |
-| **`ROLE_STUDENT`** | Enrolled Student | `READ` |
-| **`ROLE_USER`** | Standard System User | `READ` |
+| `ROLE_ADMIN` | System Administrator | `READ`, `WRITE`, `DELETE`, `MANAGE_USERS` |
+| `ROLE_INSTRUCTOR` | Academic Faculty | `READ`, `WRITE` |
+| `ROLE_STUDENT` | Academic Student | `READ` |
+| `ROLE_USER` | Standard User Account | `READ` |
 
 ### Default Credentials (Seed Data)
 
-| Username | Password | Assigned Role |
+| Username | Default Password | Role |
 | :--- | :--- | :--- |
 | `admin` | `admin123` | `ROLE_ADMIN` |
 | `instructor1` | `password123` | `ROLE_INSTRUCTOR` |
@@ -101,29 +94,82 @@ System permissions are managed through dynamic authority assignments linked to r
 
 ---
 
-## 📁 Project Package Structure
+## 4. Project Topology and Package Structure
 
 ```
 com.market.finder
 ├── FinderApplication.java
-├── config             # Spring Security, Web MVC, WebClient & Cache configurations
-├── controller         # MVC & REST Web Controllers
-├── dto                # Data Transfer Objects (WeatherDto)
-├── entity             # JPA Entities & Composite Embedded Primary Keys
-├── event              # Application Startup Event Listeners (Cache Warmer)
-├── filter             # Servlet Filters (CustomLoggingFilter)
-├── interceptor        # Handler Interceptors & Route Access Evaluators
-├── repository         # Spring Data JPA Repositories
-├── security           # Security Context Facade & Custom UserDetails Service
-└── service            # Business Domain Services, HTTP Helpers & Strategies
+├── config
+│   ├── CacheConfig.java
+│   ├── FilterConfig.java
+│   ├── PasswordEncoderConfig.java
+│   ├── SecurityConfig.java
+│   ├── SystemLogConverter.java
+│   ├── WebClientConfig.java
+│   └── WebMvcConfig.java
+├── controller
+│   ├── AdminController.java
+│   ├── AdminRoleController.java
+│   ├── AdminUserController.java
+│   ├── AttendanceController.java
+│   ├── CacheController.java
+│   ├── CourseController.java
+│   ├── DepartmentController.java
+│   ├── EmployeeController.java
+│   ├── EnrollmentController.java
+│   ├── GradebookController.java
+│   ├── HomeController.java
+│   ├── InstructorController.java
+│   ├── LoginController.java
+│   ├── RoleController.java
+│   ├── StudentController.java
+│   ├── UserController.java
+│   └── WeatherApiController.java
+├── dto
+│   └── WeatherDto.java
+├── entity
+│   ├── Attendance.java
+│   ├── AttendanceId.java
+│   ├── Course.java
+│   ├── Department.java
+│   ├── Employee.java
+│   ├── Enrollment.java
+│   ├── EnrollmentId.java
+│   ├── Gradebook.java
+│   ├── GradebookId.java
+│   ├── Instructor.java
+│   ├── InstructorDetail.java
+│   ├── Permission.java
+│   ├── Role.java
+│   ├── Staff.java
+│   ├── Student.java
+│   ├── StudentDetail.java
+│   └── User.java
+├── event
+│   └── RolePermissionCacheWarmer.java
+├── filter
+│   └── CustomLoggingFilter.java
+├── interceptor
+│   ├── AuthInterceptor.java
+│   ├── CustomLoggingInterceptor.java
+│   ├── DefaultRouteAccessEvaluator.java
+│   ├── RoleAccessInterceptor.java
+│   └── RouteAccessEvaluator.java
+├── repository
+│   └── [14 Spring Data JPA Repositories]
+├── security
+│   ├── CustomUserDetailsService.java
+│   ├── SecurityContextFacade.java
+│   └── SecurityContextFacadeImpl.java
+└── service
+    └── [Domain Services, Strategies, and Micro-Services]
 ```
 
 ---
 
-## 🗄️ Database Schema & Data Model
+## 5. Relational Database Schema
 
-The application uses a unified, production-tested database initialization script:
-* **`sql/system-db.sql`**: Mounted automatically into Docker Compose (`/docker-entrypoint-initdb.d/01-system-db.sql`).
+The database schema is consolidated in `sql/system-db.sql` and initialized automatically by Docker Compose.
 
 ```
                               +--------------------+
@@ -150,52 +196,88 @@ The application uses a unified, production-tested database initialization script
   +--------------------+  +--------------------+
 ```
 
-The database includes 17 relational tables: `users`, `roles`, `permissions`, `user_roles`, `role_permissions`, `student`, `student_detail`, `instructor`, `instructor_detail`, `course`, `teaching_assignment`, `enrollment`, `gradebook`, `attendance`, `department`, `employee`, and `staff`.
+### Table Inventory (17 Tables)
+1. `department`: Academic departments.
+2. `roles`: Security roles.
+3. `users`: System user credentials.
+4. `user_roles`: User to role mapping.
+5. `permissions`: System authorities.
+6. `role_permissions`: Role to authority mapping.
+7. `instructor_detail`: Instructor metadata.
+8. `instructor`: Faculty records.
+9. `student`: Enrolled students.
+10. `student_detail`: Student personal metadata.
+11. `course`: Academic courses.
+12. `teaching_assignment`: Instructor to course mapping.
+13. `enrollment`: Student course enrollments.
+14. `gradebook`: Academic assessment scores.
+15. `attendance`: Daily course attendance logs.
+16. `employee`: Corporate employees.
+17. `staff`: Support staff members.
 
 ---
 
-## 🚀 Getting Started & Deployment
+## 6. Component Infrastructure
+
+### 6.1 Logging and Monitoring
+- `CustomLoggingFilter` caches HTTP request and response streams to allow logging without consuming input streams.
+- `CustomLoggingInterceptor` measures controller action execution durations.
+- `SystemLogConverter` formats Hibernate SQL parameter logging for audit trails.
+
+### 6.2 Weather Integration Architecture
+- `OpenWeatherGeoLocationResolver` maps latitude and longitude coordinates to city names.
+- `OpenWeatherApiClient` executes non-blocking HTTP requests using `HttpHelperService`.
+- Fallback strategies provide seamless response default values when external API quotas are exceeded.
+
+---
+
+## 7. Local Environment and Container Deployment
 
 ### Prerequisites
-- **JDK 21**
-- **Maven 3.9+** (or bundled `./mvnw`)
-- **Docker & Docker Compose** (optional)
+- Java Development Kit (JDK) 21
+- Apache Maven 3.9+ (or local `./mvnw`)
+- Docker Engine 24+ and Docker Compose v2+
 
-### Option 1: Docker Compose (Recommended)
+### 7.1 Docker Compose Deployment (Recommended)
 
-1. Launch the application and MySQL 8.0 database containers:
-   ```bash
-   docker-compose up --build
-   ```
-2. Access the application in your browser at `http://localhost:8080`.
+To build the application container and start MySQL 8.0:
 
-### Option 2: Local Native Build
+```bash
+docker-compose up --build
+```
 
-1. Import the database schema into local MySQL:
+Access the web application at: `http://localhost:8080`
+
+### 7.2 Native Development Environment
+
+1. Import the relational database script into MySQL:
    ```bash
    mysql -u root -p < sql/system-db.sql
    ```
-2. Run the application using the Maven wrapper:
+
+2. Launch the application:
    ```bash
    ./mvnw spring-boot:run
    ```
 
 ---
 
-## 🧪 Verification & Testing
+## 8. Build and Test Verification
 
-Verify that the entire source code and test suite compile with **0% errors**:
+To compile the application and test classes offline:
 
 ```bash
-# Compile main application sources
+# Compile main Java source code
 mvn compile -o
 
-# Compile test suite
+# Compile unit test suite
 mvn test-compile -o
 ```
 
+Both compilation tasks complete with **0% errors** across 122 main classes and 13 test classes.
+
 ---
 
-## 📝 License
+## License
 
-Distributed under the **MIT License**. See `LICENSE` for details.
+Distributed under the MIT License.
