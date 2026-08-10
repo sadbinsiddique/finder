@@ -34,5 +34,7 @@ build/
 /logs/*.log
 /node_modules/
 /logs/
-/hs_err_pid20640.log
-/hs_err_pid25252.log
+/hs_err_pid*.log
+package-lock.json
+package.json
+tailwind.config.js
