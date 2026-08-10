@@ -22,6 +22,16 @@ public class WeatherDto {
     private boolean success = true;
     private String errorMessage;
 
+    public String getIconUrl() {
+        if (icon != null && !icon.isBlank()) {
+            if (icon.startsWith("http")) {
+                return icon;
+            }
+            return "https://openweathermap.org/img/wn/" + icon + "@2x.png";
+        }
+        return "https://openweathermap.org/img/wn/02d@2x.png";
+    }
+
     public static WeatherDto error(String message) {
         WeatherDto dto = new WeatherDto();
         dto.setSuccess(false);
