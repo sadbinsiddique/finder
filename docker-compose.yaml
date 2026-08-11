@@ -1,5 +1,3 @@
-# version attribute removed (Docker Compose v2+ uses default schema)
-
 services:
   # MySQL 8.0 Database Service
   mysql:
