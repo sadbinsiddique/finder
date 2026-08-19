@@ -60,7 +60,7 @@ class UserServiceTest {
         List<User> users = userService.findAll();
 
         assertEquals(1, users.size());
-        assertEquals("testuser", users.get(0).getUsername());
+        assertEquals("testuser", users.getFirst().getUsername());
         verify(userRepository, times(1)).findAll();
     }
 

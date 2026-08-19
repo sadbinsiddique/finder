@@ -47,10 +47,6 @@ class OtpServiceTest {
 
     @Test
     void testOtpExpiration() {
-        OtpServiceImpl serviceImpl = (OtpServiceImpl) otpService;
-        String identifier = "expiringUser";
-        
-        // Create an expired entry manually
         OtpServiceImpl.OtpEntry expiredEntry = new OtpServiceImpl.OtpEntry("123456", -1000L);
         assertTrue(expiredEntry.isExpired());
     }

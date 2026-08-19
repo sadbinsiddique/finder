@@ -33,7 +33,8 @@ CREATE TABLE `users`
 (
     `username` VARCHAR(50) PRIMARY KEY,
     `enabled`  BIT(1) NOT NULL DEFAULT b'1',
-    `password` VARCHAR(68) NOT NULL
+    `password` VARCHAR(68) NOT NULL,
+    `email`    VARCHAR(64) DEFAULT NULL
 ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4;
 
 # -----------------------------------------------------
