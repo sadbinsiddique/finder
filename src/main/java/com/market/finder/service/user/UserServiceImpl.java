@@ -1,10 +1,14 @@
 package com.market.finder.service.user;
 
-import com.market.finder.repository.UserRepository;
+import com.market.finder.entity.Instructor;
 import com.market.finder.entity.Role;
+import com.market.finder.entity.Student;
 import com.market.finder.entity.User;
-import com.market.finder.service.role.RoleService;
+import com.market.finder.repository.InstructorRepository;
+import com.market.finder.repository.StudentRepository;
+import com.market.finder.repository.UserRepository;
 import com.market.finder.service.base.BaseServiceImpl;
+import com.market.finder.service.role.RoleService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,11 +23,16 @@ public class UserServiceImpl extends BaseServiceImpl<User, String, UserRepositor
 
     private final RoleService roleService;
     private final PasswordEncoder passwordEncoder;
+    private final StudentRepository studentRepository;
+    private final InstructorRepository instructorRepository;
 
-    public UserServiceImpl(UserRepository userRepository, RoleService roleService, PasswordEncoder passwordEncoder) {
+    public UserServiceImpl(UserRepository userRepository, RoleService roleService, PasswordEncoder passwordEncoder,
+                           StudentRepository studentRepository, InstructorRepository instructorRepository) {
         super(userRepository);
         this.roleService = roleService;
         this.passwordEncoder = passwordEncoder;
+        this.studentRepository = studentRepository;
+        this.instructorRepository = instructorRepository;
     }
 
     @Override
@@ -114,5 +123,70 @@ public class UserServiceImpl extends BaseServiceImpl<User, String, UserRepositor
         roles.add(role);
         user.setRoles(roles);
         return user;
+    }
+
+    @Override
+    public Optional<User> findUserByIdentifier(String identifier) {
+        if (identifier == null || identifier.isBlank()) {
+            return Optional.empty();
+        }
+        String trimmed = identifier.trim();
+        // 1. Direct username lookup
+        Optional<User> userOpt = repository.findByUsername(trimmed);
+        if (userOpt.isPresent()) {
+            return userOpt;
+        }
+
+        if (trimmed.contains("@")) {
+            // 2. Direct email lookup on Users table
+            Optional<User> userByEmail = repository.findByEmail(trimmed);
+            if (userByEmail.isPresent()) {
+                return userByEmail;
+            }
+
+            // 3. Email lookup for Student and Instructor
+            Optional<Student> studentOpt = studentRepository.findByEmail(trimmed);
+            if (studentOpt.isPresent() && studentOpt.get().getUsername() != null) {
+                return repository.findByUsername(studentOpt.get().getUsername());
+            }
+
+            Optional<Instructor> instructorOpt = instructorRepository.findByEmail(trimmed);
+            if (instructorOpt.isPresent() && instructorOpt.get().getUsername() != null) {
+                return repository.findByUsername(instructorOpt.get().getUsername());
+            }
+
+            // 4. Fallback prefix check (username prefix of email address)
+            String prefix = trimmed.substring(0, trimmed.indexOf("@"));
+            Optional<User> prefixUser = repository.findByUsername(prefix);
+            if (prefixUser.isPresent()) {
+                return prefixUser;
+            }
+        }
+
+        return Optional.empty();
+    }
+
+    @Override
+    public String getEmailByUsername(String username) {
+        if (username == null || username.isBlank()) {
+            return "";
+        }
+        String trimmed = username.trim();
+        Optional<User> userOpt = repository.findByUsername(trimmed);
+        if (userOpt.isPresent() && userOpt.get().getEmail() != null) {
+            return userOpt.get().getEmail();
+        }
+
+        Optional<Student> studentOpt = studentRepository.findByUsername(trimmed);
+        if (studentOpt.isPresent() && studentOpt.get().getEmail() != null) {
+            return studentOpt.get().getEmail();
+        }
+
+        Optional<Instructor> instructorOpt = instructorRepository.findByUsername(trimmed);
+        if (instructorOpt.isPresent() && instructorOpt.get().getEmail() != null) {
+            return instructorOpt.get().getEmail();
+        }
+
+        return trimmed + "@university.edu"; // default fallback
     }
 }

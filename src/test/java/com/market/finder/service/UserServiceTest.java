@@ -2,6 +2,8 @@ package com.market.finder.service;
 
 import com.market.finder.entity.Role;
 import com.market.finder.entity.User;
+import com.market.finder.repository.InstructorRepository;
+import com.market.finder.repository.StudentRepository;
 import com.market.finder.repository.UserRepository;
 import com.market.finder.service.role.RoleService;
 import com.market.finder.service.user.UserServiceImpl;
@@ -31,6 +33,12 @@ class UserServiceTest {
 
     @Mock
     private PasswordEncoder passwordEncoder;
+
+    @Mock
+    private StudentRepository studentRepository;
+
+    @Mock
+    private InstructorRepository instructorRepository;
 
     @InjectMocks
     private UserServiceImpl userService;
@@ -107,5 +115,58 @@ class UserServiceTest {
         assertEquals("newuser", registered.getUsername());
         assertEquals("$2a$10$encodedHash", registered.getPassword());
         assertTrue(registered.getRoles().contains(role));
+    }
+
+    @Test
+    void testFindUserByIdentifier_DirectUsername() {
+        when(userRepository.findByUsername("testuser")).thenReturn(Optional.of(sampleUser));
+        Optional<User> resolved = userService.findUserByIdentifier("testuser");
+        assertTrue(resolved.isPresent());
+        assertEquals("testuser", resolved.get().getUsername());
+    }
+
+    @Test
+    void testFindUserByIdentifier_StudentEmail() {
+        com.market.finder.entity.Student student = new com.market.finder.entity.Student();
+        student.setUsername("student1");
+        student.setEmail("alice.johnson@student.edu");
+
+        when(userRepository.findByUsername("alice.johnson@student.edu")).thenReturn(Optional.empty());
+        when(studentRepository.findByEmail("alice.johnson@student.edu")).thenReturn(Optional.of(student));
+        when(userRepository.findByUsername("student1")).thenReturn(Optional.of(sampleUser));
+
+        Optional<User> resolved = userService.findUserByIdentifier("alice.johnson@student.edu");
+        assertTrue(resolved.isPresent());
+    }
+
+    @Test
+    void testFindUserByIdentifier_EmailPrefixFallback() {
+        when(userRepository.findByUsername("mdsiyam377@gmail.com")).thenReturn(Optional.empty());
+        when(studentRepository.findByEmail("mdsiyam377@gmail.com")).thenReturn(Optional.empty());
+        when(instructorRepository.findByEmail("mdsiyam377@gmail.com")).thenReturn(Optional.empty());
+        when(userRepository.findByUsername("mdsiyam377")).thenReturn(Optional.of(sampleUser));
+
+        Optional<User> resolved = userService.findUserByIdentifier("mdsiyam377@gmail.com");
+        assertTrue(resolved.isPresent());
+    }
+
+    @Test
+    void testFindUserByIdentifier_DirectUserEmail() {
+        when(userRepository.findByUsername("mdsiyam377@gmail.com")).thenReturn(Optional.empty());
+        when(userRepository.findByEmail("mdsiyam377@gmail.com")).thenReturn(Optional.of(sampleUser));
+
+        Optional<User> resolved = userService.findUserByIdentifier("mdsiyam377@gmail.com");
+        assertTrue(resolved.isPresent());
+        assertEquals("testuser", resolved.get().getUsername());
+    }
+
+    @Test
+    void testGetEmailByUsername_Student() {
+        com.market.finder.entity.Student student = new com.market.finder.entity.Student();
+        student.setEmail("alice.johnson@student.edu");
+        when(studentRepository.findByUsername("student1")).thenReturn(Optional.of(student));
+
+        String email = userService.getEmailByUsername("student1");
+        assertEquals("alice.johnson@student.edu", email);
     }
 }

@@ -33,6 +33,10 @@ public class User {
     @Column(length = 68, nullable = false)
     private String password;
 
+    @Size(max = 64, message = "Email cannot exceed 64 characters")
+    @Column(name = "email", length = 64)
+    private String email;
+
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "user_roles",

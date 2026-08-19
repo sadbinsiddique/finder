@@ -9,5 +9,4 @@ class FinderApplicationTests {
     @Test
     void contextLoads() {
     }
-
 }

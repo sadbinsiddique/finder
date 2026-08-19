@@ -1,9 +1,6 @@
 package com.market.finder.controller;
 
-import com.market.finder.entity.User;
-import com.market.finder.service.otp.OtpNotificationService;
-import com.market.finder.service.otp.OtpService;
-import com.market.finder.service.user.UserService;
+import com.market.finder.service.password.PasswordResetService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
@@ -13,24 +10,15 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import java.util.Optional;
-
 @Controller
 public class PasswordResetController {
 
     private static final Logger logger = LoggerFactory.getLogger(PasswordResetController.class);
 
-    private final OtpService otpService;
-    private final OtpNotificationService otpNotificationService;
-    private final UserService userService;
+    private final PasswordResetService passwordResetService;
 
-    public PasswordResetController(
-            OtpService otpService,
-            OtpNotificationService otpNotificationService,
-            UserService userService) {
-        this.otpService = otpService;
-        this.otpNotificationService = otpNotificationService;
-        this.userService = userService;
+    public PasswordResetController(PasswordResetService passwordResetService) {
+        this.passwordResetService = passwordResetService;
     }
 
     @GetMapping("/forgot-password")
@@ -41,29 +29,25 @@ public class PasswordResetController {
     @PostMapping("/forgot-password")
     public String handleForgotPassword(
             @RequestParam("identifier") String identifier,
-            @RequestParam(value = "channel", defaultValue = "EMAIL") String channel,
             RedirectAttributes redirectAttributes) {
 
-        logger.info("[FORGOT PASSWORD] OTP request received for identifier='{}', channel='{}'", identifier, channel);
+        logger.info("[FORGOT PASSWORD] OTP request received for identifier='{}'", identifier);
 
-        String trimmedIdentifier = identifier.trim();
-        Optional<User> userOpt = userService.findByUsername(trimmedIdentifier);
-
-        String otpCode = otpService.generateOtp(trimmedIdentifier);
-
-        if ("SMS".equalsIgnoreCase(channel)) {
-            otpNotificationService.sendOtpViaSms(trimmedIdentifier, otpCode);
-            redirectAttributes.addFlashAttribute("infoMessage",
-                    "A 6-digit verification OTP has been dispatched to your phone number.");
-        } else {
-            String targetEmail = userOpt.map(u -> u.getUsername() + "@university.edu").orElse(trimmedIdentifier);
-            otpNotificationService.sendOtpViaSmtp(targetEmail, otpCode);
-            redirectAttributes.addFlashAttribute("infoMessage",
-                    "A 6-digit verification OTP has been sent to your email address via SMTP.");
+        if (identifier == null || identifier.trim().isEmpty()) {
+            redirectAttributes.addFlashAttribute("errorMessage", "Username or Email address is required.");
+            return "redirect:/forgot-password";
         }
 
-        redirectAttributes.addAttribute("identifier", trimmedIdentifier);
-        return "redirect:/reset-password";
+        try {
+            passwordResetService.initiatePasswordReset(identifier);
+            redirectAttributes.addFlashAttribute("infoMessage",
+                    "A 6-digit verification OTP has been sent to your email address via SMTP.");
+            redirectAttributes.addAttribute("identifier", identifier.trim());
+            return "redirect:/reset-password";
+        } catch (IllegalArgumentException e) {
+            redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
+            return "redirect:/forgot-password";
+        }
     }
 
     @GetMapping("/reset-password")
@@ -83,26 +67,37 @@ public class PasswordResetController {
             Model model,
             RedirectAttributes redirectAttributes) {
 
-        if (!newPassword.equals(confirmPassword)) {
-            model.addAttribute("errorMessage", "Passwords do not match. Please try again.");
+        if (identifier == null || identifier.trim().isEmpty()) {
+            model.addAttribute("errorMessage", "Identifier is required.");
+            return "reset-password";
+        }
+        if (otpCode == null || otpCode.trim().isEmpty()) {
+            model.addAttribute("errorMessage", "OTP Code is required.");
             model.addAttribute("identifier", identifier);
             return "reset-password";
         }
-
-        boolean isValid = otpService.validateOtp(identifier, otpCode);
-        if (!isValid) {
-            model.addAttribute("errorMessage", "Invalid or expired system OTP code. Please verify and try again.");
+        if (newPassword == null || newPassword.isEmpty()) {
+            model.addAttribute("errorMessage", "New Password is required.");
+            model.addAttribute("identifier", identifier);
+            return "reset-password";
+        }
+        if (newPassword.length() < 4 || newPassword.length() > 68) {
+            model.addAttribute("errorMessage", "Password must be between 4 and 68 characters.");
+            model.addAttribute("identifier", identifier);
+            return "reset-password";
+        }
+        if (!newPassword.equals(confirmPassword)) {
+            model.addAttribute("errorMessage", "Passwords do not match.");
             model.addAttribute("identifier", identifier);
             return "reset-password";
         }
 
         try {
-            userService.resetPassword(identifier, newPassword);
-            otpService.clearOtp(identifier);
+            passwordResetService.completePasswordReset(identifier, otpCode, newPassword);
             redirectAttributes.addFlashAttribute("resetSuccess", true);
             return "redirect:/login?resetSuccess=true";
-        } catch (Exception e) {
-            model.addAttribute("errorMessage", "Password reset failed: " + e.getMessage());
+        } catch (IllegalArgumentException e) {
+            model.addAttribute("errorMessage", e.getMessage());
             model.addAttribute("identifier", identifier);
             return "reset-password";
         }

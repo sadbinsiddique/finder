@@ -54,29 +54,4 @@ class OtpServiceTest {
         OtpServiceImpl.OtpEntry expiredEntry = new OtpServiceImpl.OtpEntry("123456", -1000L);
         assertTrue(expiredEntry.isExpired());
     }
-
-    @Test
-    void testSmtpConnection() {
-        org.springframework.mail.javamail.JavaMailSenderImpl mailSender = new org.springframework.mail.javamail.JavaMailSenderImpl();
-        mailSender.setHost("smtp.gmail.com");
-        mailSender.setPort(587);
-        mailSender.setUsername("sadbinsiddique@gmail.com");
-        mailSender.setPassword("lexohoupzaxgghht");
-        
-        java.util.Properties props = mailSender.getJavaMailProperties();
-        props.put("mail.smtp.auth", "true");
-        props.put("mail.smtp.starttls.enable", "true");
-        
-        try {
-            org.springframework.mail.SimpleMailMessage message = new org.springframework.mail.SimpleMailMessage();
-            message.setTo("sadbinsiddique@gmail.com");
-            message.setSubject("Test Mail");
-            message.setText("Test OTP");
-            mailSender.send(message);
-            System.out.println("SMTP TEST SUCCESSFUL");
-        } catch (Exception e) {
-            System.err.println("SMTP TEST FAILED: " + e.getMessage());
-            e.printStackTrace();
-        }
-    }
 }
