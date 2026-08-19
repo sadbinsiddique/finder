@@ -69,4 +69,11 @@ class DefaultRouteAccessEvaluatorTest {
         boolean allowedWithRead = evaluator.evaluate(response, "user", "GET", "/students", Set.of("READ"));
         assertTrue(allowedWithRead);
     }
+
+    @Test
+    void testRoleAdmin_AllowedAnywhere() throws Exception {
+        boolean allowedAdmin = evaluator.evaluate(response, "adminUser", "DELETE", "/admin/users/delete/test", Set.of("ROLE_ADMIN"));
+        assertTrue(allowedAdmin);
+        verify(response, never()).sendRedirect(anyString());
+    }
 }

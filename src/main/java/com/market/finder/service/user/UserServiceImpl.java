@@ -74,6 +74,15 @@ public class UserServiceImpl extends BaseServiceImpl<User, String, UserRepositor
         return repository.saveAndFlush(user);
     }
 
+    @Override
+    @Transactional
+    public void resetPassword(String username, String newPassword) {
+        User user = repository.findByUsername(username)
+                .orElseThrow(() -> new IllegalArgumentException("User not found: " + username));
+        user.setPassword(passwordEncoder.encode(newPassword));
+        repository.saveAndFlush(user);
+    }
+
     private void encodePasswordIfRaw(User user) {
         String password = user.getPassword();
         if (password != null && isRawPassword(password)) {

@@ -3,12 +3,16 @@ package com.market.finder.controller;
 import com.market.finder.entity.Role;
 import com.market.finder.service.permission.PermissionService;
 import com.market.finder.service.role.RoleService;
+import jakarta.validation.Valid;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 @Controller
 @RequestMapping("/roles")
+@PreAuthorize("hasAnyAuthority('MANAGE_USERS', 'ROLE_ADMIN')")
 public class RoleController {
 
     private final RoleService roleService;
@@ -42,8 +46,15 @@ public class RoleController {
     }
 
     @PostMapping("/save")
-    public String saveRole(@ModelAttribute("role") Role role,
-                           @RequestParam(value = "permissionIds", required = false) java.util.List<Integer> permissionIds) {
+    public String saveRole(
+            @Valid @ModelAttribute("role") Role role,
+            BindingResult bindingResult,
+            @RequestParam(value = "permissionIds", required = false) java.util.List<Integer> permissionIds,
+            Model model) {
+        if (bindingResult.hasErrors()) {
+            model.addAttribute("allPermissions", permissionService.findAll());
+            return "roles/form";
+        }
         if (permissionIds == null || permissionIds.isEmpty()) {
             role.setPermissions(new java.util.HashSet<>());
         } else {

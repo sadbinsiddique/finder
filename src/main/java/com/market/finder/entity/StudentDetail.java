@@ -1,6 +1,8 @@
 package com.market.finder.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -20,9 +22,12 @@ public class StudentDetail {
     @JoinColumn(name = "student_id")
     private Student student;
 
+    @Pattern(regexp = "^(A|B|AB|O)[+-]$", message = "Blood group must be valid (e.g. A+, O-, AB+)")
+    @Size(max = 5, message = "Blood group cannot exceed 5 characters")
     @Column(name = "blood_group", length = 5)
     private String bloodGroup;
 
-    @Column()
+    @Size(max = 255, message = "Address cannot exceed 255 characters")
+    @Column(length = 255)
     private String address;
 }

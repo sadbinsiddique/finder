@@ -1,6 +1,9 @@
 package com.market.finder.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -16,12 +19,18 @@ import java.util.Set;
 public class User {
 
     @Id
+    @NotBlank(message = "Username is required")
+    @Size(min = 3, max = 50, message = "Username must be between 3 and 50 characters")
     @Column(length = 50, nullable = false)
     private String username;
 
-    private Boolean enabled;
+    @NotNull(message = "Enabled status is required")
+    @Column(nullable = false)
+    private Boolean enabled = true;
 
-    @Column(length = 68)
+    @NotBlank(message = "Password is required")
+    @Size(min = 4, max = 68, message = "Password must be between 4 and 68 characters")
+    @Column(length = 68, nullable = false)
     private String password;
 
     @ManyToMany(fetch = FetchType.EAGER)

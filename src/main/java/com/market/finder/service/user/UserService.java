@@ -9,4 +9,5 @@ public interface UserService extends BaseService<User, String> {
     Optional<User> findByUsername(String username);
     void deleteByUsername(String username);
     User registerNewUser(String username, String rawPassword, String roleName);
+    void resetPassword(String username, String newPassword);
 }

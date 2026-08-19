@@ -29,17 +29,20 @@
 
                     <div class="mb-3">
                         <label class="form-label text-secondary small fw-medium">First Name</label>
-                        <input class="form-control glass-input" placeholder="Enter first name" th:field="*{firstName}" type="text" required>
+                        <input class="form-control glass-input" th:classappend="${#fields.hasErrors('firstName')} ? 'is-invalid'" placeholder="Enter first name" th:field="*{firstName}" type="text" required>
+                        <div class="invalid-feedback" th:if="${#fields.hasErrors('firstName')}" th:errors="*{firstName}">Invalid First Name</div>
                     </div>
 
                     <div class="mb-3">
                         <label class="form-label text-secondary small fw-medium">Last Name</label>
-                        <input class="form-control glass-input" placeholder="Enter last name" th:field="*{lastName}" type="text" required>
+                        <input class="form-control glass-input" th:classappend="${#fields.hasErrors('lastName')} ? 'is-invalid'" placeholder="Enter last name" th:field="*{lastName}" type="text" required>
+                        <div class="invalid-feedback" th:if="${#fields.hasErrors('lastName')}" th:errors="*{lastName}">Invalid Last Name</div>
                     </div>
 
                     <div class="mb-4">
                         <label class="form-label text-secondary small fw-medium">Email Address</label>
-                        <input class="form-control glass-input" placeholder="name@company.com" th:field="*{email}" type="email" required>
+                        <input class="form-control glass-input" th:classappend="${#fields.hasErrors('email')} ? 'is-invalid'" placeholder="name@company.com" th:field="*{email}" type="text" required>
+                        <div class="invalid-feedback" th:if="${#fields.hasErrors('email')}" th:errors="*{email}">Please enter a valid email address</div>
                     </div>
 
                     <button class="btn btn-glass-primary w-100 py-2 fw-semibold" type="submit">

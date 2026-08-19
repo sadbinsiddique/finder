@@ -4,8 +4,11 @@ import com.market.finder.entity.Role;
 import com.market.finder.entity.User;
 import com.market.finder.service.role.RoleService;
 import com.market.finder.service.user.UserService;
+import jakarta.validation.Valid;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -15,6 +18,7 @@ import java.util.Set;
 
 @Controller
 @RequestMapping("/admin/users")
+@PreAuthorize("hasAnyAuthority('MANAGE_USERS', 'ROLE_ADMIN')")
 public class AdminUserController {
 
     private final UserService userService;
@@ -49,8 +53,15 @@ public class AdminUserController {
 
     @PostMapping("/save")
     public String saveUser(
-            @ModelAttribute("user") User user,
-            @RequestParam(value = "roleIds", required = false) List<Integer> roleIds) {
+            @Valid @ModelAttribute("user") User user,
+            BindingResult bindingResult,
+            @RequestParam(value = "roleIds", required = false) List<Integer> roleIds,
+            Model model) {
+
+        if (bindingResult.hasErrors()) {
+            model.addAttribute("allRoles", roleService.findAll());
+            return "admin/users/form";
+        }
 
         if (roleIds != null && !roleIds.isEmpty()) {
             Set<Role> selectedRoles = new HashSet<>(roleService.findAllById(roleIds));

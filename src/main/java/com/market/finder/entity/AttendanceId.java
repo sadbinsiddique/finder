@@ -2,6 +2,7 @@ package com.market.finder.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -17,12 +18,15 @@ import java.util.Objects;
 @NoArgsConstructor
 @AllArgsConstructor
 public class AttendanceId implements Serializable {
+    @NotNull(message = "Student ID is required")
     @Column(name = "student_id")
     private Integer studentId;
 
+    @NotNull(message = "Course ID is required")
     @Column(name = "course_id")
     private Integer courseId;
 
+    @NotNull(message = "Attendance date is required")
     @Column(name = "attendance_date")
     private LocalDate attendanceDate;
 

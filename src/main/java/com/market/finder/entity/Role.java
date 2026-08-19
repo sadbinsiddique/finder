@@ -1,6 +1,8 @@
 package com.market.finder.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -18,7 +20,9 @@ public class Role {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @Column(name = "role_name", unique = true, length = 50)
+    @NotBlank(message = "Role name is required")
+    @Size(min = 2, max = 50, message = "Role name must be between 2 and 50 characters")
+    @Column(name = "role_name", unique = true, length = 50, nullable = false)
     private String roleName;
 
     @ManyToMany(fetch = FetchType.EAGER)

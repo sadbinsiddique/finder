@@ -15,23 +15,28 @@ public class DefaultRouteAccessEvaluator implements RouteAccessEvaluator {
 
     @Override
     public boolean evaluate(HttpServletResponse response, String username, String method, String uri, Set<String> authorities) throws IOException {
+        boolean isAdminOrManager = authorities.contains("ROLE_ADMIN") || authorities.contains("MANAGE_USERS");
+        boolean canDelete = isAdminOrManager || authorities.contains("DELETE");
+        boolean canWrite = canDelete || authorities.contains("WRITE");
+        boolean canRead = canWrite || authorities.contains("READ");
+
         if (isAdminEndpoint(uri)) {
-            if (!authorities.contains("MANAGE_USERS")) {
+            if (!isAdminOrManager) {
                 return denyAccess(response, username, method, uri, "Requires MANAGE_USERS permission");
             }
             return true;
         }
 
         if (isDeleteOperation(uri, method)) {
-            if (!authorities.contains("DELETE")) {
+            if (!canDelete) {
                 return denyAccess(response, username, method, uri, "Requires DELETE permission");
             }
         } else if (isWriteOperation(uri, method)) {
-            if (!authorities.contains("WRITE")) {
+            if (!canWrite) {
                 return denyAccess(response, username, method, uri, "Requires WRITE permission");
             }
         } else {
-            if (!authorities.contains("READ")) {
+            if (!canRead) {
                 return denyAccess(response, username, method, uri, "Requires READ permission");
             }
         }

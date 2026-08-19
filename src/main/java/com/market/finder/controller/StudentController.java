@@ -3,8 +3,10 @@ package com.market.finder.controller;
 import com.market.finder.entity.Student;
 import com.market.finder.service.department.DepartmentService;
 import com.market.finder.service.student.StudentService;
+import jakarta.validation.Valid;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 @Controller
@@ -33,7 +35,14 @@ public class StudentController {
     }
 
     @PostMapping("/save")
-    public String saveStudent(@ModelAttribute("student") Student student) {
+    public String saveStudent(
+            @Valid @ModelAttribute("student") Student student,
+            BindingResult bindingResult,
+            Model model) {
+        if (bindingResult.hasErrors()) {
+            model.addAttribute("departments", departmentService.findAll());
+            return "students/form";
+        }
         studentService.save(student);
         return "redirect:/students";
     }

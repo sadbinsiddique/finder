@@ -83,7 +83,10 @@ class AdminUserControllerTest {
 
         when(userService.save(any(User.class))).thenAnswer(i -> i.getArgument(0));
 
-        String view = adminUserController.saveUser(editUser, List.of());
+        org.springframework.validation.BindingResult bindingResult = mock(org.springframework.validation.BindingResult.class);
+        when(bindingResult.hasErrors()).thenReturn(false);
+
+        String view = adminUserController.saveUser(editUser, bindingResult, List.of(), model);
 
         assertEquals("redirect:/admin/users", view);
         verify(userService, times(1)).save(editUser);

@@ -1,6 +1,7 @@
 package com.market.finder.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.*;
 import lombok.Getter;
 
 @Getter
@@ -9,25 +10,39 @@ import lombok.Getter;
 public class Staff {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-
     @Column(name = "id")
     private int id;
 
-    @Column(name = "first_name")
+    @NotBlank(message = "First name is required")
+    @Size(max = 45, message = "First name cannot exceed 45 characters")
+    @Column(name = "first_name", length = 45, nullable = false)
     private String firstName;
 
-    @Column(name = "last_name")
+    @NotBlank(message = "Last name is required")
+    @Size(max = 45, message = "Last name cannot exceed 45 characters")
+    @Column(name = "last_name", length = 45, nullable = false)
     private String lastName;
 
-    @Column(name = "email")
+    @NotBlank(message = "Email is required")
+    @Pattern(
+            regexp = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.(com|edu|org|net|gov|mil|io|co|in|uk|ca|de|fr|jp|au|dev|app|tech|info|biz|me|us|ai|store|online|site|bd)(\\.[a-zA-Z]{2,3})?$",
+            message = "Please enter a valid email address with a recognized domain (e.g. gmail.com, outlook.com, university.edu)"
+    )
+    @Size(max = 64, message = "Email cannot exceed 64 characters")
+    @Column(name = "email", length = 64, nullable = false)
     private String email;
 
+    @Min(value = 0, message = "Income cannot be negative")
     @Column(name = "income")
     private int income;
 
-    @Column(name = "title")
+    @NotBlank(message = "Title is required")
+    @Size(max = 50, message = "Title cannot exceed 50 characters")
+    @Column(name = "title", length = 50)
     private String title;
 
+    @Min(value = 18, message = "Age must be at least 18")
+    @Max(value = 100, message = "Age must be at most 100")
     @Column(name = "age")
     private int age;
 

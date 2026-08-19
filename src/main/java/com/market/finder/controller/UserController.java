@@ -2,12 +2,16 @@ package com.market.finder.controller;
 
 import com.market.finder.entity.User;
 import com.market.finder.service.user.UserService;
+import jakarta.validation.Valid;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 @Controller
 @RequestMapping("/users")
+@PreAuthorize("hasAnyAuthority('MANAGE_USERS', 'ROLE_ADMIN')")
 public class UserController {
 
     private final UserService userService;
@@ -37,7 +41,12 @@ public class UserController {
     }
 
     @PostMapping("/save")
-    public String saveUser(@ModelAttribute("user") User user) {
+    public String saveUser(
+            @Valid @ModelAttribute("user") User user,
+            BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            return "users/form";
+        }
         userService.save(user);
         return "redirect:/users";
     }

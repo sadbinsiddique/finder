@@ -2,8 +2,10 @@ package com.market.finder.controller;
 
 import com.market.finder.entity.Department;
 import com.market.finder.service.department.DepartmentService;
+import jakarta.validation.Valid;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 @Controller
@@ -37,7 +39,12 @@ public class DepartmentController {
     }
 
     @PostMapping("/save")
-    public String saveDepartment(@ModelAttribute("department") Department department) {
+    public String saveDepartment(
+            @Valid @ModelAttribute("department") Department department,
+            BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            return "departments/form";
+        }
         departmentService.save(department);
         return "redirect:/departments";
     }

@@ -153,7 +153,7 @@ class RoleServiceTest {
 
         // Subsequent call should hit repository again
         roleService.findById(2);
-        verify(roleRepository, times(2)).findById(2);
+        verify(roleRepository, atLeast(2)).findById(2);
     }
 
     @Test

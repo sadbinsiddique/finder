@@ -79,7 +79,10 @@ class StudentControllerTest {
     void testSaveStudent() {
         when(studentService.save(sampleStudent)).thenReturn(sampleStudent);
 
-        String view = studentController.saveStudent(sampleStudent);
+        org.springframework.validation.BindingResult bindingResult = mock(org.springframework.validation.BindingResult.class);
+        when(bindingResult.hasErrors()).thenReturn(false);
+
+        String view = studentController.saveStudent(sampleStudent, bindingResult, model);
 
         assertEquals("redirect:/students", view);
         verify(studentService, times(1)).save(sampleStudent);

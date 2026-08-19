@@ -9,4 +9,6 @@ public interface SecurityContextFacade {
     boolean isAuthenticated();
     String getCurrentUsername();
     Set<String> getCurrentAuthorities();
+    boolean hasAuthority(String authority);
+    boolean isAdmin();
 }

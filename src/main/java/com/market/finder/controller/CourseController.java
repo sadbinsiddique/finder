@@ -2,8 +2,10 @@ package com.market.finder.controller;
 
 import com.market.finder.entity.Course;
 import com.market.finder.service.course.CourseService;
+import jakarta.validation.Valid;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 @Controller
@@ -37,7 +39,12 @@ public class CourseController {
     }
 
     @PostMapping("/save")
-    public String saveCourse(@ModelAttribute("course") Course course) {
+    public String saveCourse(
+            @Valid @ModelAttribute("course") Course course,
+            BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            return "courses/form";
+        }
         courseService.save(course);
         return "redirect:/courses";
     }

@@ -1,6 +1,8 @@
 package com.market.finder.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -19,7 +21,9 @@ public class Permission {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @Column(name = "permission_name", unique = true)
+    @NotBlank(message = "Permission name is required")
+    @Size(min = 2, max = 50, message = "Permission name must be between 2 and 50 characters")
+    @Column(name = "permission_name", unique = true, length = 50, nullable = false)
     private String permissionName;
 
     public Permission(String permissionName) {

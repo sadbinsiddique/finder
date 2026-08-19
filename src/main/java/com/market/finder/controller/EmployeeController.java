@@ -2,8 +2,10 @@ package com.market.finder.controller;
 
 import com.market.finder.entity.Employee;
 import com.market.finder.service.employee.EmployeeService;
+import jakarta.validation.Valid;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -41,7 +43,12 @@ public class EmployeeController {
     }
 
     @PostMapping("/save")
-    public String saveEmployee(@ModelAttribute("employee") Employee theEmployee) {
+    public String saveEmployee(
+            @Valid @ModelAttribute("employee") Employee theEmployee,
+            BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            return "employees/employee-form";
+        }
         employeeService.save(theEmployee);
         return "redirect:/employees/list";
     }
