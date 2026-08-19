@@ -22,7 +22,7 @@ public class InstructorDetail {
     @Max(value = 100, message = "Age must be at most 100")
     private Integer age;
 
-    @Size(max = 128, message = "YouTube channel URL/name cannot exceed 128 characters")
+    @Size(max = 128, message = "YouTube channel URL")
     @Column(name = "youtube_channel", length = 128)
     private String youtubeChannel;
 }
