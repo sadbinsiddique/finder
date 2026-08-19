@@ -3,7 +3,9 @@ package com.market.finder.entity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import lombok.Getter;
+import lombok.Setter;
 
+@Setter
 @Getter
 @Entity
 @Table(name = "staff")
@@ -56,34 +58,6 @@ public class Staff {
         this.income = income;
         this.title = title;
         this.age = age;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
-
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public void setAge(int age) {
-        this.age = age;
-    }
-
-    public void setIncome(int income) {
-        this.income = income;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
     }
 
     @Override
