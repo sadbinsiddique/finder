@@ -82,7 +82,7 @@ public class PasswordResetController {
             return "reset-password";
         }
         if (newPassword.length() < 4 || newPassword.length() > 68) {
-            model.addAttribute("errorMessage", "Password must be between 4 and 68 characters.");
+            model.addAttribute("errorMessage", "Password must be between 68 characters.");
             model.addAttribute("identifier", identifier);
             return "reset-password";
         }

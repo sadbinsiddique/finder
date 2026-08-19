@@ -130,7 +130,7 @@
     <p class="text-secondary small mb-4">Enter your system credentials to sign in.</p>
 
     <div th:if="${param.error}" class="alert alert-glass-danger mb-3" role="alert">
-        <i class="fas fa-exclamation-circle me-1"></i> Invalid username or password. Please try again.
+        <i class="fas fa-exclamation-circle me-1"></i> Invalid username or password.
     </div>
 
     <div th:if="${param.logout}" class="alert alert-info text-white bg-transparent border-info mb-3 small py-2" role="alert">
@@ -138,7 +138,7 @@
     </div>
 
     <div th:if="${param.resetSuccess}" class="alert alert-success text-white bg-transparent border-success mb-3 small py-2" role="alert">
-        <i class="fas fa-check-circle me-1"></i> Password reset successfully. Please sign in.
+        <i class="fas fa-check-circle me-1"></i> Password reset successfully.
     </div>
 
     <form th:action="@{/login}" method="post">

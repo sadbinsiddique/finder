@@ -38,7 +38,11 @@
                             <div class="row g-2">
                                 <div class="col-6" th:each="perm : ${allPermissions}">
                                     <div class="form-check">
-                                        <input class="form-check-input" type="checkbox" name="permissionIds" th:value="${perm.id}" th:id="${'perm_' + perm.id}" th:checked="${role.permissions != null and role.permissions.contains(perm)}"/>
+                                        <label>
+                                            <input class="form-check-input" name="permissionIds" th:checked="${role.permissions != null and role.permissions.contains(perm)}"
+                                                   th:id="${'perm_' + perm.id}" th:value="${perm.id}"
+                                                   type="checkbox"/>
+                                        </label>
                                         <label class="form-check-label small text-light" th:for="${'perm_' + perm.id}" th:text="${perm.permissionName}">PERM_NAME</label>
                                     </div>
                                 </div>
