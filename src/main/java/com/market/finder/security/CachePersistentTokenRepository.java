@@ -1,5 +1,6 @@
 package com.market.finder.security;
 
+import org.jspecify.annotations.NonNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.cache.Cache;
@@ -47,7 +48,7 @@ public class CachePersistentTokenRepository implements PersistentTokenRepository
     }
 
     @Override
-    public void updateToken(String series, String tokenValue, Date lastUsed) {
+    public void updateToken(@NonNull String series, @NonNull String tokenValue, @NonNull Date lastUsed) {
         logger.info("[REMEMBER-ME CACHE] Updating token in cache layer for series='{}'", series);
         Cache cache = getCache();
         if (cache != null) {
@@ -61,7 +62,7 @@ public class CachePersistentTokenRepository implements PersistentTokenRepository
     }
 
     @Override
-    public PersistentRememberMeToken getTokenForSeries(String seriesId) {
+    public PersistentRememberMeToken getTokenForSeries(@NonNull String seriesId) {
         Cache cache = getCache();
         if (cache != null) {
             PersistentRememberMeToken token = cache.get("series:" + seriesId, PersistentRememberMeToken.class);
@@ -74,7 +75,7 @@ public class CachePersistentTokenRepository implements PersistentTokenRepository
     }
 
     @Override
-    public void removeUserTokens(String username) {
+    public void removeUserTokens(@NonNull String username) {
         logger.info("[REMEMBER-ME CACHE] Evicting remember-me tokens from cache layer for user='{}'", username);
         Cache cache = getCache();
         if (cache != null) {
