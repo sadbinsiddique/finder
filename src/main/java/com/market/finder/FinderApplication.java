@@ -5,10 +5,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.scheduling.annotation.EnableScheduling;
 
-@SpringBootApplication(exclude = {
-        org.springdoc.core.configuration.SpringDocDataRestConfiguration.class,
-        org.springdoc.core.configuration.SpringDocHateoasConfiguration.class
-})
+@SpringBootApplication
 @EnableCaching
 @EnableScheduling
 public class FinderApplication {

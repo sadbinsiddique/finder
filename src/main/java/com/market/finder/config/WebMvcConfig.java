@@ -32,6 +32,9 @@ public class WebMvcConfig implements WebMvcConfigurer {
                         "/img/**",
                         "/js/**",
                         "/login",
+                        "/register",
+                        "/forgot-password",
+                        "/reset-password",
                         "/error"
                 );
 
@@ -42,6 +45,9 @@ public class WebMvcConfig implements WebMvcConfigurer {
                         "/img/**",
                         "/js/**",
                         "/login",
+                        "/register",
+                        "/forgot-password",
+                        "/reset-password",
                         "/error"
                 );
 

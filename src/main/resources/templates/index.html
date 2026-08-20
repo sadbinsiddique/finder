@@ -259,6 +259,17 @@
                 <p class="text-secondary small mb-0">System user accounts, role definitions and permissions.</p>
             </a>
         </div>
+
+        <!-- Settings Control Center -->
+        <div class="col-md-6 col-lg-4" sec:authorize="hasRole('ADMIN')">
+            <a th:href="@{/admin/settings}" class="liquid-glass-card" style="border-color: rgba(10, 132, 255, 0.3);">
+                <div class="card-icon" style="background: rgba(10, 132, 255, 0.15); color: var(--apple-blue);">
+                    <i class="fas fa-sliders-h"></i>
+                </div>
+                <h5 class="fw-bold mb-1 text-white">Settings Control Center</h5>
+                <p class="text-secondary small mb-0">System configurations, email rules, appearance and API settings.</p>
+            </a>
+        </div>
     </div>
 </div>
 

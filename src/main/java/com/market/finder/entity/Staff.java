@@ -33,10 +33,8 @@ public class Staff extends BasePersonEntity {
     public Staff() {
     }
 
-    public Staff(String email, String lastName, String firstName, int income, String title, int age) {
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.email = email;
+    public Staff(String firstName, String lastName, String email, int income, String title, int age) {
+        super(firstName, lastName, email);
         this.income = income;
         this.title = title;
         this.age = age;

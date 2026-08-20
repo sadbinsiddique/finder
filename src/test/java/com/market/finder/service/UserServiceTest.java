@@ -120,6 +120,26 @@ class UserServiceTest {
     }
 
     @Test
+    void testRegisterNewUser_WithoutEmail_Success() {
+        Role role = new Role();
+        role.setId(1);
+        role.setRoleName("ROLE_STUDENT");
+
+        when(userRepository.findByUsername("simpleuser")).thenReturn(Optional.empty());
+        when(roleService.findByRoleName("ROLE_STUDENT")).thenReturn(Optional.of(role));
+        when(passwordEncoder.encode("pass123")).thenReturn("$2a$10$encodedHash");
+        when(userRepository.saveAndFlush(any(User.class))).thenAnswer(invocation -> invocation.getArgument(0));
+
+        User registered = userService.registerNewUser("simpleuser", "pass123", "ROLE_STUDENT");
+
+        assertNotNull(registered);
+        assertEquals("simpleuser", registered.getUsername());
+        assertNull(registered.getEmail());
+        assertEquals("$2a$10$encodedHash", registered.getPassword());
+        assertTrue(registered.getRoles().contains(role));
+    }
+
+    @Test
     void testRegisterNewUser_DuplicateUsername_ThrowsException() {
         when(userRepository.findByUsername("existinguser")).thenReturn(Optional.of(sampleUser));
 

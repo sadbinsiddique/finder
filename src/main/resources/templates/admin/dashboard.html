@@ -126,6 +126,9 @@
                 <span id="nav-weather-location" class="text-light opacity-90" th:text="${weather != null && weather.cityName != null ? weather.cityName + (weather.country != null && !weather.country.isEmpty() ? ', ' + weather.country : '') : 'Dhaka, BD'}">Dhaka, BD</span>
             </div>
 
+            <a th:href="@{/admin/settings}" class="btn btn-apple-glass">
+                <i class="fas fa-sliders-h me-1" style="color: var(--apple-blue);"></i> Settings
+            </a>
             <a th:href="@{/}" class="btn btn-apple-glass">
                 <i class="fas fa-home me-1"></i> Dashboard
             </a>
@@ -236,6 +239,19 @@
                 <h5 class="fw-bold mb-1">Navbar Weather Display</h5>
                 <p class="text-secondary small mb-0">Turn weather indicator ON or OFF across the entire system.</p>
             </div>
+        </div>
+
+        <div class="col-md-4">
+            <a th:href="@{/admin/settings}" class="liquid-glass-card">
+                <div class="d-flex align-items-center justify-content-between mb-3">
+                    <div class="p-3 rounded-3" style="background: rgba(10, 132, 255, 0.15); color: var(--apple-blue);">
+                        <i class="fas fa-sliders-h fs-4"></i>
+                    </div>
+                    <i class="fas fa-chevron-right text-secondary"></i>
+                </div>
+                <h5 class="fw-bold mb-1">Settings Control Center</h5>
+                <p class="text-secondary small mb-0">Configure system parameters, email, appearance, media, and rules.</p>
+            </a>
         </div>
     </div>
 </div>

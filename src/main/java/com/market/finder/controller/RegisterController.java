@@ -25,9 +25,18 @@ public class RegisterController {
     }
 
     @GetMapping("/register")
-    public String showRegisterForm(Model model) {
+    public String showRegisterForm(
+            @org.springframework.web.bind.annotation.RequestParam(name = "role", required = false) String role,
+            Model model) {
         if (!model.containsAttribute("registerRequest")) {
-            model.addAttribute("registerRequest", new RegisterRequest());
+            RegisterRequest request = new RegisterRequest();
+            if (role != null && !role.trim().isEmpty()) {
+                request.setRoleName(role.trim());
+                model.addAttribute("initialStep", 2);
+            } else {
+                model.addAttribute("initialStep", 1);
+            }
+            model.addAttribute("registerRequest", request);
         }
         return "register";
     }

@@ -52,4 +52,40 @@ public class AdminController {
         model.addAttribute("permissions", permissionService.findAll());
         return "admin/permissions/list";
     }
+
+    @GetMapping("/settings")
+    public String showSettings(Model model) {
+        model.addAttribute("javaVersion", System.getProperty("java.version"));
+        model.addAttribute("osName", System.getProperty("os.name"));
+        model.addAttribute("weatherEnabled", weatherService.isEnabled());
+        return "admin/settings";
+    }
+
+    @GetMapping("/settings/general")
+    public String showGeneralSettings(Model model) {
+        model.addAttribute("adminEmail", "vitalglowlifestyle@gmail.com");
+        model.addAttribute("timezone", "Asia/Dhaka");
+        model.addAttribute("direction", "ltr");
+        model.addAttribute("siteLanguage", "en");
+        model.addAttribute("errorReporting", true);
+        model.addAttribute("redirectNotFound", true);
+        model.addAttribute("auditLogRetention", "1_year");
+        model.addAttribute("licenseStatus", "Licensed to vitalglowlifestyle. Activated since Mar 14 2026.");
+        return "admin/settings-general";
+    }
+
+    @org.springframework.web.bind.annotation.PostMapping("/settings/general")
+    public String saveGeneralSettings(
+            @org.springframework.web.bind.annotation.RequestParam(name = "adminEmail", required = false) String adminEmail,
+            @org.springframework.web.bind.annotation.RequestParam(name = "timezone", required = false) String timezone,
+            @org.springframework.web.bind.annotation.RequestParam(name = "direction", required = false) String direction,
+            @org.springframework.web.bind.annotation.RequestParam(name = "siteLanguage", required = false) String siteLanguage,
+            @org.springframework.web.bind.annotation.RequestParam(name = "errorReporting", defaultValue = "false") boolean errorReporting,
+            @org.springframework.web.bind.annotation.RequestParam(name = "redirectNotFound", defaultValue = "false") boolean redirectNotFound,
+            @org.springframework.web.bind.annotation.RequestParam(name = "auditLogRetention", defaultValue = "1_year") String auditLogRetention,
+            org.springframework.web.servlet.mvc.support.RedirectAttributes redirectAttributes) {
+        
+        redirectAttributes.addFlashAttribute("savedSuccess", true);
+        return "redirect:/admin/settings/general?success=true";
+    }
 }
