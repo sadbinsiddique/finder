@@ -72,14 +72,31 @@ public class UserServiceImpl extends BaseServiceImpl<User, String, UserRepositor
     @Override
     @Transactional
     public User registerNewUser(String username, String rawPassword, String roleName) {
-        if (repository.findByUsername(username).isPresent()) {
-            throw new IllegalArgumentException("User already exists: " + username);
+        return registerNewUser(username, null, rawPassword, roleName);
+    }
+
+    @Override
+    @Transactional
+    public User registerNewUser(String username, String email, String rawPassword, String roleName) {
+        if (username == null || username.trim().isEmpty()) {
+            throw new IllegalArgumentException("Username is required.");
+        }
+        String cleanUsername = username.trim();
+        if (repository.findByUsername(cleanUsername).isPresent()) {
+            throw new IllegalArgumentException("Username already exists: " + cleanUsername);
         }
 
-        Role role = roleService.findByRoleName(roleName)
-                .orElseThrow(() -> new IllegalArgumentException("Role not found: " + roleName));
+        String cleanEmail = (email != null && !email.trim().isEmpty()) ? email.trim() : null;
+        if (cleanEmail != null && repository.findByEmail(cleanEmail).isPresent()) {
+            throw new IllegalArgumentException("An account with email '" + cleanEmail + "' already exists.");
+        }
 
-        User user = buildUserEntity(username, rawPassword, role);
+        String targetRole = (roleName == null || roleName.trim().isEmpty()) ? "ROLE_STUDENT" : roleName.trim();
+        Role role = roleService.findByRoleName(targetRole)
+                .orElseThrow(() -> new IllegalArgumentException("Role not found: " + targetRole));
+
+        User user = buildUserEntity(cleanUsername, rawPassword, role);
+        user.setEmail(cleanEmail);
         return repository.saveAndFlush(user);
     }
 

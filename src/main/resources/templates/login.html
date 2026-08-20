@@ -141,6 +141,10 @@
         <i class="fas fa-check-circle me-1"></i> Password reset successfully.
     </div>
 
+    <div th:if="${param.registered}" class="alert alert-success text-white bg-transparent border-success mb-3 small py-2" role="alert">
+        <i class="fas fa-check-circle me-1"></i> Account registered successfully! You can now log in.
+    </div>
+
     <form th:action="@{/login}" method="post">
         <div class="mb-3 text-start">
             <label for="usernameInput" class="form-label">Username</label>
@@ -162,7 +166,12 @@
             </label>
         </div>
 
-        <button type="submit" class="btn btn-apple-primary">Sign In</button>
+        <button type="submit" class="btn btn-apple-primary mb-3">Sign In</button>
+
+        <div class="text-center mb-2">
+            <span class="text-secondary small">Don't have an account? </span>
+            <a th:href="@{/register}" class="small text-decoration-none fw-medium" style="color: var(--apple-blue);">Register here</a>
+        </div>
     </form>
 
     <div class="my-4 d-flex align-items-center justify-content-center">

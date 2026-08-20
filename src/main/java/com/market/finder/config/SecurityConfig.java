@@ -78,7 +78,7 @@ public class SecurityConfig {
 
         http.authorizeHttpRequests(configurer ->
                 configurer
-                        .requestMatchers("/login", "/forgot-password", "/reset-password", "/oauth2/**", "/login/oauth2/**", "/css/**", "/img/**", "/js/**").permitAll()
+                        .requestMatchers("/login", "/register", "/forgot-password", "/reset-password", "/oauth2/**", "/login/oauth2/**", "/css/**", "/img/**", "/js/**").permitAll()
                         .requestMatchers("/swagger-ui/**", "/v3/api-docs/**", "/api-docs/**").permitAll()
                         .requestMatchers("/error", "/access-denied").permitAll()
                         .requestMatchers("/admin/**", "/users/**", "/roles/**",

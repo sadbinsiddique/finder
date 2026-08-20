@@ -102,19 +102,40 @@ class UserServiceTest {
     void testRegisterNewUser_Success() {
         Role role = new Role();
         role.setId(1);
-        role.setRoleName("ROLE_USER");
+        role.setRoleName("ROLE_STUDENT");
 
         when(userRepository.findByUsername("newuser")).thenReturn(Optional.empty());
-        when(roleService.findByRoleName("ROLE_USER")).thenReturn(Optional.of(role));
+        when(userRepository.findByEmail("newuser@university.edu")).thenReturn(Optional.empty());
+        when(roleService.findByRoleName("ROLE_STUDENT")).thenReturn(Optional.of(role));
         when(passwordEncoder.encode("pass123")).thenReturn("$2a$10$encodedHash");
         when(userRepository.saveAndFlush(any(User.class))).thenAnswer(invocation -> invocation.getArgument(0));
 
-        User registered = userService.registerNewUser("newuser", "pass123", "ROLE_USER");
+        User registered = userService.registerNewUser("newuser", "newuser@university.edu", "pass123", "ROLE_STUDENT");
 
         assertNotNull(registered);
         assertEquals("newuser", registered.getUsername());
+        assertEquals("newuser@university.edu", registered.getEmail());
         assertEquals("$2a$10$encodedHash", registered.getPassword());
         assertTrue(registered.getRoles().contains(role));
+    }
+
+    @Test
+    void testRegisterNewUser_DuplicateUsername_ThrowsException() {
+        when(userRepository.findByUsername("existinguser")).thenReturn(Optional.of(sampleUser));
+
+        IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () ->
+                userService.registerNewUser("existinguser", "email@test.com", "pass", "ROLE_STUDENT"));
+        assertTrue(ex.getMessage().contains("Username already exists"));
+    }
+
+    @Test
+    void testRegisterNewUser_DuplicateEmail_ThrowsException() {
+        when(userRepository.findByUsername("freshuser")).thenReturn(Optional.empty());
+        when(userRepository.findByEmail("taken@test.com")).thenReturn(Optional.of(sampleUser));
+
+        IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () ->
+                userService.registerNewUser("freshuser", "taken@test.com", "pass", "ROLE_STUDENT"));
+        assertTrue(ex.getMessage().contains("already exists"));
     }
 
     @Test
