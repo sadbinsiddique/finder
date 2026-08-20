@@ -1,5 +1,6 @@
 package com.market.finder.entity;
 
+import com.market.finder.entity.base.BasePersonEntity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import lombok.Getter;
@@ -9,30 +10,11 @@ import lombok.Setter;
 @Getter
 @Entity
 @Table(name = "staff")
-public class Staff {
+public class Staff extends BasePersonEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private int id;
-
-    @NotBlank(message = "First name is required")
-    @Size(max = 45, message = "First name cannot exceed 45 characters")
-    @Column(name = "first_name", length = 45, nullable = false)
-    private String firstName;
-
-    @NotBlank(message = "Last name is required")
-    @Size(max = 45, message = "Last name cannot exceed 45 characters")
-    @Column(name = "last_name", length = 45, nullable = false)
-    private String lastName;
-
-    @NotBlank(message = "Email is required")
-    @Pattern(
-            regexp = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.(com|edu|org|net|gov|mil|io|co|in|uk|ca|de|fr|jp|au|dev|app|tech|info|biz|me|us|ai|store|online|site|bd)(\\.[a-zA-Z]{2,3})?$",
-            message = "Please enter a valid email address with a recognized domain (e.g. gmail.com, outlook.com, university.edu)"
-    )
-    @Size(max = 64, message = "Email cannot exceed 64 characters")
-    @Column(name = "email", length = 64, nullable = false)
-    private String email;
 
     @Min(value = 0, message = "Income cannot be negative")
     @Column(name = "income")
