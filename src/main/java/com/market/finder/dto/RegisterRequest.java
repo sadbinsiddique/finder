@@ -1,5 +1,4 @@
 package com.market.finder.dto;
-
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
@@ -13,21 +12,23 @@ import lombok.Setter;
 @NoArgsConstructor
 public class RegisterRequest {
 
-    @NotBlank(message = "Username is required")
+    @NotBlank()
     @Size(min = 3, max = 50, message = "Username must be between 3 and 50 characters")
-    @Pattern(regexp = "^[a-zA-Z0-9._-]+$", message = "Username can only contain alphanumeric characters, dots, underscores, and hyphens")
+    @Pattern(regexp = "^[a-zA-Z0-9_-]+$")
     private String username;
 
-    @NotBlank(message = "Email address is required")
-    @Email(message = "Please enter a valid email address")
-    @Size(max = 64, message = "Email cannot exceed 64 characters")
+    @NotBlank()
+    //@Email(message = "Please enter a valid email address")
+    @Size(max = 64, message = "Must be a valid email address")
+    @Pattern(regexp = "^(?i)[a-z0-9._%+-]+@(student\\.aiub\\.edu | gmail\\.com | outlook\\.com | hotmail\\.com)$")
     private String email;
 
-    @NotBlank(message = "Password is required")
-    @Size(min = 4, max = 68, message = "Password must be between 4 and 68 characters")
+    @NotBlank()
+    @Size(min = 8, max = 68, message = "Password must be follow the rule")
+    @Pattern(regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&#^._~+=`|{}\\[\\];:\"'<>,\\\\-]).*$")
     private String password;
 
-    @NotBlank(message = "Please confirm your password")
+    @NotBlank()
     private String confirmPassword;
 
     private String roleName = "ROLE_STUDENT";
