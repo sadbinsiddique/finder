@@ -330,24 +330,8 @@
                         <i class="fas fa-chalkboard-user"></i>
                     </div>
                     <div>
-                        <div class="fw-semibold text-white">Instructor / Faculty</div>
+                        <div class="fw-semibold text-white">Instructor</div>
                         <div class="text-secondary small">Course management, grading & attendance</div>
-                    </div>
-                </div>
-                <div class="role-check-indicator">
-                    <i class="fas fa-check"></i>
-                </div>
-            </div>
-
-            <!-- Staff / General Member Role -->
-            <div class="role-card-option" data-role="ROLE_USER" onclick="selectRoleCard(this, 'ROLE_USER', 'General Member / Staff', 'role-icon-staff', 'fas fa-id-badge')">
-                <div class="d-flex align-items-center gap-3">
-                    <div class="role-icon-box role-icon-staff">
-                        <i class="fas fa-id-badge"></i>
-                    </div>
-                    <div>
-                        <div class="fw-semibold text-white">Staff / Member</div>
-                        <div class="text-secondary small">Department directory & campus operations</div>
                     </div>
                 </div>
                 <div class="role-check-indicator">
@@ -450,13 +434,12 @@
 
 <script th:inline="javascript">
     let currentRole = /*[[${registerRequest.roleName}]]*/ 'ROLE_STUDENT';
-    const hasErrors = /*[[${#fields.hasErrors('*')}]]*/ false;
+    const hasErrors = /*[[${#fields.hasErrors('registerRequest.*')}]]*/ false;
     const initialStep = /*[[${initialStep}]]*/ 1;
 
     const roleData = {
         'ROLE_STUDENT': { label: 'Student', iconClass: 'role-icon-student', icon: 'fas fa-user-graduate' },
-        'ROLE_INSTRUCTOR': { label: 'Instructor / Faculty', iconClass: 'role-icon-instructor', icon: 'fas fa-chalkboard-user' },
-        'ROLE_USER': { label: 'Staff / Member', iconClass: 'role-icon-staff', icon: 'fas fa-id-badge' }
+        'ROLE_INSTRUCTOR': { label: 'Instructor', iconClass: 'role-icon-instructor', icon: 'fas fa-chalkboard-user' }
     };
 
     function selectRoleCard(element, roleKey, roleLabel, iconClass, iconName) {
@@ -506,10 +489,17 @@
     document.addEventListener('DOMContentLoaded', () => {
         if (!currentRole || !roleData[currentRole]) {
             currentRole = 'ROLE_STUDENT';
+            const hiddenInput = document.getElementById('hiddenRoleName');
+            if (hiddenInput) hiddenInput.value = 'ROLE_STUDENT';
         }
         const activeCard = document.querySelector(`.role-card-option[data-role="${currentRole}"]`);
         if (activeCard) {
             selectRoleCard(activeCard, currentRole);
+        } else {
+            const defaultCard = document.querySelector(`.role-card-option[data-role="ROLE_STUDENT"]`);
+            if (defaultCard) {
+                selectRoleCard(defaultCard, 'ROLE_STUDENT');
+            }
         }
 
         // If there were validation errors on POST or initialStep was 2, show Step 2 immediately

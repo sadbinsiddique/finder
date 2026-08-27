@@ -31,8 +31,17 @@ public class RegisterController {
         if (!model.containsAttribute("registerRequest")) {
             RegisterRequest request = new RegisterRequest();
             if (role != null && !role.trim().isEmpty()) {
-                request.setRoleName(role.trim());
-                model.addAttribute("initialStep", 2);
+                String cleanRole = role.trim().toUpperCase();
+                if ("ROLE_INSTRUCTOR".equals(cleanRole) || "INSTRUCTOR".equals(cleanRole)) {
+                    request.setRoleName("ROLE_INSTRUCTOR");
+                    model.addAttribute("initialStep", 2);
+                } else if ("ROLE_STUDENT".equals(cleanRole) || "STUDENT".equals(cleanRole)) {
+                    request.setRoleName("ROLE_STUDENT");
+                    model.addAttribute("initialStep", 2);
+                } else {
+                    request.setRoleName("ROLE_STUDENT");
+                    model.addAttribute("initialStep", 1);
+                }
             } else {
                 model.addAttribute("initialStep", 1);
             }
@@ -50,6 +59,10 @@ public class RegisterController {
 
         logger.info("[USER REGISTRATION] Registration attempt for username='{}', email='{}'",
                 registerRequest.getUsername(), registerRequest.getEmail());
+
+        if (registerRequest.getRoleName() == null || (!"ROLE_STUDENT".equals(registerRequest.getRoleName()) && !"ROLE_INSTRUCTOR".equals(registerRequest.getRoleName()))) {
+            bindingResult.rejectValue("roleName", "error.registerRequest", "Only Student and Instructor roles are eligible for registration.");
+        }
 
         if (registerRequest.getPassword() != null && !registerRequest.getPassword().equals(registerRequest.getConfirmPassword())) {
             bindingResult.rejectValue("confirmPassword", "error.registerRequest", "Passwords do not match.");

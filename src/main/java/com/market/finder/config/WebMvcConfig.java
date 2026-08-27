@@ -62,7 +62,9 @@ public class WebMvcConfig implements WebMvcConfigurer {
                         "/courses/**",
                         "/enrollments/**",
                         "/attendance/**",
-                        "/gradebooks/**"
+                        "/gradebooks/**",
+                        "/staff/**",
+                        "/employees/**"
                 );
     }
 }
