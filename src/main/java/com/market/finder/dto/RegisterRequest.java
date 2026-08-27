@@ -17,14 +17,13 @@ public class RegisterRequest {
     private String username;
 
     @NotBlank()
-    //@Email(message = "Please enter a valid email address")
     @Size(max = 64, message = "Must be a valid email address")
     @Pattern(regexp = "^(?i)[a-z0-9._%+-]+@(student\\.aiub\\.edu | gmail\\.com | outlook\\.com | hotmail\\.com)$")
     private String email;
 
     @NotBlank()
     @Size(min = 8, max = 68, message = "Password must be follow the rule")
-    @Pattern(regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&#^._~+=`|{}\\[\\];:\"'<>,\\\\-]).*$")
+    @Pattern(regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[@$!%*?&#^._~+=`|{}\\[\\];:\"'<>,\\\\-]).*$")
     private String password;
 
     @NotBlank()
