@@ -2,7 +2,6 @@ package com.market.finder.config;
 
 import com.market.finder.security.CachePersistentTokenRepository;
 import com.market.finder.security.CustomOAuth2UserService;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -11,12 +10,8 @@ import org.springframework.security.config.annotation.authentication.configurati
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
-import org.springframework.security.config.oauth2.client.CommonOAuth2Provider;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.oauth2.client.registration.ClientRegistration;
-import org.springframework.security.oauth2.client.registration.ClientRegistrationRepository;
-import org.springframework.security.oauth2.client.registration.InMemoryClientRegistrationRepository;
 import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
@@ -34,19 +29,6 @@ public class SecurityConfig {
         this.userDetailsService = userDetailsService;
         this.customOAuth2UserService = customOAuth2UserService;
         this.persistentTokenRepository = persistentTokenRepository;
-    }
-
-    @Bean
-    public ClientRegistrationRepository clientRegistrationRepository(
-            @Value("${github.oauth2.client-id:Ov23likZOtI7PoJqIKkA}") String githubClientId,
-            @Value("${github.oauth2.client-secret:c54188d5344a9d2bc78c9e9157e8b61e9c9c08f0}") String githubClientSecret) {
-
-        ClientRegistration githubRegistration = CommonOAuth2Provider.GITHUB.getBuilder("github")
-                .clientId(githubClientId)
-                .clientSecret(githubClientSecret)
-                .build();
-
-        return new InMemoryClientRegistrationRepository(githubRegistration);
     }
 
     @Bean

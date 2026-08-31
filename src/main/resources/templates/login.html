@@ -118,6 +118,45 @@
             padding: 10px 14px;
             font-size: 0.85rem;
         }
+
+        .btn-github {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            box-shadow: var(--glass-inner-shadow);
+            color: #F5F5F7 !important;
+            border-radius: 12px;
+            padding: 10px 16px;
+            font-weight: 500;
+            width: 100%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            text-decoration: none !important;
+            transition: all 0.2s ease;
+        }
+
+        .btn-github:hover,
+        .btn-github:focus,
+        .btn-github:focus-visible,
+        .btn-github:active,
+        .btn-github:visited {
+            background: rgba(255, 255, 255, 0.1) !important;
+            border-color: rgba(255, 255, 255, 0.25) !important;
+            color: #FFFFFF !important;
+            text-decoration: none !important;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3), var(--glass-inner-shadow) !important;
+            outline: none !important;
+        }
+
+        .btn-github:hover {
+            transform: translateY(-1px);
+        }
+
+        .btn-github:active {
+            background: rgba(255, 255, 255, 0.08) !important;
+            transform: translateY(0);
+        }
     </style>
 </head>
 <body>
@@ -126,7 +165,7 @@
     <div class="brand-icon">
         <i class="fas fa-globe logo-glow fs-2"></i>
     </div>
-    <h1 class="h3 fw-bold text-white mb-1">University ERP</h1>
+    <h1 class="h3 fw-bold text-white mb-1">University Portal</h1>
     <p class="text-secondary small mb-4">Enter your system credentials to sign in.</p>
 
     <div th:if="${param.error}" class="alert alert-glass-danger mb-3" role="alert">
@@ -148,22 +187,15 @@
     <form th:action="@{/login}" method="post">
         <div class="mb-3 text-start">
             <label for="usernameInput" class="form-label">Username</label>
-            <input id="usernameInput" type="text" name="username" class="form-control" placeholder="e.g. admin" required autofocus/>
+            <input id="usernameInput" type="text" name="username" class="form-control" required autofocus/>
         </div>
 
-        <div class="mb-3 text-start">
+        <div class="mb-4 text-start">
             <div class="d-flex justify-content-between align-items-center mb-1">
                 <label for="passwordInput" class="form-label mb-0">Password</label>
                 <a th:href="@{/forgot-password}" class="small text-decoration-none" style="color: var(--apple-blue);">Forgot Password?</a>
             </div>
-            <input id="passwordInput" type="password" name="password" class="form-control" placeholder="Password" required/>
-        </div>
-
-        <div class="form-check text-start mb-4">
-            <input class="form-check-input" type="checkbox" name="remember-me" id="rememberMe">
-            <label class="form-check-label text-secondary small" for="rememberMe">
-                Remember me
-            </label>
+            <input id="passwordInput" type="password" name="password" class="form-control" required/>
         </div>
 
         <button type="submit" class="btn btn-apple-primary mb-3">Sign In</button>
@@ -181,7 +213,7 @@
     </div>
 
     <div class="d-flex gap-2">
-        <a th:href="@{/oauth2/authorization/github}" class="btn btn-outline-light w-100 py-2 d-flex align-items-center justify-content-center gap-2 text-decoration-none" style="border-radius: 12px; background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.15); transition: all 0.2s ease;">
+        <a th:href="@{/oauth2/authorization/github}" class="btn-github">
             <i class="fab fa-github text-white fs-5"></i> <span class="fw-medium">GitHub</span>
         </a>
     </div>
